@@ -22,6 +22,7 @@ app.post('/shorten', async (req, res) => {
     if (!originalUrl || !/^https?:\/\/.+/.test(originalUrl)) {
         return res.status(400).json({ error: 'Invalid URL' });
     }
+    
     const date = new Date()
     const createdAt = formateDate(date);
     urlDatabase[shortId] = originalUrl;
