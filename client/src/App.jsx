@@ -4,11 +4,15 @@ import Navbar from "./components/layouts/Navbar";
 import TableData from "./components/TableData";
 import toast, { Toaster } from 'react-hot-toast';
 import { Spinner } from "./components/svg/SVG";
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
 
   const [originalUrl, setOriginalUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [urls, setUrls] = useState(() => {
+    return JSON.parse(localStorage.getItem("shortUrlData")) || []
+  })
 
   const handleUrl = async (e) => {
     e.preventDefault();
@@ -20,11 +24,11 @@ function App() {
       return
     }
 
-    const allData = JSON.parse(localStorage.getItem("shortUrlData"))
-    if (allData.find((item) => item.originalUrl === originalUrl)) {
+    if (urls.find((item) => item.originalUrl === originalUrl)) {
       toast.error("URL already in use!", {
         position: 'top-center'
       })
+
       return
     }
 
@@ -32,9 +36,11 @@ function App() {
 
     try {
       const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/shorten`, { originalUrl });
-      setTimeout(() => {
 
+      setTimeout(() => {
         const newShortUrlData = {
+          id: uuidv4(),
+          shortId: res.data.shortId,
           shortUrl: res.data.shortUrl,
           originalUrl: res.data.originalUrl,
           createdAt: res.data.createdAt,
@@ -44,6 +50,7 @@ function App() {
         const existingDate = JSON.parse(localStorage.getItem("shortUrlData")) || [];
         const updatedData = [newShortUrlData, ...existingDate]
         localStorage.setItem("shortUrlData", JSON.stringify(updatedData));
+        setUrls(updatedData)
         setOriginalUrl("")
         toast.success("URL added!", {
           position: 'bottom-right'
@@ -56,7 +63,6 @@ function App() {
       });
       setLoading(false);
     }
-
   };
 
   return (
@@ -72,6 +78,7 @@ function App() {
                 className="border w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-[48px] p-5"
                 placeholder="Enter your long url here..."
                 onChange={(e) => setOriginalUrl(e.target.value)}
+                type="url"
                 value={originalUrl}
               />
               <button type="submit" className={`${loading ? 'bg-blue-500' : 'bg-sky-400 dark:bg-blue-600'} text-white cursor-pointer transition duration-300 hover:bg-blue-500 absolute w-[150px] right-2 top-2 bottom-2 px-4 rounded-[48px]`}>
@@ -88,7 +95,7 @@ function App() {
             </form>
           </div>
         </div>
-        <TableData />
+        <TableData urls={urls} setUrls={setUrls} />
       </div>
     </>
   )

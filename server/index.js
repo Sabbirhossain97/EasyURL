@@ -32,6 +32,7 @@ app.post('/shorten', async (req, res) => {
         const qrCodeDataUrl = await QRCode.toDataURL(shortUrl)
 
         res.json({
+            shortId,
             shortUrl,
             originalUrl,
             createdAt,
