@@ -1,66 +1,50 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios"
 import Navbar from "./components/layouts/Navbar";
 import TableData from "./components/TableData";
 import toast, { Toaster } from 'react-hot-toast';
 import { Spinner } from "./components/svg/SVG";
-import { v4 as uuidv4 } from 'uuid';
 
 function App() {
 
   const [originalUrl, setOriginalUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [urls, setUrls] = useState(() => {
-    return JSON.parse(localStorage.getItem("shortUrlData")) || []
-  })
+  const [urls, setUrls] = useState([])
+
+  const getUrls = async () => {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/`);
+    if (res) {
+      setUrls(res.data);
+    }
+  };
+
+  useEffect(() => {
+    getUrls(); 
+  }, []);
 
   const handleUrl = async (e) => {
     e.preventDefault();
 
     if (!originalUrl) {
-      toast.error('Enter an URL!', {
-        position: 'top-center'
-      });
-      return
+      toast.error('Enter an URL!', { position: 'top-center' });
+      return;
     }
 
-    if (urls.find((item) => item.originalUrl === originalUrl)) {
-      toast.error("URL already in use!", {
-        position: 'top-center'
-      })
-
-      return
+    if (urls.find((item) => item.longUrl === originalUrl)) {
+      toast.error("URL already in use!", { position: 'top-center' });
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/shorten`, { originalUrl });
-
-      setTimeout(() => {
-        const newShortUrlData = {
-          id: uuidv4(),
-          shortId: res.data.shortId,
-          shortUrl: res.data.shortUrl,
-          originalUrl: res.data.originalUrl,
-          createdAt: res.data.createdAt,
-          qrcode: res.data.qrcode
-        };
-        setLoading(false);
-        const existingDate = JSON.parse(localStorage.getItem("shortUrlData")) || [];
-        const updatedData = [newShortUrlData, ...existingDate]
-        localStorage.setItem("shortUrlData", JSON.stringify(updatedData));
-        setUrls(updatedData)
-        setOriginalUrl("")
-        toast.success("URL added!", {
-          position: 'bottom-right'
-        });
-      }, 1500);
-
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/shorten`, { originalUrl });
+      await getUrls();
+      setOriginalUrl("");
+      toast.success("URL added!", { position: 'bottom-right' });
     } catch (err) {
-      toast.error(err?.response?.data?.error, {
-        position: 'top-center'
-      });
+      toast.error(err?.response?.data?.error, { position: 'top-center' });
+    } finally {
       setLoading(false);
     }
   };
