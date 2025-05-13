@@ -22,8 +22,12 @@ const urlSchema = new mongoose.Schema({
     clickCount: {
         type: Number,
         default: 0
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
-
 })
 
 const Url = mongoose.model("Url", urlSchema);

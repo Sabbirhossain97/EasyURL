@@ -5,18 +5,23 @@ import { nanoid } from 'nanoid';
 import 'dotenv/config';
 import QRCode from 'qrcode'
 import Url from './models/Url.js';
+import { authRoutes } from './routes/authRoutes.js';
+import { auth } from './middlewares/auth.js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/shorten", auth)
+authRoutes(app);
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("DB Connected!"))
     .catch((err) => console.log("Failed to Connect to mongodb!"))
 
-app.get("/", async (req, res) => {
+app.get("/shorten", async (req, res) => {
+    const userId = req.user.id;
     try {
-        const urls = await Url.find({})
+        const urls = await Url.find({ user: userId })
         res.json(urls);
     } catch (err) {
         console.error('Error fetching URLs:', err.message);
@@ -28,6 +33,7 @@ app.get("/", async (req, res) => {
 app.post('/shorten', async (req, res) => {
     const { originalUrl } = req.body;
     const shortId = nanoid(6);
+    const userId = req.user.id;
 
     if (!originalUrl || !/^https?:\/\/.+/.test(originalUrl)) {
         return res.status(400).json({ error: 'Invalid URL' });
@@ -47,7 +53,8 @@ app.post('/shorten', async (req, res) => {
             shortUrl,
             shortId,
             createdAt,
-            qrCode: qrCodeDataUrl
+            qrCode: qrCodeDataUrl,
+            user: userId
         });
         await url.save();
 
@@ -64,6 +71,24 @@ app.post('/shorten', async (req, res) => {
     }
 });
 
+app.patch("/shorten/:shortId", async (req, res) => {
+    const { shortId } = req.params;
+    const { customName } = req.body;
+    const userId = req.user.id;
+    const isCustomNameExist = await Url.findOne({ shortId: customName })
+    if (isCustomNameExist) {
+        return res.status(409).json({ error: "Custom name already taken!" })
+    }
+    const url = await Url.findOne({ shortId: shortId })
+    if (!url) {
+        return res.status(404).json({ error: "Short ID not found!" });
+    }
+    url.shortUrl = url.shortUrl.replace(`${url.shortId}`, customName)
+    url.shortId = customName;
+    await url.save();
+    const urls = await Url.find({ user: userId })
+    return res.status(200).json({ message: "Custom name added!", updatedUrl: urls })
+})
 
 app.get('/:shortId', async (req, res) => {
     const { shortId } = req.params;
