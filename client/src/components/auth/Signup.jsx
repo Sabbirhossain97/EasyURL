@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Button } from '@headlessui/react';
-import axios from 'axios';
-import toast from 'react-hot-toast';
 import { Spinner } from "../svg/SVG"
+import { registerUser } from '../../services/authService';
+import toast from 'react-hot-toast';
 
-function Signup() {
+function Signup({ onSuccess }) {
 
     const [formValues, setFormValues] = useState({
         username: "",
@@ -17,15 +17,16 @@ function Signup() {
         e.preventDefault();
         setLoading(true)
         try {
-            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/signup`, formValues)
+            const data = await registerUser(formValues)
             setTimeout(() => {
-                toast.success(res?.data?.message, { position: 'top-center' });
+                toast.success(data?.message, { position: 'top-center' });
+                setLoading(false);
+                onSuccess()
                 toast.success("Please log in to continue!", { position: 'top-center' });
-                setLoading(false)
             }, 1500)
         } catch (err) {
             setTimeout(() => {
-                toast.error(err?.response?.data?.error, { position: 'top-center' });
+                toast.error(err?.error, { position: 'top-center' });
                 setLoading(false)
             }, 1500)
         }
@@ -37,7 +38,7 @@ function Signup() {
                 <label htmlFor="username" className='font-semibold'>Username</label>
                 <input
                     htmlFor="username"
-                    className="border w-full mt-2 placeholder:text-[14px] bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-md p-2"
+                    className="border focus:border-sky-400 dark:focus:border-blue-500 transition duration-300 outline-none w-full mt-2 placeholder:text-[14px] bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-md p-2"
                     placeholder="Enter your name here..."
                     value={formValues.username}
                     onChange={(e) => setFormValues({ ...formValues, username: e.target.value })}
@@ -47,7 +48,7 @@ function Signup() {
                 <label htmlFor="email" className='font-semibold'>Email</label>
                 <input
                     htmlFor="email"
-                    className="border w-full mt-2 placeholder:text-[14px] bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-md p-2"
+                    className="border focus:border-sky-400 dark:focus:border-blue-500 transition duration-300 outline-none w-full mt-2 placeholder:text-[14px] bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-md p-2"
                     placeholder="Enter your email here..."
                     value={formValues.email}
                     onChange={(e) => setFormValues({ ...formValues, email: e.target.value })}
@@ -58,7 +59,7 @@ function Signup() {
                 <label htmlFor="password" className='font-semibold'>Password</label>
                 <input
                     htmlFor="password"
-                    className="border w-full mt-2 placeholder:text-[14px] bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-md p-2"
+                    className="border focus:border-sky-400 dark:focus:border-blue-500 transition duration-300 outline-none w-full mt-2 placeholder:text-[14px] bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-md p-2"
                     placeholder="Enter your password here..."
                     value={formValues.password}
                     onChange={(e) => setFormValues({ ...formValues, password: e.target.value })}

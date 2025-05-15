@@ -49,7 +49,24 @@ const loginUser = async (req, res) => {
     }
 }
 
+const resetPassword = async (req, res) => {
+    try {
+        const { email, newPassword } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(409).json({ error: "Email doesn't exist" })
+        }
+        const hashed = await bcrypt.hash(newPassword, 10)
+        user.password = hashed
+        await user.save();
+        return res.status(200).json({ message: 'Password updated successfully!' })
+    } catch (err) {
+        res.status(500).json({ error: 'Server error!' });
+    }
+}
+
 export const authRoutes = (app) => {
     app.post("/signup", registerUser);
     app.post("/signin", loginUser)
+    app.post("/update-password", resetPassword)
 }

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
-import TableData from "../TableData"
+import TableData from "../components/table/TableData";
 import toast from 'react-hot-toast';
-import { Spinner } from "../svg/SVG"
+import { Spinner } from "../components/svg/SVG"
 
 function Shorten() {
 
@@ -64,7 +64,7 @@ function Shorten() {
                         <h1 className="text-center text-[64px] font-bold leading-[80px] custom-header-text">Shorten your URL here</h1>
                         <form onSubmit={handleUrl} className="flex gap-4 mt-10 relative">
                             <input
-                                className="border w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-[48px] p-5"
+                                className="border focus:border-sky-400 dark:focus:border-blue-500 transition duration-300 outline-none w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-[48px] p-5"
                                 placeholder="Enter your long url here..."
                                 onChange={(e) => setOriginalUrl(e.target.value)}
                                 type="url"
