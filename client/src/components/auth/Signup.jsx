@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@headlessui/react';
 import { Spinner } from "../svg/SVG"
 import { registerUser } from '../../services/authService';
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import toast from 'react-hot-toast';
 
 function Signup({ onSuccess }) {
@@ -11,6 +12,7 @@ function Signup({ onSuccess }) {
         email: "",
         password: ""
     })
+    const [visible, setVisible] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const handleRegister = async (e) => {
@@ -55,16 +57,22 @@ function Signup({ onSuccess }) {
                     required
                 />
             </div>
-            <div className='mt-4'>
+            <div className='mt-4 relative'>
                 <label htmlFor="password" className='font-semibold'>Password</label>
                 <input
                     htmlFor="password"
+                    type={visible ? "text" : "password"}
                     className="border focus:border-sky-400 dark:focus:border-blue-500 transition duration-300 outline-none w-full mt-2 placeholder:text-[14px] bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-md p-2"
                     placeholder="Enter your password here..."
                     value={formValues.password}
                     onChange={(e) => setFormValues({ ...formValues, password: e.target.value })}
                     required
                 />
+                {visible ?
+                    <MdVisibility onClick={() => setVisible(!visible)} className='cursor-pointer absolute bottom-3 text-zinc-400 right-2' />
+                    :
+                    <MdVisibilityOff onClick={() => setVisible(!visible)} className='cursor-pointer absolute bottom-3 text-zinc-400 right-2' />
+                }
             </div>
             <div className="mt-6">
                 <Button

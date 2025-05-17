@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Spinner } from '../svg/SVG';
 import { loginUser } from '../../services/authService';
 import toast from 'react-hot-toast';
-
+import { Link } from 'react-router-dom';
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 function Login() {
 
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ function Login() {
         email: "",
         password: ""
     })
-
+    const [visible, setVisible] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const handleLogin = async (e) => {
@@ -20,8 +21,8 @@ function Login() {
         setLoading(true);
         try {
             const data = await loginUser(formValues);
-            localStorage.setItem("token", data.accessToken);
-            localStorage.setItem("user", JSON.stringify(data.user));
+            localStorage.setItem("token", data?.accessToken);
+            localStorage.setItem("user", JSON.stringify(data?.user));
             setTimeout(() => {
                 toast.success(data.message, { position: 'top-center' });
                 setLoading(false);
@@ -50,16 +51,21 @@ function Login() {
                         onChange={(e) => setFormValues({ ...formValues, email: e.target.value })}
                     />
                 </div>
-                <div className='mt-4'>
+                <div className='mt-4 relative'>
                     <label htmlFor="password" className='font-semibold'>Password</label>
                     <input
                         htmlFor="password"
+                        type={visible ? "text" : "password"}
                         className="border focus:border-sky-400 dark:focus:border-blue-500 transition duration-300 outline-none w-full mt-2 placeholder:text-[14px] bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-md p-2"
                         placeholder="Enter your password here..."
                         value={formValues.password}
                         required
                         onChange={(e) => setFormValues({ ...formValues, password: e.target.value })}
                     />
+                    {visible ? <MdVisibility onClick={() => setVisible(!visible)} className='cursor-pointer absolute bottom-3 text-zinc-400 right-2' />
+                        :
+                        <MdVisibilityOff onClick={() => setVisible(!visible)} className='cursor-pointer absolute bottom-3 text-zinc-400 right-2' />
+                    }
                 </div>
                 <div className="mt-6">
                     <Button
@@ -68,6 +74,9 @@ function Login() {
                     >
                         {loading ? <><Spinner /> Processing...</> : "Signin"}
                     </Button>
+                </div>
+                <div className='mt-4 text-center'>
+                    <button onClick={() => navigate("/forgot-password")} className='text-sky-400 inline-flex dark:text-white underline cursor-pointer'>Forgot password?</button>
                 </div>
             </form>
         </>

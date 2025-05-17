@@ -18,9 +18,18 @@ export const registerUser = async (formValues) => {
     }
 };
 
-export const resetPassword = async (formValues) => {
+export const forgotPassword = async (email) => {
     try {
-        const response = await axiosInstance.post('/update-password', formValues);
+        const response = await axiosInstance.post('/forgot-password', { email });
+        return response.data;
+    } catch (error) {
+        throw error?.response?.data || { error: 'Something went wrong during password update.' };
+    }
+}
+
+export const resetPassword = async (token, newPassword) => {
+    try {
+        const response = await axiosInstance.post(`/reset-password/${token}`, { newPassword });
         return response.data;
     } catch (error) {
         throw error?.response?.data || { error: 'Something went wrong during password update.' };

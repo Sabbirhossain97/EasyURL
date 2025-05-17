@@ -61,7 +61,7 @@ function TableData({ urls, setUrls }) {
                                     <th scope="col" className="px-6 py-3">
                                         Clicks
                                     </th>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3 whitespace-nowrap">
                                         Created At
                                     </th>
                                     <th scope="col" className="px-6 py-3">
@@ -82,7 +82,7 @@ function TableData({ urls, setUrls }) {
                                         <td className="px-6 py-4 text-start">
                                             {item.clickCount}
                                         </td>
-                                        <td className="px-6 py-4 ">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             {new Date(item.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                         </td>
                                         <td className="px-6 py-4 flex items-center gap-2">
