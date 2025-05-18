@@ -10,17 +10,21 @@ function Shorten() {
     const [originalUrl, setOriginalUrl] = useState("");
     const [loading, setLoading] = useState(false);
     const [urls, setUrls] = useState([])
+    const [sortBy, setSortBy] = useState({
+        slug: "createdAt_desc",
+        field: "Date ( newest )"
+    });
 
-    const getUrls = async () => {
-        const data = await fetchUrls();
+    const getUrls = async (sortBy) => {
+        const data = await fetchUrls(sortBy);
         if (data) {
             setUrls(data);
         }
     };
 
     useEffect(() => {
-        getUrls();
-    }, []);
+        getUrls(sortBy);
+    }, [sortBy]);
 
     const createUrl = async (e) => {
         e.preventDefault();
@@ -81,7 +85,12 @@ function Shorten() {
                     </form>
                 </div>
             </div>
-            <TableData urls={urls} setUrls={setUrls} />
+            <TableData
+                urls={urls}
+                setUrls={setUrls}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+            />
         </div>
     )
 }

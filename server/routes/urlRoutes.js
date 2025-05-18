@@ -8,8 +8,27 @@ import { nanoid } from 'nanoid';
 
 const fetchUrls = async (req, res) => {
     const userId = req.user.id;
+    const { sort } = req.query;
+    let sortOption = {};
+    switch (sort) {
+        case 'createdAt_asc':
+            sortOption.createdAt = 1;
+            break;
+        case 'createdAt_desc':
+            sortOption.createdAt = -1;
+            break;
+        case 'clickCount_asc':
+            sortOption.clickCount = 1;
+            break;
+        case 'clickCount_desc':
+            sortOption.clickCount = -1;
+            break;
+        default:
+            sortOption.createdAt = -1;
+    }
+    console.log(sortOption)
     try {
-        const urls = await Url.find({ user: userId })
+        const urls = await Url.find({ user: userId }).sort(sortOption)
         res.json(urls);
     } catch (err) {
         console.error('Error fetching URLs:', err.message);
@@ -138,7 +157,7 @@ const deleteUrl = async (req, res) => {
 
 
 export const urlRoutes = (app) => {
-    app.get("/shorten", fetchUrls);
+    app.get("/shorten/urls", fetchUrls);
     app.post("/shorten", createUrl);
     app.patch("/shorten/:shortId", customizeUrl);
     app.get('/:shortId', redirectUrl);

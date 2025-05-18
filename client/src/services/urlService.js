@@ -1,8 +1,8 @@
 import axiosInstance from "./axiosConfig"
 
-export const fetchUrls = async () => {
+export const fetchUrls = async (sortBy) => {
     try {
-        const response = await axiosInstance.get('/shorten');
+        const response = await axiosInstance.get(`/shorten/urls?sort=${sortBy.slug}`);
         return response.data;
     } catch (error) {
         throw error?.response?.data || { error: 'Something went wrong during fetching urls.' };
