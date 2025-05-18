@@ -1,6 +1,6 @@
 export const handleDownloadQR = (viewUrl, setLoading) => {
     const link = document.createElement('a');
-    link.href = viewUrl.qrCode;
+    link.href = viewUrl?.qr?.code;
     setLoading(true)
     setTimeout(() => {
         link.download = `${viewUrl.shortId}-qr.png`

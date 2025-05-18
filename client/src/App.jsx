@@ -6,6 +6,8 @@ import { PrivateRoute } from "./components/auth/PrivateRoute";
 import VerifyEmail from "./pages/VerifyEmail";
 import ResetPassword from "./pages/ResetPassword";
 import NoPage from "./pages/NoPage";
+import Statistics from "./pages/Statistics";
+
 function App() {
   return (
     <div>
@@ -22,6 +24,7 @@ function App() {
           </Route>
           <Route path="/forgot-password" exact element={<VerifyEmail />} />
           <Route path="/reset-password/:token" exact element={<ResetPassword />} />
+          <Route path="/statistics" exact element={<Statistics />} />
           <Route path="*" exact element={<NoPage />} />
         </Routes>
       </Router>

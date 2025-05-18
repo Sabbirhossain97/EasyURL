@@ -1,10 +1,7 @@
 import Url from "../models/Url.js"
 import Stat from "../models/Statistics.js"
 import QRCode from 'qrcode'
-import geoip from 'geoip-lite';
-import { UAParser } from 'ua-parser-js';
 import { nanoid } from 'nanoid';
-
 
 const fetchUrls = async (req, res) => {
     const userId = req.user.id;
@@ -26,7 +23,6 @@ const fetchUrls = async (req, res) => {
         default:
             sortOption.createdAt = -1;
     }
-    console.log(sortOption)
     try {
         const urls = await Url.find({ user: userId }).sort(sortOption)
         res.json(urls);
@@ -47,6 +43,7 @@ const createUrl = async (req, res) => {
     }
 
     const shortUrl = `${process.env.BASE_URL}/${shortId}`;
+    const qrUrl = `${process.env.BASE_URL}/${shortId}?source=qr`;
     const createdAt = new Date().toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -54,13 +51,13 @@ const createUrl = async (req, res) => {
     })
 
     try {
-        const qrCodeDataUrl = await QRCode.toDataURL(shortUrl);
+        const qrCodeDataUrl = await QRCode.toDataURL(qrUrl);
         const url = new Url({
             longUrl: originalUrl,
             shortUrl,
+            qr: { url: qrUrl, code: qrCodeDataUrl },
             shortId,
             createdAt,
-            qrCode: qrCodeDataUrl,
             user: userId
         });
         await url.save();
@@ -70,7 +67,7 @@ const createUrl = async (req, res) => {
             shortUrl,
             originalUrl,
             createdAt,
-            qrcode: qrCodeDataUrl
+            qr: { url: qrUrl, code: qrCodeDataUrl },
         });
     } catch (err) {
         console.error('QR Code generation error:', err.message);
@@ -110,27 +107,42 @@ const customizeUrl = async (req, res) => {
 const redirectUrl = async (req, res) => {
     try {
         const { shortId } = req.params;
-        const url = await Url.findOne({ shortId });
+        const isQR = req.query.source === 'qr';
+        const ua = req.useragent;
+        const referrer = req.get('referer') || 'Direct';
+        const url = await Url.findOneAndUpdate({ shortId }, {
+            $inc: {
+                clickCount: 1,
+                'qr.scans': isQR ? 1 : 0
+            }
+        });
+        const ip = "8.8.8.8"
+        let geoData;
         if (!url) return res.status(404).send('URL not found');
 
-        url.clickCount++;
         await url.save();
 
-        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-        const geo = geoip.lookup(ip);
-        const ua = UAParser(req.headers['user-agent']);
-        const referrer = req.get('referer') || 'Direct';
+        try {
+            const response = await fetch(`https://ipapi.co/${ip}/json/`, {
+                method: "GET"
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            geoData = await response.json();
+        } catch (err) {
+            console.error("Geo API error:", err.message);
+        }
 
         const stat = new Stat({
             urlId: url._id,
             shortUrl: url.shortUrl,
-            ipAddress: ip,
-            country: geo?.country || 'Unknown',
-            city: geo?.city || 'Unknown',
-            browser: ua.browser.name || 'Unknown',
-            os: ua.os.name || 'Unknown',
-            device: ua.device.type || 'Desktop',
-            referrer
+            country: 'Unknown',
+            browser: ua.browser || 'Unknown',
+            platform: ua.platform || 'Unknown',
+            referrer: referrer
         });
 
         await stat.save();

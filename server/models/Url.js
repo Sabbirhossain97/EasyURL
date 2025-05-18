@@ -9,6 +9,19 @@ const urlSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    qr: {
+        url: {
+            type: String,
+            required: true
+        },
+        code: {
+            type: String
+        },
+        scans: {
+            type: Number,
+            default: 0
+        }
+    },
     shortId: {
         type: String,
         required: true,
@@ -18,7 +31,6 @@ const urlSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    qrCode: { type: String },
     clickCount: {
         type: Number,
         default: 0

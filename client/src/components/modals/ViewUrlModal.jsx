@@ -7,9 +7,10 @@ import { FacebookShareButton, TwitterShareButton, LinkedinShareButton, WhatsappS
 import { Spinner } from '../svg/SVG';
 import { handleCopy } from '../../utils/clipboard';
 import { handleDownloadQR } from '../../utils/downloadQR';
+import { useNavigate } from 'react-router-dom';
 
 function ViewUrlModal({ isUrlViewOpen, setIsUrlViewOpen, viewUrl, setViewUrl }) {
-
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
 
     function close() {
@@ -44,6 +45,7 @@ function ViewUrlModal({ isUrlViewOpen, setIsUrlViewOpen, viewUrl, setViewUrl }) 
                                 </Button>
                                 <Button
                                     type='submit'
+                                    onClick={() => navigate("/statistics")}
                                     className="inline-flex w-1/2 [@media(min-width:530px)]:w-full justify-center items-center cursor-pointer transition duration-300 gap-2 rounded-md bg-gray-700 dark:bg-white/10 px-3 py-1 text-sm/6 font-semibold text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-600 data-open:bg-gray-700"
                                 >
                                     <IoMdStats className='text-lg' />
@@ -73,7 +75,7 @@ function ViewUrlModal({ isUrlViewOpen, setIsUrlViewOpen, viewUrl, setViewUrl }) 
                         </div>
                         <div className='mt-10 flex flex-col items-center gap-4 justify-center'>
                             <div>
-                                <img src={viewUrl.qrCode} width="300px" height="300px" />
+                                <img src={viewUrl?.qr?.code} width="300px" height="300px" />
                             </div>
                             <div>
                                 <Button

@@ -45,7 +45,7 @@ function Shorten() {
             await createUrls(originalUrl);
             setTimeout(async () => {
                 toast.success("URL added!", { position: 'bottom-right' });
-                await getUrls();
+                await getUrls(sortBy);
                 setOriginalUrl("");
                 setLoading(false);
             }, 2000)
