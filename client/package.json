@@ -22,6 +22,8 @@
     "react-router-dom": "^6.30.0",
     "react-share": "^5.2.2",
     "react-simple-maps": "^3.0.0",
+    "react-tooltip": "^5.28.1",
+    "recharts": "^2.15.3",
     "swiper": "^11.2.6",
     "tailwindcss": "^4.1.4",
     "uuid": "^11.1.0"

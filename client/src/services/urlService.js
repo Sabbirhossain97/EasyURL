@@ -9,6 +9,15 @@ export const fetchUrls = async (sortBy) => {
     }
 }
 
+export const fetchUrlStats = async (urlId) => {
+    try {
+        const response = await axiosInstance.get(`/statistics/${urlId}`);
+        return response.data;
+    } catch (error) {
+        throw error?.response?.data || { error: 'Something went wrong during fetching urls.' };
+    }
+}
+
 export const createUrls = async (originalUrl) => {
     try {
         const response = await axiosInstance.post('/shorten', { originalUrl });

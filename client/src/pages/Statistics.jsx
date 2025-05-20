@@ -1,77 +1,80 @@
-import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simple-maps";
+import { MdVisibility, MdPeopleAlt } from "react-icons/md";
+import { RiQrScan2Line } from "react-icons/ri";
+import { useSearchParams } from "react-router-dom";
+import { fetchUrlStats } from "../services/urlService";
+import { useState, useEffect } from "react";
+import { LuLink } from "react-icons/lu";
+import { HeaderCardSkeleton, SmallCardSkeleton } from "../layouts/StatsSkeleton";
+import MapChart from "../utils/MapChart";
+import DonutChart from "../utils/DonutChart";
 
 function Statistics() {
 
-    const visitorStats = {
-        US: 120,
-        IN: 90,
-        DE: 40,
-        BD: 65,
-    };
+    const [searchParams] = useSearchParams();
+    const urlId = searchParams.get('id');
+    const [urlStats, setUrlsStats] = useState([])
+    const [loading, setLoading] = useState(true)
 
-    const geoUrl =
-        "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+    useEffect(() => {
+        if (!urlId) return;
 
-    const getColor = (isoCode) => {
-        const max = Math.max(...Object.values(visitorStats));
-        const count = visitorStats[isoCode] || 0;
-        const intensity = count / max;
-        return `rgba(111, 111, 111, ${intensity})`;
-    };
+        const fetchStats = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchUrlStats(urlId);
+                setUrlsStats(data);
+            } catch (err) {
+                console.error('Failed to fetch stats', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchStats();
+    }, [urlId]);
 
     return (
-        <div>
-            <div class="mt-44 grid max-w-7xl mx-auto grid-cols-4 row-span-3 gap-x-8 gap-y-4">
-                <div class="border rows-span-1 h-auto rounded-md">01</div>
-                <div className="row-span-3 col-span-2 border rounded-md">
-                    <div className="w-full h-auto">
-                        <ComposableMap
-                            projection="geoMercator"
-                            projectionConfig={{
-                                scale: 100,
-                                center: [0, 0],
-                            }}
-                            style={{ width: "100%", height: "100%" }}
-                        >
-                            <ZoomableGroup
-                                zoom={1}
-                                minZoom={1}
-                                maxZoom={8}
-                                center={[0, 0]}
-                                enableZoom={true}
-                                enablePan={true}
-                            >
-                                <Geographies geography={geoUrl}>
-                                    {({ geographies }) =>
-                                        geographies.map((geo) => {
-                                            const isoCode = geo.properties.ISO_A2;
-                                            return (
-                                                <Geography
-                                                    key={geo.rsmKey}
-                                                    geography={geo}
-                                                    fill={getColor(isoCode)}
-                                                    stroke="#DDD"
-                                                    style={{
-                                                        default: { outline: "none" },
-                                                        hover: { fill: "#FF5722", outline: "none" },
-                                                        pressed: { outline: "none" },
-                                                    }}
-                                                />
-                                            );
-                                        })
-                                    }
-                                </Geographies>
-                            </ZoomableGroup>
-                        </ComposableMap>
+        <div className=" max-w-7xl mx-auto pb-20">
+            <div className="text-center mt-30">
+                <h1 className="text-4xl font-bold pb-5">Statistics</h1>
+            </div>
+            <div className="mt-10">
+                <div className="grid grid-cols-4 row-span-3 gap-x-6 gap-y-6">
+                    {loading ? <HeaderCardSkeleton /> : <div className="bg-[#ecedf0] dark:bg-white/10 flex flex-col gap-2 py-6 items-center justify-center col-span-4 rows-span-1 h-auto rounded-md">
+                        <p className="text-gray-800 dark:text-white text-lg font-bold">Shortened URL</p>
+                        <a href={urlStats?.visits?.shortUrl} className="flex text-xl text-gray-500 hover:text-sky-400 dark:hover:text-blue-500 transition duration-300 dark:text-white/30 items-center gap-2 font-semibold"> <LuLink /> {urlStats?.visits?.shortUrl}</a>
+                    </div>}
+                    {loading ? <SmallCardSkeleton /> : <div className="bg-[#ecedf0] dark:bg-white/10 flex flex-col gap-2 items-center justify-center rows-span-1 h-auto rounded-md">
+                        <p className="text-gray-800 dark:text-white text-3xl font-bold">{urlStats?.stats?.length}</p>
+                        <p className="flex text-lg text-gray-500 dark:text-white/30 items-center gap-2 font-semibold"> <MdVisibility /> Total Visits</p>
+                    </div>}
+                    <div className="row-span-3 col-span-2 bg-[#ecedf0] dark:bg-white/10 rounded-md">
+                        <MapChart urlStats={urlStats} />
                     </div>
+                    {loading ? <SmallCardSkeleton /> : <div className="bg-[#ecedf0] dark:bg-white/10 flex flex-col gap-2 items-center justify-center rows-span-1 h-auto rounded-md">
+                        <p className="text-gray-800 dark:text-white text-3xl font-bold">{urlStats?.averages?.daily}</p>
+                        <p className="flex text-lg text-gray-500 dark:text-white/30 items-center gap-2 font-semibold"> Daily Average</p>
+                    </div>}
+                    {loading ? <SmallCardSkeleton /> : <div className="bg-[#ecedf0] dark:bg-white/10 flex flex-col gap-2 items-center justify-center rows-span-1 h-auto rounded-md">
+                        <p className="text-gray-800 dark:text-white text-3xl font-bold">0</p>
+                        <p className="flex text-lg text-gray-500 dark:text-white/30 items-center gap-2 font-semibold"> <MdPeopleAlt /> Unique Visitors</p>
+                    </div>}
+                    {loading ? <SmallCardSkeleton /> : <div className="bg-[#ecedf0] dark:bg-white/10 flex flex-col gap-2 items-center justify-center rows-span-1 h-auto rounded-md">
+                        <p className="text-gray-800 dark:text-white text-3xl font-bold">{urlStats?.averages?.weekly}</p>
+                        <p className="flex text-lg text-gray-500 dark:text-white/30 items-center gap-2 font-semibold"> Weekly Average</p>
+                    </div>}
+                    {loading ? <SmallCardSkeleton /> : <div className="bg-[#ecedf0] dark:bg-white/10 flex flex-col gap-2 items-center justify-center rows-span-1 h-auto rounded-md">
+                        <p className="text-gray-800 dark:text-white text-3xl font-bold">{urlStats?.visits?.qr?.scans}</p>
+                        <p className="flex text-lg text-gray-500 dark:text-white/30 items-center gap-2 font-semibold"> <RiQrScan2Line /> QR Scans</p>
+                    </div>}
+                    {loading ? <SmallCardSkeleton /> : <div className="bg-[#ecedf0] dark:bg-white/10 flex flex-col gap-2 items-center justify-center rows-span-1 h-auto rounded-md">
+                        <p className="text-gray-800 dark:text-white text-3xl font-bold">{urlStats?.averages?.monthly}</p>
+                        <p className="flex text-lg text-gray-500 dark:text-white/30 items-center gap-2 font-semibold">Monthly Average</p>
+                    </div>}
                 </div>
-                <div class="border rounded-md rows-span-1">03</div>
-                <div class="border rounded-md rows-span-1">04</div>
-                <div class="border rounded-md rows-span-1">05</div>
-                <div class="border rounded-md rows-span-1">06</div>
-                <div class="border rounded-md rows-span-1">07</div>
+                <DonutChart urlStats={urlStats} />
             </div>
         </div>
+
     )
 }
 

@@ -33,7 +33,7 @@ function ViewUrlModal({ isUrlViewOpen, setIsUrlViewOpen, viewUrl, setViewUrl }) 
                             Your shortened URL
                         </DialogTitle>
                         <div className='mt-2 flex [@media(max-width:530px)]:flex-col sm:flex-row gap-2 items-center'>
-                            <h3 className='text-sm w-full px-6 py-1.5 rounded-md bg-gray-200 dark:bg-white/10'>{viewUrl.shortUrl}</h3>
+                            <h3 className='text-sm w-full px-4 py-1.5 rounded-md bg-gray-200 dark:bg-white/10'>{viewUrl.shortUrl}</h3>
                             <div className='w-full flex gap-2'>
                                 <Button
                                     type='button'
@@ -45,7 +45,9 @@ function ViewUrlModal({ isUrlViewOpen, setIsUrlViewOpen, viewUrl, setViewUrl }) 
                                 </Button>
                                 <Button
                                     type='submit'
-                                    onClick={() => navigate("/statistics")}
+                                    onClick={() => navigate(
+                                        `/statistics?url=${encodeURIComponent(viewUrl.shortUrl)}&id=${viewUrl._id}`
+                                    )}
                                     className="inline-flex w-1/2 [@media(min-width:530px)]:w-full justify-center items-center cursor-pointer transition duration-300 gap-2 rounded-md bg-gray-700 dark:bg-white/10 px-3 py-1 text-sm/6 font-semibold text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-600 data-open:bg-gray-700"
                                 >
                                     <IoMdStats className='text-lg' />

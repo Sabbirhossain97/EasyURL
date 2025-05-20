@@ -1,36 +1,23 @@
 import { useState } from 'react'
 import { handleCopy } from '../../utils/clipboard';
-import { deleteUrl } from '../../services/urlService';
 import { FaCopy } from "react-icons/fa6";
-import toast from 'react-hot-toast';
+import DeleteConfirmModal from '../modals/DeleteConfirmModal';
 import ViewUrlModal from "../modals/ViewUrlModal"
 import CustomUrlModal from '../modals/CustomUrlModal';
 import SortFilter from '../filters/SortFilter';
 
 function TableData({ urls, setUrls, sortBy, setSortBy }) {
 
-    let [isCustomUrlModalOpen, setIsCustomUrlModalOpen] = useState(false)
+    let [isCustomUrlModalOpen, setIsCustomUrlModalOpen] = useState(false);
+    let [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+    let [isUrlViewOpen, setIsUrlViewOpen] = useState(false)
+    let [viewUrl, setViewUrl] = useState({});
     let [customUrl, setCustomUrl] = useState({
         id: null,
         name: ""
     });
-    let [isUrlViewOpen, setIsUrlViewOpen] = useState(false)
-    let [viewUrl, setViewUrl] = useState({});
-
-
-    const handleDelete = async (id) => {
-        try {
-            const data = await deleteUrl(id)
-            setUrls(prev => prev.filter(url => url._id !== id))
-            toast.success(data?.message, {
-                position: 'bottom-right'
-            });
-        } catch (err) {
-            toast.success(err?.error, {
-                position: 'bottom-right'
-            });
-        }
-    }
+    const [selectedId, setSelectedId] = useState(null)
+    console.log(selectedId)
 
     return (
         <div className="relative overflow-hidden mt-24">
@@ -47,6 +34,14 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                 setCustomUrl={setCustomUrl}
                 setUrls={setUrls}
             />
+            <DeleteConfirmModal
+                isDeleteModalOpen={isDeleteModalOpen}
+                setIsDeleteModalOpen={setIsDeleteModalOpen}
+                selectedId={selectedId}
+                setSelectedId={setSelectedId}
+                setUrls={setUrls}
+            />
+
             {urls?.length > 0 &&
                 <div className='flex flex-col'>
                     <div className='flex justify-between'>
@@ -102,7 +97,12 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                             {new Date(item.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                         </td>
                                         <td className="px-6 py-4 flex items-center gap-2">
-                                            <button onClick={() => handleDelete(item._id)} className="px-2 py-1 transition duration-300 hover:bg-red-600 rounded-md bg-red-500 font-medium text-white cursor-pointer">
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedId(item._id)
+                                                    setIsDeleteModalOpen(true)
+                                                }}
+                                                className="px-2 py-1 transition duration-300 hover:bg-red-600 rounded-md bg-red-500 font-medium text-white cursor-pointer">
                                                 Delete
                                             </button>
                                             <button
