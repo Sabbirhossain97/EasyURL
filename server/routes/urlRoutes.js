@@ -238,7 +238,7 @@ const redirectUrl = async (req, res) => {
         const stat = new Stat({
             urlId: url._id,
             shortUrl: url.shortUrl,
-            country: "Bangladesh",
+            country: "India",
             browser: ua.browser || 'Unknown',
             platform: ua.platform || 'Unknown',
             referrer: referrer

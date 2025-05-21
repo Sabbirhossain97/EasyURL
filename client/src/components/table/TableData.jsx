@@ -17,7 +17,6 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
         name: ""
     });
     const [selectedId, setSelectedId] = useState(null)
-    console.log(selectedId)
 
     return (
         <div className="relative overflow-hidden mt-24">

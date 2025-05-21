@@ -25,7 +25,7 @@ function Navbar() {
             </Link>
             <div className='flex items-center gap-10'>
                 <div className='flex items-center gap-2'>
-                    {location.pathname === "/shorten" &&
+                    {location.pathname !== "/" && user &&
                         <Popover>
                             <PopoverButton className="text-sm/6 cursor-pointer flex items-center gap-2 font-medium dark:text-white focus:outline-none data-active:text-sky-400 data-focus:outline data-focus:outline-white transition duration-300 data-hover:text-sky-400">
                                 <AiOutlineUser className='text-xl' />
@@ -73,7 +73,7 @@ function Navbar() {
                         </Popover>
                     }
                 </div>
-                <TabGroup className={`p-1 rounded-full bg-white dark:bg-[#181E29] ${location.pathname === "/shorten" && "hidden"} sm:block`}>
+                <TabGroup className={`p-1 rounded-full bg-white dark:bg-[#181E29] ${location.pathname === "/shorten" && "hidden"} hidden sm:block`}>
                     <TabList className="flex">
                         {theme.map(({ name }) => (
                             <Tab
