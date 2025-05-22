@@ -21,6 +21,12 @@ const fetchUrls = async (req, res) => {
         case 'clickCount_desc':
             sortOption.clickCount = -1;
             break;
+        case 'qrScans_asc':
+            sortOption['qr.scans'] = 1;
+            break;
+        case 'qrScans_desc':
+            sortOption['qr.scans'] = -1
+            break;
         default:
             sortOption.createdAt = -1;
     }
@@ -230,7 +236,6 @@ const redirectUrl = async (req, res) => {
             }
 
             geoData = await response.json();
-            console.log(geoData)
         } catch (err) {
             console.error("Geo API error:", err.message);
         }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { handleCopy } from '../../utils/clipboard';
 import { FaCopy } from "react-icons/fa6";
+import { Tooltip as ReactTooltip } from 'react-tooltip'
 import DeleteConfirmModal from '../modals/DeleteConfirmModal';
 import ViewUrlModal from "../modals/ViewUrlModal"
 import CustomUrlModal from '../modals/CustomUrlModal';
@@ -40,21 +41,20 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                 setSelectedId={setSelectedId}
                 setUrls={setUrls}
             />
-
             {urls?.length > 0 &&
                 <div className='flex flex-col'>
-                    <div className='flex justify-between'>
-                        <div>
-                            <h1 className='text-xl'>History ({urls.length}) </h1>
+                    <div className='flex  justify-end sm:justify-between'>
+                        <div className='hidden sm:block'>
+                            <h1 className='text-xl'>History({urls.length}) </h1>
                         </div>
                         <SortFilter
                             sortBy={sortBy}
                             setSortBy={setSortBy}
                         />
                     </div>
-                    <div className="w-full max-h-[420px] overflow-y-auto mt-4 rounded-xl shadow-xl bg-white dark:bg-[#101522]">
+                    <div className="w-full max-h-[420px] overflow-y-auto overflow-hidden mt-4 rounded-xl bg-white dark:bg-[#101522]">
                         <table className="w-full text-sm text-left rtl:text-right">
-                            <thead className="text-md rounded-xl bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
+                            <thead className="text-md rounded-t-xl bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
                                 <tr>
                                     <th scope="col" className="px-6 py-3">
                                         Short Link
@@ -78,12 +78,17 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                             </thead>
                             <tbody className='dark:text-[#b2b6bd]'>
                                 {urls.map((item, index) => (
-                                    <tr key={index} className="border-b border-zinc-100 dark:border-gray-700/40">
+                                    <tr key={index} className={`${index < urls.length - 1 && "border-b"} border-zinc-100 dark:border-gray-700/40`}>
                                         <td className="px-6 w-1/5 py-4 flex items-center gap-2 font-medium whitespace-nowrap">
                                             {item.shortUrl}
                                             <span onClick={() => handleCopy(item.shortUrl)} className='cursor-pointer p-2 bg-zinc-100 dark:bg-[#1C283FB0] rounded-full'><FaCopy className='text-gray-500 dark:text-white' /></span>
                                         </td>
-                                        <td className="px-6 py-4 truncate max-w-[250px]">
+                                        <td data-tooltip-id="my-tooltip" data-tooltip-content={item.longUrl} className="px-6 py-4 truncate max-w-[250px]">
+                                            <ReactTooltip
+                                                id="my-tooltip"
+                                                place="top"
+                                                arrowColor="black"
+                                            />
                                             {item.longUrl}
                                         </td>
                                         <td className="px-6 py-4 text-start">

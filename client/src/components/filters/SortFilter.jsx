@@ -27,6 +27,16 @@ function SortFilter({ sortBy, setSortBy }) {
                         </button>
                     </MenuItem>
                     <MenuItem>
+                        <button onClick={() => setSortBy({ slug: 'qrScans_asc', field: 'Scans ( least )' })} className="group cursor-pointer flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800/50">
+                            Scans ( least )
+                        </button>
+                    </MenuItem>
+                    <MenuItem>
+                        <button onClick={() => setSortBy({ slug: 'qrScans_desc', field: ' Scans ( most )' })} className="group cursor-pointer flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800/50">
+                            Scans ( most )
+                        </button>
+                    </MenuItem>
+                    <MenuItem>
                         <button onClick={() => setSortBy({ slug: 'createdAt_desc', field: 'Date ( newest )' })} className="group cursor-pointer flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800/50">
                             Date Added ( newest )
                         </button>

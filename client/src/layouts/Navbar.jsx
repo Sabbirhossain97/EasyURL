@@ -73,7 +73,7 @@ function Navbar() {
                         </Popover>
                     }
                 </div>
-                <TabGroup className={`p-1 rounded-full bg-white dark:bg-[#181E29] ${location.pathname === "/shorten" && "hidden"} hidden sm:block`}>
+                <TabGroup className={`p-1 rounded-full bg-white dark:bg-[#181E29] ${location.pathname === "/shorten" || location.pathname === "/statistics" ? "hidden sm:block" : "block"} `}>
                     <TabList className="flex">
                         {theme.map(({ name }) => (
                             <Tab

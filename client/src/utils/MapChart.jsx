@@ -32,7 +32,6 @@ function MapChart({ urlStats }) {
                                         geography={geo}
                                         fill={findCount && findCount.count > 0 ? "#48A4FD" : "#D4DEED"}
                                         stroke="#9f9fa9"
-                                        onClick={() => console.log(geo)}
                                         data-tooltip-id="country-tooltip"
                                         data-tooltip-content={`${geo.properties.name}: ${findCount?.count ? findCount?.count : 0} visit`}
                                         style={{

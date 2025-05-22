@@ -6,7 +6,7 @@ function DonutChart({ urlStats }) {
 
     return (
         <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="bg-[#ecedf0] dark:bg-white/10 rounded-md py-4">
+            <div className="bg-[#ecedf0] dark:bg-white/5 rounded-md py-4">
                 <h3 className="text-lg font-bold text-center">Referrers</h3>
                 {urlStats?.referrerStats?.length === 0 ?
                     <div className='w-[400px] h-[300px] flex flex-col items-center justify-center'>
@@ -64,7 +64,7 @@ function DonutChart({ urlStats }) {
                     </>
                 }
             </div>
-            <div className="bg-[#ecedf0] dark:bg-white/10 rounded-md py-4">
+            <div className="bg-[#ecedf0] dark:bg-white/5 rounded-md py-4">
                 <h3 className="text-lg font-bold text-center">Browser</h3>
                 {urlStats?.browserStats?.length === 0 ?
                     <div className='w-[400px] h-[300px] flex flex-col items-center justify-center'>
@@ -119,7 +119,7 @@ function DonutChart({ urlStats }) {
                     </>
                 }
             </div>
-            <div className="bg-[#ecedf0] dark:bg-white/10 rounded-md py-4">
+            <div className="bg-[#ecedf0] dark:bg-white/5 rounded-md py-4">
                 <h3 className="text-lg font-bold text-center">Platform</h3>
                 {urlStats?.platformStats?.length === 0 ?
                     <div className='w-[400px] h-[300px] flex flex-col items-center justify-center'>
