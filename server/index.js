@@ -9,6 +9,7 @@ import useragent from "express-useragent";
 
 const app = express();
 app.use(cors());
+app.set('trust proxy', true);
 app.use(express.json());
 app.use("/shorten", auth)
 app.use(useragent.express());

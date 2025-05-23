@@ -219,9 +219,7 @@ const redirectUrl = async (req, res) => {
         if (!url) return res.status(404).send('URL not found');
 
         await url.save();
-
-        const ip = "170.171.1.0"
-
+        const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
         let geoData;
         try {
             const response = await fetch(`https://ipapi.co/${ip}/json/`, {
@@ -243,7 +241,7 @@ const redirectUrl = async (req, res) => {
         const stat = new Stat({
             urlId: url._id,
             shortUrl: url.shortUrl,
-            country: "India",
+            country: geoData?.country_name || "Unknown",
             browser: ua.browser || 'Unknown',
             platform: ua.platform || 'Unknown',
             referrer: referrer
