@@ -7,6 +7,7 @@ const statisticsSchema = new mongoose.Schema({
         required: true
     },
     timestamp: { type: Date, default: Date.now },
+    ip: String,
     country: String,
     browser: String,
     platform: String,

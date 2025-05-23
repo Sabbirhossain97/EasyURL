@@ -79,6 +79,7 @@ const fetchUrlStats = async (req, res) => {
                 }
             }
         ]);
+
         const weeklyAverage = weeklyStats.length
             ? weeklyStats.reduce((acc, curr) => acc + curr.count, 0) / weeklyStats.length
             : 0;
@@ -105,6 +106,11 @@ const fetchUrlStats = async (req, res) => {
             weekly: weeklyAverage,
             monthly: monthlyAverage
         };
+
+        urlStats.uniqueVisitors = await Stat.aggregate([
+            { $match: { urlId: objectId } },
+            { $group: { _id: "$ip" } }
+        ])
 
         urlStats.countryStats = await Stat.aggregate([
             { $match: { urlId: objectId } },
@@ -241,6 +247,7 @@ const redirectUrl = async (req, res) => {
         const stat = new Stat({
             urlId: url._id,
             shortUrl: url.shortUrl,
+            ip: ip,
             country: geoData?.country_name || "Unknown",
             browser: ua.browser || 'Unknown',
             platform: ua.platform || 'Unknown',

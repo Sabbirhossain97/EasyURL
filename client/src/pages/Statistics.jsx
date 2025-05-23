@@ -59,7 +59,7 @@ function Statistics() {
                         <div className="flex text-lg text-gray-500 dark:text-white/30 items-center gap-2 font-semibold">{loading ? <div className="bg-gray-300 animate-pulse dark:bg-white/15 w-32 h-4 mt-4 rounded-md"></div> : "Daily Average"}</div>
                     </div>
                     <div className="bg-[#ecedf0] dark:bg-white/5 [@media(max-width:500px)]:col-span-full flex flex-col gap-2 py-8 lg:py-0 items-center justify-center rows-span-1 col-span-2 lg:col-span-1 order-5 h-auto rounded-md">
-                        <div className="text-gray-800 dark:text-white text-3xl font-bold"> {loading ? <div className="bg-gray-300 animate-pulse dark:bg-white/15 text-3xl h-8 w-8 rounded-md font-bold"></div> : "0"}</div>
+                        <div className="text-gray-800 dark:text-white text-3xl font-bold"> {loading ? <div className="bg-gray-300 animate-pulse dark:bg-white/15 text-3xl h-8 w-8 rounded-md font-bold"></div> : (urlStats?.uniqueVisitors?.length)}</div>
                         <div className="flex text-lg text-gray-500 dark:text-white/30 items-center gap-2 font-semibold">{loading ? <div className="bg-gray-300 animate-pulse dark:bg-white/15 w-32 h-4 mt-4 rounded-md"></div> : <><MdPeopleAlt /> Unique Visitors</>}</div>
                     </div>
                     <div className="bg-[#ecedf0] dark:bg-white/5 [@media(max-width:500px)]:col-span-full flex flex-col gap-2 py-8 lg:py-0 items-center justify-center rows-span-1 col-span-2 lg:col-span-1 order-6 h-auto rounded-md">
