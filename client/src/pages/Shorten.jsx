@@ -28,19 +28,7 @@ function Shorten() {
 
     const createUrl = async (e) => {
         e.preventDefault();
-
-        if (!originalUrl) {
-            toast.error('Enter an URL!', { position: 'top-center' });
-            return;
-        }
-
-        if (urls.find((item) => item.longUrl === originalUrl)) {
-            toast.error("URL already in use!", { position: 'top-center' });
-            return;
-        }
-
         setLoading(true);
-
         try {
             await createUrls(originalUrl);
             setTimeout(async () => {
@@ -49,14 +37,16 @@ function Shorten() {
                 setOriginalUrl("");
                 setLoading(false);
             }, 2000)
-
         } catch (err) {
-            toast.error(err?.response?.data?.error, { position: 'top-center' });
+            setTimeout(() => {
+                toast.error(err?.error, { position: 'top-center' });
+                setLoading(false);
+            }, 1500);
         }
     };
 
     return (
-        <div className="max-w-7xl mx-auto pb-20 px-6 md:px-10 xl:px-10">
+        <div className="max-w-7xl mx-auto pb-20 px-6 md:px-10 xl:px-0">
             <div className='flex justify-center'>
                 <div className="mt-44 w-full lg:w-3/4">
                     <h1 className="text-center text-[42px] sm:text-[52px] md:text-[64px] font-bold leading-[52px] custom-header-text">Shorten Your URL here</h1>
@@ -65,7 +55,6 @@ function Shorten() {
                             className="border focus:border-sky-400 dark:focus:border-blue-500 transition duration-300 outline-none w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-[48px] p-5"
                             placeholder="Enter your long url here..."
                             onChange={(e) => setOriginalUrl(e.target.value)}
-                            type="url"
                             value={originalUrl}
                         />
                         <button type="submit" className={`${loading ? 'bg-blue-500' : 'bg-sky-400 dark:bg-blue-600'} text-white cursor-pointer transition duration-300 hover:bg-blue-500 absolute w-[50px] sm:w-[150px] right-2 top-2 bottom-2 px-4 rounded-[48px]`}>

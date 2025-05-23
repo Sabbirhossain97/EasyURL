@@ -27,20 +27,22 @@ export const createUrls = async (originalUrl) => {
     }
 }
 
-export const deleteUrl = async (id) => {
+export const deleteUrls = async (urls) => {
     try {
-        const response = await axiosInstance.delete(`/${id}`);
+        const response = await axiosInstance.delete('/delete-urls', {
+            data: { ids: urls }
+        });
         return response.data;
     } catch (error) {
-        throw error?.response?.data || { error: 'Something went wrong creating urls.' };
+        throw error?.response?.data || { error: 'Something went wrong deleting urls.' };
     }
-}
+};
 
 export const customizeUrl = async (customUrl) => {
     try {
         const response = await axiosInstance.patch(`/shorten/${customUrl.id}`, { customName: customUrl.name });
         return response.data;
     } catch (error) {
-        throw error?.response?.data || { error: 'Something went wrong creating urls.' };
+        throw error?.response?.data || { error: 'Something went wrong customizing urls.' };
     }
 }

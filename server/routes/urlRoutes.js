@@ -142,8 +142,21 @@ const createUrl = async (req, res) => {
     const { originalUrl } = req.body;
     const shortId = nanoid(6);
     const userId = req.user.id;
+    const trimmedUrl = originalUrl?.trim();
 
-    if (!originalUrl || !/^https?:\/\/.+/.test(originalUrl)) {
+    const isUrlExists = await Url.findOne({
+        user: mongoose.Types.ObjectId.createFromHexString(userId),
+        $or: [
+            { longUrl: trimmedUrl },
+            { shortUrl: trimmedUrl }
+        ]
+    })
+
+    if (isUrlExists) {
+        return res.status(400).json({ error: "URL already exists." });
+    }
+
+    if (!trimmedUrl || !/^https?:\/\/.+/.test(trimmedUrl)) {
         return res.status(400).json({ error: 'Invalid URL' });
     }
 
@@ -158,7 +171,7 @@ const createUrl = async (req, res) => {
     try {
         const qrCodeDataUrl = await QRCode.toDataURL(qrUrl);
         const url = new Url({
-            longUrl: originalUrl,
+            longUrl: trimmedUrl,
             shortUrl,
             qr: { url: qrUrl, code: qrCodeDataUrl },
             shortId,
@@ -170,7 +183,7 @@ const createUrl = async (req, res) => {
         res.json({
             shortId,
             shortUrl,
-            originalUrl,
+            trimmedUrl,
             createdAt,
             qr: { url: qrUrl, code: qrCodeDataUrl },
         });
@@ -277,6 +290,17 @@ const deleteUrl = async (req, res) => {
     }
 }
 
+const deleteMultipleUrls = async (req, res) => {
+    try {
+        const { ids } = req.body
+        const objectIds = ids.map((id) => mongoose.Types.ObjectId.createFromHexString(id));
+        await Url.deleteMany({ _id: { $in: objectIds } })
+        await Stat.deleteMany({ urlId: objectIds })
+        res.json({ message: "URLs deleted succesfully!" })
+    } catch (err) {
+        res.status(500).json({ error: "Failed to delete URLs" })
+    }
+}
 
 export const urlRoutes = (app) => {
     app.get("/shorten/urls", fetchUrls);
@@ -284,6 +308,6 @@ export const urlRoutes = (app) => {
     app.post("/shorten", createUrl);
     app.patch("/shorten/:shortId", customizeUrl);
     app.get('/:shortId', redirectUrl);
+    app.delete("/delete-urls", deleteMultipleUrls)
     app.delete('/:id', deleteUrl);
-
 }
