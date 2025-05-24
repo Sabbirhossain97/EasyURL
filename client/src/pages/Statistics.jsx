@@ -34,7 +34,7 @@ function Statistics() {
     }, [urlId]);
 
     return (
-        <div className="px-6 md:px-10 xl:px-0 max-w-7xl mx-auto pb-20">
+        <div className="px-6 md:px-4 xl:px-6 max-w-7xl mx-auto pb-20">
             <div className="mt-24">
                 <Link to="/shorten"><h3 className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-500 dark:text-white dark:hover:text-white/40 transition duration-300 cursor-pointer"><FaArrowLeftLong />Back to previous page</h3></Link>
             </div>
@@ -44,8 +44,19 @@ function Statistics() {
             <div className="py-4">
                 <div className="grid grid-cols-4 row-span-3 gap-x-6 gap-y-6">
                     <div className="bg-[#ecedf0] order-1 dark:bg-white/5 flex flex-col gap-2 py-6 items-center justify-center col-span-4 rows-span-1 h-auto rounded-md">
-                        <div className="text-gray-800 dark:text-white text-lg font-bold"> {loading ? <div className="bg-gray-300 dark:bg-white/15 text-3xl h-4 w-64 rounded-md font-bold"></div> : "Shortened URL"}</div>
-                        <a href={urlStats?.visits?.shortUrl} className="flex text-xl text-gray-500 hover:text-sky-400 dark:hover:text-blue-500 transition duration-300 dark:text-white/30 items-center gap-2 font-semibold">{loading ? <div className="bg-gray-300 dark:bg-white/15 w-96 h-4 mt-4 rounded-md"></div> : <> <LuLink /> {urlStats?.visits?.shortUrl}</>}</a>
+                        <div className="text-gray-800 dark:text-white text-md sm:text-lg font-bold"> {loading ? <div className="bg-gray-300 animate-pulse dark:bg-white/15 text-3xl h-4 w-44 sm:w-64 rounded-md font-bold"></div> : "Shortened URL"}</div>
+                        <a
+                            href={urlStats?.visits?.shortUrl}
+                            className="flex max-w-[400px] px-2 sm:px-0 text-lg sm:text-xl break-words break-all whitespace-normal text-gray-500 hover:text-sky-400 dark:hover:text-blue-500 transition duration-300 dark:text-white/30 items-center gap-2 font-semibold"
+                        >
+                            {loading ? (
+                                <div className="bg-gray-300 animate-pulse dark:bg-white/15 w-64 sm:w-96 h-4 mt-4 rounded-md"></div>
+                            ) : (
+                                <>
+                                    <LuLink className="hidden sm:block" /> {urlStats?.visits?.shortUrl}
+                                </>
+                            )}
+                        </a>
                     </div>
                     <div className="bg-[#ecedf0] dark:bg-white/5 [@media(max-width:500px)]:col-span-full flex flex-col gap-2 py-8 lg:py-0 items-center justify-center rows-span-1 col-span-2 lg:col-span-1 order-3 lg:order-2 h-auto rounded-md">
                         <div className="text-gray-800 dark:text-white text-3xl font-bold">{loading ? <div className="bg-gray-300 animate-pulse dark:bg-white/15 text-3xl h-8 w-8 rounded-md font-bold"></div> : urlStats?.stats?.length}</div>

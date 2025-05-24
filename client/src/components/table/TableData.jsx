@@ -112,7 +112,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                 {urls.map((item, index) => (
                                     <tr
                                         key={index}
-                                        className={`${selectedUrlId.includes(item._id) ? "bg-blue-300/40 divide-none" : "divide-y divide-zinc-300/40 dark:divide-gray-700/40"}`}
+                                        className={`${selectedUrlId.includes(item._id) ? "bg-blue-300/40 divide-none" : "border-b border-zinc-300/40 dark:border-gray-700/40"}`}
                                  >
                                         <td className='px-6 py-6'>
                                             <input

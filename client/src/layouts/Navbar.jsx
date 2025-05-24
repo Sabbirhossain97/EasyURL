@@ -19,7 +19,7 @@ function Navbar() {
     return (
         <nav className="mx-auto flex items-center justify-between pt-6 text-center h-16 max-w-7xl px-6 md:px-10 xl:px-0">
             <Link to="/">
-                <h1 className="font-montserrat custom-header-text leading-[58px] text-zinc-500 flex font-bold whitespace-nowrap tracking-[1px] text-3xl">
+                <h1 className="font-montserrat custom-header-text leading-[58px] text-zinc-500 flex font-bold whitespace-nowrap tracking-[1px] text-2xl sm:text-3xl">
                     EasyURL
                 </h1>
             </Link>
@@ -27,9 +27,9 @@ function Navbar() {
                 <div className='flex items-center gap-2'>
                     {location.pathname !== "/" && user &&
                         <Popover>
-                            <PopoverButton className="text-sm/6 cursor-pointer flex items-center gap-2 font-medium dark:text-white focus:outline-none data-active:text-sky-400 data-focus:outline data-focus:outline-white transition duration-300 data-hover:text-sky-400">
-                                <AiOutlineUser className='text-xl' />
-                                <span className='text-[16px]'>{user && user?.username}</span>
+                            <PopoverButton className="cursor-pointer flex items-center gap-2 font-medium dark:text-white focus:outline-none data-active:text-sky-400 data-focus:outline data-focus:outline-white transition duration-300 data-hover:text-sky-400">
+                                <AiOutlineUser className='text-2xl sm:text-xl' />
+                                <span className='text-[18px] sm:text-[16px]'>{user && user?.username}</span>
                             </PopoverButton>
                             <PopoverPanel
                                 transition
