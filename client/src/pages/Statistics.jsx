@@ -1,11 +1,10 @@
 import { MdVisibility, MdPeopleAlt } from "react-icons/md";
 import { RiQrScan2Line } from "react-icons/ri";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { fetchUrlStats } from "../services/urlService";
 import { useState, useEffect } from "react";
 import { LuLink } from "react-icons/lu";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { Link } from "react-router-dom";
 import MapChart from "../utils/MapChart";
 import DonutChart from "../utils/DonutChart";
 

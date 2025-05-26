@@ -5,7 +5,7 @@
             "has": [
                 {
                     "type": "host",
-                    "value": "www.easyurl.xyz"
+                    "value": "https://www.easy-url.xyz"
                 }
             ],
             "destination": "https://easyurl-production.up.railway.app/:shortId"
