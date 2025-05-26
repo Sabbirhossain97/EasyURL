@@ -228,6 +228,9 @@ const redirectUrl = async (req, res) => {
         const { shortId } = req.params;
         const isQR = req.query.source === 'qr';
         const ua = req.useragent;
+        if (shortId === "shorten") {
+            return res.redirect("/shorten");
+        }
         const referrer = req.get('referer') || 'Direct';
         const url = await Url.findOneAndUpdate({ shortId }, {
             $inc: {
