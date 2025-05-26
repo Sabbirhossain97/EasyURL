@@ -20,7 +20,7 @@ export const fetchUrlStats = async (urlId) => {
 
 export const createUrls = async (originalUrl) => {
     try {
-        const response = await axiosInstance.post('/shorten', { originalUrl });
+        const response = await axiosInstance.post('/shorten/create-url', { originalUrl });
         return response.data;
     } catch (error) {
         throw error?.response?.data || { error: 'Something went wrong creating urls.' };

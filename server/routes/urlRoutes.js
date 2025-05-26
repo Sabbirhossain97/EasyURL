@@ -3,7 +3,7 @@ import Stat from "../models/Statistics.js"
 import QRCode from 'qrcode'
 import { nanoid } from 'nanoid';
 import mongoose from "mongoose";
-import {auth} from "../middlewares/auth.js";
+import { auth } from "../middlewares/auth.js";
 
 const fetchUrls = async (req, res) => {
     const userId = req.user.id;
@@ -236,7 +236,7 @@ const redirectUrl = async (req, res) => {
             }
         });
 
-        if (!url) return res.status(404).send('URL not found');
+        if (!url) return res.status(404).send('URL not found in database!');
 
         await url.save();
         const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
@@ -291,10 +291,10 @@ const deleteMultipleUrls = async (req, res) => {
 }
 
 export const urlRoutes = (app) => {
-    app.post("/shorten", auth, createUrl);
-    app.get('/:shortId', redirectUrl); 
+    app.post("/shorten/create-url", auth, createUrl);
     app.get("/shorten/urls", auth, fetchUrls);
     app.get("/statistics/:urlId", auth, fetchUrlStats);
     app.patch("/shorten/:shortId", auth, customizeUrl);
     app.delete("/delete-urls", auth, deleteMultipleUrls);
+    app.get('/:shortId', redirectUrl);
 }
