@@ -197,16 +197,16 @@ const createUrl = async (req, res) => {
 const customizeUrl = async (req, res) => {
     const { shortId } = req.params;
     const { customName } = req.body;
-    const userId = req.user.id;
+    const userId = mongoose.Types.ObjectId(req.user.id);
 
     try {
-        const isCustomNameExist = await Url.findOne({ shortId: customName });
+        const isCustomNameExist = await Url.findOne({ shortId: customName, user: userId });
 
         if (isCustomNameExist) {
             return res.status(409).json({ error: "Custom name already taken!" });
         }
 
-        const url = await Url.findOne({ shortId });
+        const url = await Url.findOne({ shortId, user: userId });
         if (!url) {
             return res.status(404).json({ error: "Short ID not found!" });
         }
