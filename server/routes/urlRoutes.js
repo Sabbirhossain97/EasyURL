@@ -226,6 +226,9 @@ const customizeUrl = async (req, res) => {
 const redirectUrl = async (req, res) => {
     try {
         const { shortId } = req.params;
+        if (shortId === "shorten") {
+            return
+        }
         const isQR = req.query.source === 'qr';
         const ua = req.useragent;
         const referrer = req.get('referer') || 'Direct';
@@ -291,10 +294,10 @@ const deleteMultipleUrls = async (req, res) => {
 }
 
 export const urlRoutes = (app) => {
-    app.post("/shorten/create-url", auth, createUrl);
-    app.get("/shorten/urls", auth, fetchUrls);
-    app.get("/statistics/:urlId", auth, fetchUrlStats);
-    app.patch("/shorten/:shortId", auth, customizeUrl);
-    app.delete("/delete-urls", auth, deleteMultipleUrls);
+    app.post("/api/shorten/create-url", auth, createUrl);
+    app.get("/api/shorten/urls", auth, fetchUrls);
+    app.get("/api/statistics/:urlId", auth, fetchUrlStats);
+    app.patch("/api/shorten/:shortId", auth, customizeUrl);
+    app.delete("/api/delete-urls", auth, deleteMultipleUrls);
     app.get('/:shortId', redirectUrl);
 }
