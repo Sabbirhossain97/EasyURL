@@ -226,9 +226,6 @@ const customizeUrl = async (req, res) => {
 const redirectUrl = async (req, res) => {
     try {
         const { shortId } = req.params;
-        if (shortId === "shorten") {
-            return
-        }
         const isQR = req.query.source === 'qr';
         const ua = req.useragent;
         const referrer = req.get('referer') || 'Direct';
