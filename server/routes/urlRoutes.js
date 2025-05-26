@@ -3,6 +3,7 @@ import Stat from "../models/Statistics.js"
 import QRCode from 'qrcode'
 import { nanoid } from 'nanoid';
 import mongoose from "mongoose";
+import {auth} from "../middlewares/auth.js";
 
 const fetchUrls = async (req, res) => {
     const userId = req.user.id;
@@ -290,10 +291,10 @@ const deleteMultipleUrls = async (req, res) => {
 }
 
 export const urlRoutes = (app) => {
-    app.get('/:shortId', redirectUrl); 
-    app.get("/shorten/urls", fetchUrls);
-    app.get("/statistics/:urlId", fetchUrlStats);
-    app.post("/shorten", createUrl);
-    app.patch("/shorten/:shortId", customizeUrl);
-    app.delete("/delete-urls", deleteMultipleUrls);
+    app.get('/:shortId', auth, redirectUrl); 
+    app.get("/shorten/urls", auth, fetchUrls);
+    app.get("/statistics/:urlId", auth, fetchUrlStats);
+    app.post("/shorten", auth, createUrl);
+    app.patch("/shorten/:shortId", auth, customizeUrl);
+    app.delete("/delete-urls", auth, deleteMultipleUrls);
 }

@@ -4,7 +4,6 @@ import 'dotenv/config';
 import { connectDB } from './config/db.js';
 import { authRoutes } from './routes/authRoutes.js';
 import { urlRoutes } from './routes/urlRoutes.js';
-import { auth } from './middlewares/auth.js';
 import useragent from "express-useragent";
 
 const app = express();
@@ -13,7 +12,6 @@ app.set('trust proxy', true);
 app.use(express.json());
 app.use(useragent.express());
 connectDB();
-app.use("/shorten", auth)
 authRoutes(app);
 urlRoutes(app);
 
