@@ -292,7 +292,7 @@ const deleteMultipleUrls = async (req, res) => {
 
 export const urlRoutes = (app) => {
     app.post("/shorten/create-url", auth, createUrl);
-    app.get("/shorten/urls", auth, fetchUrls);
+    app.get("/urls", auth, fetchUrls);
     app.get("/statistics/:urlId", auth, fetchUrlStats);
     app.patch("/shorten/:shortId", auth, customizeUrl);
     app.delete("/delete-urls", auth, deleteMultipleUrls);
