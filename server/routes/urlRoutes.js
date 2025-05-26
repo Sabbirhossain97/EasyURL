@@ -291,10 +291,10 @@ const deleteMultipleUrls = async (req, res) => {
 }
 
 export const urlRoutes = (app) => {
-    app.get('/:shortId', auth, redirectUrl); 
+    app.post("/shorten", auth, createUrl);
+    app.get('/:shortId', redirectUrl); 
     app.get("/shorten/urls", auth, fetchUrls);
     app.get("/statistics/:urlId", auth, fetchUrlStats);
-    app.post("/shorten", auth, createUrl);
     app.patch("/shorten/:shortId", auth, customizeUrl);
     app.delete("/delete-urls", auth, deleteMultipleUrls);
 }
