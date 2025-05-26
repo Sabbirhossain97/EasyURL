@@ -13,8 +13,10 @@ function Navbar() {
     const navigate = useNavigate();
     const location = useLocation();
     const [loading, setLoading] = useState(false);
-    const { setSelectedTheme } = useTheme('Light');
+    const { selectedTheme, setSelectedTheme } = useTheme('Light');
     const user = JSON.parse(localStorage.getItem("user"))
+
+    const themeIndex = theme.findIndex(t => t.name === selectedTheme);
 
     return (
         <nav className="mx-auto flex items-center justify-between pt-6 text-center h-16 max-w-7xl px-6 md:px-10 xl:px-0">
@@ -56,12 +58,11 @@ function Navbar() {
                                         </button>
                                     }
                                 </div>
-                                <TabGroup className="p-3 rounded-full sm:hidden">
+                                <TabGroup selectedIndex={themeIndex} onChange={(index) => setSelectedTheme(theme[index].name)} className="p-2">
                                     <TabList className="flex">
                                         {theme.map(({ name }) => (
                                             <Tab
                                                 key={name}
-                                                onClick={() => setSelectedTheme(name)}
                                                 className="rounded-full cursor-pointer transition duration-300 ease-in-out px-3 py-1 text-sm/6 font-semibold data-selected:text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-selected:bg-sky-400 dark:data-selected:bg-white/10 dark:data-selected:data-hover:bg-white/10"
                                             >
                                                 {name}
@@ -73,12 +74,11 @@ function Navbar() {
                         </Popover>
                     }
                 </div>
-                <TabGroup className={`p-1 rounded-full bg-white dark:bg-[#181E29] ${location.pathname === "/shorten" || location.pathname === "/statistics" ? "hidden sm:block" : "block"} `}>
+                <TabGroup selectedIndex={themeIndex} onChange={(index) => setSelectedTheme(theme[index].name)} className={`p-1 rounded-full bg-white dark:bg-[#181E29] ${location.pathname === "/shorten" || location.pathname === "/statistics" ? "hidden sm:block" : "block"} `}>
                     <TabList className="flex">
                         {theme.map(({ name }) => (
                             <Tab
                                 key={name}
-                                onClick={() => setSelectedTheme(name)}
                                 className="rounded-full cursor-pointer transition duration-300 ease-in-out px-3 py-1 text-sm/6 font-semibold data-selected:text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-selected:bg-sky-400 dark:data-selected:bg-white/10 dark:data-selected:data-hover:bg-white/10"
                             >
                                 {name}

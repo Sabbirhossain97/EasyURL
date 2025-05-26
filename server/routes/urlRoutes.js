@@ -203,6 +203,11 @@ const customizeUrl = async (req, res) => {
     const { customName } = req.body;
     const userId = mongoose.Types.ObjectId.createFromHexString(req.user.id);
     try {
+        
+        if (customName.length < 4 || customName.length > 30) {
+            return res.status(400).json({ error: "Custom name must be between 4 and 30 characters." });
+        }
+
         const isCustomNameExist = await Url.findOne({ shortId: customName, user: userId });
         if (isCustomNameExist) {
             return res.status(409).json({ error: "Custom name already taken!" });

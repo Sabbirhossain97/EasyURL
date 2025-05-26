@@ -12,6 +12,6 @@ export const useTheme = () => {
         }
     }, [selectedTheme])
 
-    return { setSelectedTheme }
+    return { selectedTheme, setSelectedTheme }
 
 }

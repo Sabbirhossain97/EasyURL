@@ -24,34 +24,32 @@ function ViewUrlModal({ isUrlViewOpen, setIsUrlViewOpen, viewUrl, setViewUrl }) 
         <Dialog open={isUrlViewOpen} as="div" className="relative z-10 focus:outline-none" onClose={close}>
             <DialogBackdrop className="fixed inset-0 backdrop-blur-sm" />
             <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-                <div className="flex min-h-full items-center justify-center p-4">
+                <div className="flex min-h-full items-center justify-center p-2 sm:p-4">
                     <DialogPanel
                         transition
-                        className="w-full max-w-[500px] rounded-xl shadow-xl bg-white dark:bg-[#181E29] p-6 backdrop-blur-2xl duration-300 ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0"
+                        className="w-full max-w-[500px] rounded-xl shadow-xl bg-white dark:bg-[#181E29] p-4 sm:p-6 backdrop-blur-2xl duration-300 ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0"
                     >
                         <DialogTitle as="h3" className="text-base/7 font-bold dark:text-white">
                             Your shortened URL
                         </DialogTitle>
-                        <div className='mt-2 flex [@media(max-width:530px)]:flex-col sm:flex-row gap-2 items-center'>
+                        <div className='mt-2 flex gap-2 items-center w-full'>
                             <h3 className='text-sm w-full px-4 py-1.5 rounded-md bg-gray-200 dark:bg-white/10'>{viewUrl.shortUrl}</h3>
-                            <div className='w-full flex gap-2'>
+                            <div className='w-full flex gap-2 flex-1'>
                                 <Button
                                     type='button'
                                     onClick={() => handleCopy(viewUrl.shortUrl)}
-                                    className="inline-flex w-1/2 [@media(min-width:530px)]:w-full justify-center items-center cursor-pointer transition duration-300 gap-2 rounded-md bg-gray-700 dark:bg-white/10 px-3 py-1 text-sm/6 font-semibold text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-600 data-open:bg-gray-700"
+                                    className="inline-flex  justify-center items-center cursor-pointer transition duration-300 gap-2 rounded-md bg-gray-700 dark:bg-white/10 px-3 py-1.5 text-sm/6 font-semibold text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-600 data-open:bg-gray-700"
                                 >
                                     <FaCopy />
-                                    Copy
                                 </Button>
                                 <Button
                                     type='submit'
                                     onClick={() => navigate(
                                         `/statistics?url=${encodeURIComponent(viewUrl.shortUrl)}&id=${viewUrl._id}`
                                     )}
-                                    className="inline-flex w-1/2 [@media(min-width:530px)]:w-full justify-center items-center cursor-pointer transition duration-300 gap-2 rounded-md bg-gray-700 dark:bg-white/10 px-3 py-1 text-sm/6 font-semibold text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-600 data-open:bg-gray-700"
+                                    className="inline-flex justify-center items-center cursor-pointer transition duration-300 gap-2 rounded-md bg-gray-700 dark:bg-white/10 px-3 py-1.5 text-sm/6 font-semibold text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-600 data-open:bg-gray-700"
                                 >
                                     <IoMdStats className='text-lg' />
-                                    Statistics
                                 </Button>
                             </div>
                         </div>

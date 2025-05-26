@@ -32,7 +32,6 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
             setTimeout(() => {
                 toast.error(err?.error, { position: 'top-center' });
                 setLoading(false);
-                close()
             }, 2000);
         }
     }
