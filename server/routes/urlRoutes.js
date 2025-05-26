@@ -197,7 +197,7 @@ const createUrl = async (req, res) => {
 const customizeUrl = async (req, res) => {
     const { shortId } = req.params;
     const { customName } = req.body;
-    const userId = mongoose.Types.ObjectId(req.user.id);
+    const userId = mongoose.Types.ObjectId.createFromHexString(req.user.id);
 
     try {
         const isCustomNameExist = await Url.findOne({ shortId: customName, user: userId });
