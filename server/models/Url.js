@@ -25,7 +25,6 @@ const urlSchema = new mongoose.Schema({
     shortId: {
         type: String,
         required: true,
-        unique: true
     },
     createdAt: {
         type: Date,
@@ -41,6 +40,8 @@ const urlSchema = new mongoose.Schema({
         required: true
     }
 })
+
+urlSchema.index({ user: 1, shortId: 1 }, { unique: true })
 
 const Url = mongoose.model("Url", urlSchema);
 

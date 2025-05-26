@@ -157,7 +157,11 @@ const createUrl = async (req, res) => {
         return res.status(400).json({ error: "URL already exists." });
     }
 
-    if (!trimmedUrl || !/^https?:\/\/.+/.test(trimmedUrl)) {
+    if (!trimmedUrl) {
+        return res.status(400).json({ error: 'Please enter an URL' });
+    }
+
+    if (!/^https?:\/\/.+/.test(trimmedUrl)) {
         return res.status(400).json({ error: 'Invalid URL' });
     }
 
@@ -198,10 +202,8 @@ const customizeUrl = async (req, res) => {
     const { shortId } = req.params;
     const { customName } = req.body;
     const userId = mongoose.Types.ObjectId.createFromHexString(req.user.id);
-
     try {
         const isCustomNameExist = await Url.findOne({ shortId: customName, user: userId });
-
         if (isCustomNameExist) {
             return res.status(409).json({ error: "Custom name already taken!" });
         }
