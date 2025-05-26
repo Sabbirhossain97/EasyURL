@@ -98,8 +98,8 @@ const resetPassword = async (req, res) => {
 }
 
 export const authRoutes = (app) => {
-    app.post("/signup", registerUser);
-    app.post("/signin", loginUser)
-    app.post('/forgot-password', forgotPassword)
-    app.post("/reset-password/:token", resetPassword)
+    app.post("/api/signup", registerUser);
+    app.post("/api/signin", loginUser)
+    app.post('/api/forgot-password', forgotPassword)
+    app.post("/api/reset-password/:token", resetPassword)
 }
