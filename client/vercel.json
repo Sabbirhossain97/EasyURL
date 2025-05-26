@@ -2,12 +2,6 @@
     "rewrites": [
         {
             "source": "/:shortId",
-            "has": [
-                {
-                    "type": "host",
-                    "value": "www.easy-url.xyz"
-                }
-            ],
             "destination": "https://easyurl-production.up.railway.app/:shortId"
         },
         {

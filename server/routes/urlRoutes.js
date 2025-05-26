@@ -276,19 +276,6 @@ const redirectUrl = async (req, res) => {
     }
 }
 
-const deleteUrl = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const result = await Url.findByIdAndDelete(id)
-        await Stat.deleteMany({ urlId: id })
-        if (!result) {
-            return res.status(404).json({ error: 'URL not found!' })
-        }
-        res.json({ message: "URL deleted succesfully!" })
-    } catch (err) {
-        res.status(500).json({ error: "Failed to delete URL" })
-    }
-}
 
 const deleteMultipleUrls = async (req, res) => {
     try {
@@ -303,11 +290,10 @@ const deleteMultipleUrls = async (req, res) => {
 }
 
 export const urlRoutes = (app) => {
+    app.get('/:shortId', redirectUrl); 
     app.get("/shorten/urls", fetchUrls);
     app.get("/statistics/:urlId", fetchUrlStats);
     app.post("/shorten", createUrl);
     app.patch("/shorten/:shortId", customizeUrl);
-    app.get('/:shortId', redirectUrl);
-    app.delete("/delete-urls", deleteMultipleUrls)
-    app.delete('/:id', deleteUrl);
+    app.delete("/delete-urls", deleteMultipleUrls);
 }

@@ -11,11 +11,11 @@ const app = express();
 app.use(cors());
 app.set('trust proxy', true);
 app.use(express.json());
-app.use("/shorten", auth)
 app.use(useragent.express());
+connectDB();
+app.use("/shorten", auth)
 authRoutes(app);
 urlRoutes(app);
-connectDB();
 
 app.listen(3000, () => {
     console.log(`Server is running on port 3000`);
