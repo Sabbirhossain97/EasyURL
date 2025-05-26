@@ -5,6 +5,10 @@
             "destination": "https://easyurl-production.up.railway.app/:shortId"
         },
         {
+            "source": "/api/:match*",
+            "destination": "https://easyurl-production.up.railway.app/api/:match*"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }
