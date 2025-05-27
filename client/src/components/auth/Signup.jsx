@@ -50,6 +50,7 @@ function Signup({ onSuccess }) {
                 <label htmlFor="email" className='font-semibold'>Email</label>
                 <input
                     htmlFor="email"
+                    type='email'
                     className="border focus:border-sky-400 dark:focus:border-blue-500 transition duration-300 outline-none w-full mt-2 placeholder:text-[14px] bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-md p-2"
                     placeholder="Enter your email here..."
                     value={formValues.email}

@@ -10,25 +10,23 @@ import Statistics from "./pages/Statistics";
 
 function App() {
   return (
-    <div>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route
-            exact
-            path="/"
-            element={<Home />}
-          />
-          <Route element={<PrivateRoute />} >
-            <Route path="/shorten" element={<Shorten />} />
-          </Route>
-          <Route path="/forgot-password" exact element={<VerifyEmail />} />
-          <Route path="/reset-password/:token" exact element={<ResetPassword />} />
-          <Route path="/statistics" exact element={<Statistics />} />
-          <Route path="*" exact element={<NoPage />} />
-        </Routes>
-      </Router>
-    </div >
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route
+          exact
+          path="/"
+          element={<Home />}
+        />
+        <Route element={<PrivateRoute />} >
+          <Route path="/shorten" element={<Shorten />} />
+        </Route>
+        <Route path="/forgot-password" exact element={<VerifyEmail />} />
+        <Route path="/reset-password/:token" exact element={<ResetPassword />} />
+        <Route path="/statistics" exact element={<Statistics />} />
+        <Route path="*" exact element={<NoPage />} />
+      </Routes>
+    </Router>
   )
 }
 

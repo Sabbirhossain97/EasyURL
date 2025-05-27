@@ -46,7 +46,7 @@ function Shorten() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto pb-20 px-6 md:px-10 xl:px-0">
+        <div className="max-w-7xl mx-auto pb-20 px-6 md:px-10 xl:px-2">
             <div className='flex justify-center'>
                 <div className="mt-44 w-full lg:w-3/4">
                     <h1 className="text-center text-[42px] sm:text-[52px] md:text-[64px] font-bold leading-[52px] custom-header-text">Shorten Your URL here</h1>

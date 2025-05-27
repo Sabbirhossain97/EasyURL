@@ -6,7 +6,7 @@ function MapChart({ urlStats }) {
     const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
     return (
         <div className="relative w-full h-auto">
-            <h3 className="absolute text-md font-semibold top-4 left-6">Countries</h3>
+            <h3 className="absolute text-md hidden sm:block font-semibold top-4 left-6">Countries</h3>
             <ComposableMap
                 projection="geoMercator"
                 projectionConfig={{
