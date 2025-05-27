@@ -2,17 +2,15 @@ import { useState } from 'react'
 import { AiOutlineUser } from "react-icons/ai";
 import { Popover, PopoverButton, PopoverPanel, Tab, TabGroup, TabList } from '@headlessui/react'
 import { MdLogout } from "react-icons/md";
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Spinner } from '../components/svg/SVG';
 import { useTheme } from '../hooks/useTheme';
 import { theme } from '../constants/theme';
 import { handleLogout } from '../utils/logout';
-import { knownRoutes } from '../utils/routeHandler';
 
 function Navbar() {
 
     const navigate = useNavigate();
-    const location = useLocation();
     const [loading, setLoading] = useState(false);
     const { selectedTheme, setSelectedTheme } = useTheme('Light');
     const user = JSON.parse(localStorage.getItem("user"));
