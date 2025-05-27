@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import toast from 'react-hot-toast';
 import { Spinner } from "../components/svg/SVG"
 import TableData from "../components/table/TableData";
@@ -9,7 +9,8 @@ function Shorten() {
 
     const [originalUrl, setOriginalUrl] = useState("");
     const [loading, setLoading] = useState(false);
-    const [urls, setUrls] = useState([])
+    const [urls, setUrls] = useState([]);
+    const textareaRef = useRef(null);
     const [sortBy, setSortBy] = useState({
         slug: "createdAt_desc",
         field: "Date ( newest )"
@@ -45,29 +46,37 @@ function Shorten() {
         }
     };
 
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
+    }, [originalUrl]);
+
     return (
         <div className="max-w-7xl mx-auto pb-20 px-6 md:px-10 xl:px-2">
             <div className='flex justify-center'>
                 <div className="mt-44 w-full lg:w-3/4">
                     <h1 className="text-center text-[42px] sm:text-[52px] md:text-[64px] font-bold leading-[52px] custom-header-text">Shorten Your URL here</h1>
                     <form onSubmit={createUrl} className="flex gap-4 mt-4 md:mt-10 relative">
-                        <input
-                            className="border focus:border-sky-400 dark:focus:border-blue-500 transition duration-300 outline-none w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-[48px] p-5"
-                            placeholder="Enter your long url here..."
-                            onChange={(e) => setOriginalUrl(e.target.value)}
+                        <textarea
+                            ref={textareaRef}
                             value={originalUrl}
+                            onChange={(e) => setOriginalUrl(e.target.value)}
+                            placeholder="Paste your long URL here..."
+                            className="resize-none border placeholder:text-gray-400 focus:border-sky-400 pr-[60px] min-h-[50px] dark:focus:border-blue-500 overflow-hidden transition duration-300 outline-none w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-lg p-5"
+                            rows={1}
                         />
-                        <button type="submit" className={`${loading ? 'bg-blue-500' : 'bg-sky-400 dark:bg-blue-600'} text-white cursor-pointer transition duration-300 hover:bg-blue-500 absolute w-[50px] sm:w-[150px] right-2 top-2 bottom-2 px-4 rounded-[48px]`}>
+                        <button type="submit" className={`${loading ? 'bg-blue-500' : 'bg-sky-400 dark:bg-blue-600'} text-white cursor-pointer transition duration-300 hover:bg-blue-500 absolute right-2 top-1/2 -translate-y-1/2 w-[50px] h-[50px] px-4 rounded-lg flex items-center justify-center`}>
                             {loading ? (
                                 <div className='flex items-center gap-2'>
                                     <div role="status">
                                         <Spinner />
-                                    </div> <span className="hidden md:block">Shortening...</span>
+                                    </div>
                                 </div>
                             ) : (
                                 <p>
-                                    <span className="hidden sm:block">Shorten</span>
-                                    <span className="block sm:hidden"><RiSendPlaneFill /></span>
+                                    <span className="block"><RiSendPlaneFill className="text-xl" /></span>
                                 </p>
                             )}
                         </button>
