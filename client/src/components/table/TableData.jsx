@@ -143,7 +143,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 {new Date(item.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                             </td>
-                                            <td className="px-6 py-4 flex items-center gap-2">
+                                            <td className="px-6 py-6 flex items-center gap-2">
                                                 <button
                                                     onClick={() => {
                                                         setIsUrlViewOpen(true)

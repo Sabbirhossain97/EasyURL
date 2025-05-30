@@ -7,6 +7,7 @@ import { Spinner } from '../components/svg/SVG';
 import { useTheme } from '../hooks/useTheme';
 import { theme } from '../constants/theme';
 import { handleLogout } from '../utils/logout';
+import { IoSettingsSharp } from "react-icons/io5";
 
 function Navbar() {
 
@@ -28,9 +29,10 @@ function Navbar() {
                     {user &&
                         (
                             <Popover>
-                                <PopoverButton className="cursor-pointer flex items-center gap-2 font-medium dark:text-white focus:outline-none data-active:text-sky-400 data-focus:outline data-focus:outline-white transition duration-300 data-hover:text-sky-400">
-                                    <AiOutlineUser className='text-2xl sm:text-xl' />
-                                    <span className='text-[18px] sm:text-[16px]'>{user && user?.username}</span>
+                                <PopoverButton className="cursor-pointer flex items-center gap-3 font-medium dark:text-white focus:outline-none data-active:text-sky-400 data-focus:outline data-focus:outline-white transition duration-300 data-hover:text-sky-400">
+                                    {user?.image ? <img src={user?.image} className='w-10 sm:w-8 h-10 sm:h-8 rounded-full object-cover object-top border border-zinc-300' /> :
+                                        <AiOutlineUser className='text-2xl sm:text-xl' />}
+                                    <span className='text-[16px] hidden sm:block'>{user && user?.username}</span>
                                 </PopoverButton>
                                 <PopoverPanel
                                     transition
@@ -39,9 +41,15 @@ function Navbar() {
                                 >
                                     <div className="p-3">
                                         <div className="block rounded-lg px-3 py-2 transition">
-                                            <p className="font-semibold dark:text-white">Signed in as</p>
+                                            <p className="font-semibold dark:text-white hidden sm:block">Signed in as</p>
+                                            <p className="font-semibold dark:text-white block sm:hidden">{user && user?.username}</p>
                                             <p className="dark:text-white/50">{user && user?.email}</p>
                                         </div>
+                                    </div>
+                                    <div className="p-3 ">
+                                        <Link to="/settings" className="block rounded-lg px-3 py-2 transition hover:bg-gray-100 dark:hover:bg-white/5 cursor-pointer">
+                                            <p className="font-semibold dark:text-white flex items-center gap-2"><span><IoSettingsSharp className='text-lg' /></span>Settings</p>
+                                        </Link>
                                     </div>
                                     <div className="p-3">
                                         {loading ?

@@ -28,19 +28,25 @@ const loginUser = async (req, res) => {
         const { email, password } = req.body;
 
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ error: 'Invalid credentials' });
+        if (!user) return res.status(400).json({ error: 'User not found!' });
 
         const isMatched = await bcrypt.compare(password, user.password);
         if (!isMatched) return res.status(400).json({ error: 'Invalid credentials' });
 
         const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
+        let imageBase64 = null;
+        if (user.image && user.image.data) {
+            imageBase64 = `data:${user.image.contentType};base64,${user.image.data.toString("base64")}`;
+        }
+
         res.json({
             accessToken,
             user: {
                 id: user._id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                image: imageBase64 ? imageBase64 : null
             },
             message: "Successfully logged in!"
         });
@@ -96,6 +102,8 @@ const resetPassword = async (req, res) => {
         res.status(500).json({ error: 'Server error!' });
     }
 }
+
+
 
 export const authRoutes = (app) => {
     app.post("/api/signup", registerUser);

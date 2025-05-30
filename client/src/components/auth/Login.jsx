@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Spinner } from '../svg/SVG';
 import { loginUser } from '../../services/authService';
 import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+
 function Login() {
 
     const navigate = useNavigate();
@@ -22,6 +22,7 @@ function Login() {
         try {
             const data = await loginUser(formValues);
             localStorage.setItem("token", data?.accessToken);
+            localStorage.setItem("token_expiry", new Date().getTime() + 24 * 60 * 60 * 1000);
             localStorage.setItem("user", JSON.stringify(data?.user));
             setTimeout(() => {
                 toast.success(data.message, { position: 'top-center' });

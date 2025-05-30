@@ -21,7 +21,11 @@ const userSchema = new mongoose.Schema({
     resetPasswordExpires: {
         type: Date,
         default: null
-    }
+    },
+    image: {
+        data: Buffer,
+        contentType: String,
+      },
 })
 
 const User = mongoose.model("User", userSchema);
