@@ -30,7 +30,7 @@ Welcome to **EasyURL**, a fully-featured, full-stack **URL Shortener** built wit
 - 📈 Track total clicks and geo-location-based insights
 - 📤 Share URLs via social platforms
 - 📷 Generate and download QR codes for shortened URLs
-- 🔐 Secure login system with email-based password reset
+- 🔐 Secure JWT-based authentication, email-based password reset through nodemailer
 - 🖼️ Upload user profile images or custom images
 
 ---
