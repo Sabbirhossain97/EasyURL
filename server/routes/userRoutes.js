@@ -1,4 +1,4 @@
-import { auth } from "../middlewares/auth.js";
+import { auth, adminOnly } from "../middlewares/auth.js";
 import Url from "../models/Url.js";
 import User from "../models/User.js";
 import Stat from "../models/Statistics.js";
@@ -55,7 +55,30 @@ const updateProfile = async (req, res) => {
     }
 }
 
+
+const getAdminStats = async (req, res) => {
+    try {
+        const sinceLastMonth = new Date();
+        const sinceLastWeek = new Date();
+        sinceLastMonth.setMonth(sinceLastMonth.getMonth() - 1);
+        sinceLastWeek.setDate(sinceLastWeek.getDate() - 7);
+
+        const [usersData, totalUrls, usersFromLastMonth, usersFromLastWeek, urlsFromLastMonth, urlsFromLastWeek] = await Promise.all([
+            User.find().select("-password"),
+            Url.countDocuments(),
+            User.countDocuments({ createdAt: { $gte: sinceLastMonth } }),
+            User.countDocuments({ createdAt: { $gte: sinceLastWeek } }),
+            Url.countDocuments({ createdAt: { $gte: sinceLastMonth } }),
+            Url.countDocuments({ createdAt: { $gte: sinceLastWeek } })
+        ])
+        res.status(200).json({ usersData, totalUrls, usersFromLastMonth, usersFromLastWeek, urlsFromLastMonth, urlsFromLastWeek });
+    } catch (err) {
+        res.status(500).json({ error: "Something went wrong" });
+    }
+}
+
 export const userRoutes = (app) => {
     app.delete("/api/delete-account", auth, deleteAccount);
-    app.post("/api/update-profile", upload.single('profilePicture'), auth, updateProfile)
+    app.post("/api/update-profile", upload.single('profilePicture'), auth, updateProfile);
+    app.get("/api/admin/stats", auth, adminOnly, getAdminStats)
 }

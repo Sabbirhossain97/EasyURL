@@ -104,6 +104,9 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                         <th scope="col" className="px-6 py-3 whitespace-nowrap">
                                             Created At
                                         </th>
+                                        <th scope="col" className="px-6 py-3 whitespace-nowrap">
+                                            Updated At
+                                        </th>
                                         <th scope="col" className="px-6 py-3">
                                             Action
                                         </th>
@@ -142,6 +145,9 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 {new Date(item.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                {new Date(item.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                             </td>
                                             <td className="px-6 py-6 flex items-center gap-2">
                                                 <button

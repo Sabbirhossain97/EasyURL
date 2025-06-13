@@ -12,3 +12,12 @@ export const auth = (req, res, next) => {
         res.status(400).json({ error: 'Invalid token' });
     }
 }
+
+
+export const adminOnly = (req,res,next)=> {
+    if(req.user?.role === "admin"){
+        next();
+    } else {
+        res.status(403).json({error: "Access denied. Admins only"})
+    }
+}

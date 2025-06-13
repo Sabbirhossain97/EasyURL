@@ -203,7 +203,7 @@ const customizeUrl = async (req, res) => {
     const { customName } = req.body;
     const userId = mongoose.Types.ObjectId.createFromHexString(req.user.id);
     try {
-        
+
         if (customName.length < 4 || customName.length > 30) {
             return res.status(400).json({ error: "Custom name must be between 4 and 30 characters." });
         }
@@ -220,6 +220,12 @@ const customizeUrl = async (req, res) => {
 
         url.shortUrl = url.shortUrl.replace(url.shortId, customName);
         url.shortId = customName;
+        const updatedAt = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        })
+        url.updatedAt = updatedAt
         await url.save();
         const urls = await Url.find({ user: userId });
         return res.status(200).json({ message: "Custom name added!", updatedUrl: urls });
