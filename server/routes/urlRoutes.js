@@ -16,6 +16,12 @@ const fetchUrls = async (req, res) => {
         case 'createdAt_desc':
             sortOption.createdAt = -1;
             break;
+        case 'updatedAt_asc':
+            sortOption.updatedAt = 1;
+            break;
+        case 'updatedAt_desc':
+            sortOption.updatedAt = -1;
+            break;
         case 'clickCount_asc':
             sortOption.clickCount = 1;
             break;

@@ -16,7 +16,7 @@ function App() {
   useTokenExpiryChecker();
 
   return (
-    <>
+    <div className="min-h-screen">
       <Navbar />
       <Routes>
         <Route
@@ -33,8 +33,8 @@ function App() {
         <Route path="/statistics" exact element={<Statistics />} />
         <Route path="*" exact element={<NoPage />} />
       </Routes>
-      <Footer/>
-    </>
+      <Footer />
+    </div>
   )
 }
 

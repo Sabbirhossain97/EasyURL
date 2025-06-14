@@ -4,6 +4,7 @@ import { Spinner } from "../components/svg/SVG"
 import TableData from "../components/table/TableData";
 import { fetchUrls, createUrls } from "../services/urlService";
 import { RiSendPlaneFill } from "react-icons/ri";
+import { FaLink } from "react-icons/fa";
 
 function Shorten() {
 
@@ -54,7 +55,7 @@ function Shorten() {
     }, [originalUrl]);
 
     return (
-        <div className="max-w-7xl mx-auto pb-20 px-6 md:px-10 xl:px-2">
+        <div className="max-w-7xl min-h-screen mx-auto pb-20 px-6 md:px-10 xl:px-2">
             <div className='flex justify-center'>
                 <div className="mt-44 w-full lg:w-3/4">
                     <h1 className="text-center text-[42px] sm:text-[52px] md:text-[64px] font-bold leading-[52px] custom-header-text">Shorten Your URL here</h1>
@@ -83,6 +84,15 @@ function Shorten() {
                     </form>
                 </div>
             </div>
+            {urls.length === 0 && <div className="min-h-[420px] bg-white dark:bg-white/5 rounded-md flex flex-col justify-center items-center mt-20">
+                <div>
+                    <div className="p-5 rounded-md bg-sky-400/20">
+                        <FaLink className="h-8 w-8 text-sky-400" />
+                    </div>
+                </div>
+                <h1 className="text-3xl font-bold mt-4">No URLs Yet</h1>
+                <h3 className="mt-2 text-gray-400 text-center px-8 sm:px-0">Start shortening your first URL and watch your links come to life.</h3>
+            </div>}
             <TableData
                 urls={urls}
                 setUrls={setUrls}

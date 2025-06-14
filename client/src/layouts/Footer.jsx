@@ -1,13 +1,11 @@
-import { FaGithub } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa";
-import { FaFacebook } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaFacebook } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
 
 function Footer() {
     return (
         <footer className="px-6 md:px-10 xl:px-2 bg-background/95 backdrop-blur mb-6 supports-[backdrop-filter]:bg-background/60">
             <div className="max-w-[1280px] mx-auto px-4 py-4">
-                <div className="flex flex-col md:flex-row items-center justify-between">
+                <div className="flex flex-col gap-4 sm:flex-row items-center justify-between">
                     <div className="flex items-center space-x-1 text-muted-foreground">
                         <span>Made with</span>
                         <FaHeart className="h-4 w-4 text-red-500 ml-1 fill-current " />

@@ -8,6 +8,7 @@ import { deleteAccount, updateProfile, getUserStats } from '../services/userServ
 import { FaUsers } from "react-icons/fa";
 import { FaLongArrowAltUp } from "react-icons/fa";
 import { IoIosLink } from "react-icons/io";
+import { AdminStatCardSkeleton } from '../layouts/Skeleton';
 import AdminStatFilter from '../components/filters/AdminStatFilter';
 import toast from 'react-hot-toast';
 
@@ -200,7 +201,6 @@ function AdminSettings() {
         field: "Joined Date ( newest )"
     });
 
-
     const fetchUsers = async (sortBy) => {
         setLoading(true)
         try {
@@ -219,9 +219,9 @@ function AdminSettings() {
 
     return (
         <>
-            {loading ? <div className='max-h-[420px] w-full flex justify-center items-center'><Spinner /></div> :
-                <div className='px-3'>
-                    <div className='flex flex-col sm:flex-row gap-6 w-full'>
+            <div className='px-3 lg:w-3/4'>
+                <div className='flex flex-col sm:flex-row gap-6 w-full'>
+                    {loading ? <AdminStatCardSkeleton /> :
                         <div className='border flex-1 dark:text-white bg-white dark:bg-[#181E29] p-4 flex gap-4 flex-col rounded-md border-zinc-200 dark:border-gray-800'>
                             <div className='flex items-center justify-between'>
                                 <div>
@@ -237,28 +237,32 @@ function AdminSettings() {
                                 <h3 className='flex items-center'><FaLongArrowAltUp className='text-sky-400 dark:text-white' /> <span>{users?.usersFromLastWeek} &nbsp;Since last week</span></h3>
                             </div>
                         </div>
-                        <div className='border flex-1 dark:text-white bg-white dark:bg-[#181E29] r p-4 flex gap-4 flex-col rounded-md border-zinc-200 dark:border-gray-800'>
-                            <div className='flex items-center justify-between'>
-                                <div>
-                                    <h1 className='dark:text-white'>Total URLs</h1>
-                                    <h3 className='font-bold'>{users?.totalUrls}</h3>
-                                </div>
-                                <div>
-                                    <IoIosLink className='text-2xl text-sky-400 dark:text-white' />
-                                </div>
+                    }
+
+                    {loading ? <AdminStatCardSkeleton /> : <div className='border flex-1 dark:text-white bg-white dark:bg-[#181E29] r p-4 flex gap-4 flex-col rounded-md border-zinc-200 dark:border-gray-800'>
+                        <div className='flex items-center justify-between'>
+                            <div>
+                                <h1 className='dark:text-white'>Total URLs</h1>
+                                <h3 className='font-bold'>{users?.totalUrls}</h3>
                             </div>
-                            <div className='text-center'>
-                                <h3 className='flex items-center'><FaLongArrowAltUp className='text-sky-400 dark:text-white' /> <span>{users?.urlsFromLastMonth} &nbsp;Since last month</span></h3>
-                                <h3 className='flex items-center'><FaLongArrowAltUp className='text-sky-400 dark:text-white' /> <span>{users?.urlsFromLastWeek} &nbsp;Since last week</span></h3>
+                            <div>
+                                <IoIosLink className='text-2xl text-sky-400 dark:text-white' />
                             </div>
                         </div>
+                        <div className='text-center'>
+                            <h3 className='flex items-center'><FaLongArrowAltUp className='text-sky-400 dark:text-white' /> <span>{users?.urlsFromLastMonth} &nbsp;Since last month</span></h3>
+                            <h3 className='flex items-center'><FaLongArrowAltUp className='text-sky-400 dark:text-white' /> <span>{users?.urlsFromLastWeek} &nbsp;Since last week</span></h3>
+                        </div>
                     </div>
-                    <div className='py-4 flex justify-end'>
-                        <AdminStatFilter
-                            sortBy={sortBy}
-                            setSortBy={setSortBy}
-                        />
-                    </div>
+                    }
+                </div>
+                <div className='py-4 flex justify-end'>
+                    <AdminStatFilter
+                        sortBy={sortBy}
+                        setSortBy={setSortBy}
+                    />
+                </div>
+                {loading ? <div className='w-full h-[420px] flex justify-center items-center'><Spinner /></div> :
                     <div className="w-full max-h-[420px] overflow-y-auto overflow-x-auto overflow-hidden rounded-xl bg-white dark:bg-[#101522]">
                         <table className="w-full text-sm text-left rtl:text-right border-collapse">
                             <thead className="text-md sticky top-0 left-0 right-0 rounded-t-xl bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
@@ -305,8 +309,8 @@ function AdminSettings() {
                                 ))}
                             </tbody>
                         </table>
-                    </div>
-                </div>}
+                    </div>}
+            </div>
         </>
     )
 }

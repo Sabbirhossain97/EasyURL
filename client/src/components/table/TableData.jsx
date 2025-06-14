@@ -128,7 +128,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                             </td>
                                             <td data-tooltip-id="my-tooltip" data-tooltip-content={item.shortUrl} className="px-6 w-1/5 py-4 font-medium whitespace-nowrap">
                                                 <div className="flex items-center gap-2 ">
-                                                    <span className='truncate max-w-[200px]'>{item.shortUrl}</span>
+                                                    <span className='truncate max-w-[220px]'>{item.shortUrl}</span>
                                                     <span onClick={() => handleCopy(item.shortUrl)} className='cursor-pointer p-2 bg-zinc-100 dark:bg-[#1C283FB0] rounded-full'>
                                                         <FaCopy className='text-gray-500 dark:text-white' />
                                                     </span>
