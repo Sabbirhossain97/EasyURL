@@ -8,6 +8,7 @@ import { deleteAccount, updateProfile, getUserStats } from '../services/userServ
 import { FaUsers } from "react-icons/fa";
 import { FaLongArrowAltUp } from "react-icons/fa";
 import { IoIosLink } from "react-icons/io";
+import AdminStatFilter from '../components/filters/AdminStatFilter';
 import toast from 'react-hot-toast';
 
 const ImagePreview = ({ src, uploading }) => (
@@ -194,21 +195,27 @@ function AdminSettings() {
 
     const [users, setUsers] = useState([])
     const [loading, setLoading] = useState(false);
+    const [sortBy, setSortBy] = useState({
+        slug: "createdAt_desc",
+        field: "Joined Date ( newest )"
+    });
+
+
+    const fetchUsers = async (sortBy) => {
+        setLoading(true)
+        try {
+            const data = await getUserStats(sortBy);
+            setUsers(data)
+        } catch (err) {
+            toast.error(err?.error, { position: 'top-center' });
+        } finally {
+            setLoading(false)
+        }
+    }
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            setLoading(true)
-            try {
-                const data = await getUserStats();
-                setUsers(data)
-            } catch (err) {
-                toast.error(err?.error, { position: 'top-center' });
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchUsers()
-    }, [])
+        fetchUsers(sortBy)
+    }, [sortBy])
 
     return (
         <>
@@ -246,9 +253,15 @@ function AdminSettings() {
                             </div>
                         </div>
                     </div>
-                    <div className="w-full max-h-[420px] overflow-y-auto overflow-x-auto overflow-hidden mt-4 rounded-xl bg-white dark:bg-[#101522]">
+                    <div className='py-4 flex justify-end'>
+                        <AdminStatFilter
+                            sortBy={sortBy}
+                            setSortBy={setSortBy}
+                        />
+                    </div>
+                    <div className="w-full max-h-[420px] overflow-y-auto overflow-x-auto overflow-hidden rounded-xl bg-white dark:bg-[#101522]">
                         <table className="w-full text-sm text-left rtl:text-right border-collapse">
-                            <thead className="text-md rounded-t-xl bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
+                            <thead className="text-md sticky top-0 left-0 right-0 rounded-t-xl bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
                                 <tr>
                                     <th scope="col" className="px-6 py-3">
                                         Username
@@ -258,6 +271,9 @@ function AdminSettings() {
                                     </th>
                                     <th scope="col" className="px-6 py-3">
                                         Role
+                                    </th>
+                                    <th scope="col" className="px-6 py-3 whitespace-nowrap">
+                                        URLs
                                     </th>
                                     <th scope="col" className="px-6 py-3">
                                         Joined
@@ -277,10 +293,13 @@ function AdminSettings() {
                                             {user.email}
                                         </td>
                                         <td className="px-6 py-4 text-start">
-                                            {user.role}
+                                            {user.role ? user.role : "user"}
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            {user.urlCount}
                                         </td>
                                         <td className="px-6 py-4 text-start whitespace-nowrap">
-                                            {new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                            {user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "N/A"}
                                         </td>
                                     </tr>
                                 ))}

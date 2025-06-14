@@ -57,21 +57,75 @@ const updateProfile = async (req, res) => {
 
 
 const getAdminStats = async (req, res) => {
+    const { sort } = req.query;
+    let sortOption = {};
+    switch (sort) {
+        case 'createdAt_asc':
+            sortOption.createdAt = 1;
+            break;
+        case 'createdAt_desc':
+            sortOption.createdAt = -1;
+            break;
+        case 'urlCount_asc':
+            sortOption.urlCount = 1;
+            break;
+        case 'urlCount_desc':
+            sortOption.urlCount = -1;
+            break;
+        default:
+            sortOption.createdAt = -1;
+    }
     try {
         const sinceLastMonth = new Date();
         const sinceLastWeek = new Date();
         sinceLastMonth.setMonth(sinceLastMonth.getMonth() - 1);
         sinceLastWeek.setDate(sinceLastWeek.getDate() - 7);
 
-        const [usersData, totalUrls, usersFromLastMonth, usersFromLastWeek, urlsFromLastMonth, urlsFromLastWeek] = await Promise.all([
-            User.find().select("-password"),
+        const [
+            totalUrls,
+            usersFromLastMonth,
+            usersFromLastWeek,
+            urlsFromLastMonth,
+            urlsFromLastWeek,
+            usersWithUrlCounts
+        ] = await Promise.all([
             Url.countDocuments(),
             User.countDocuments({ createdAt: { $gte: sinceLastMonth } }),
             User.countDocuments({ createdAt: { $gte: sinceLastWeek } }),
             Url.countDocuments({ createdAt: { $gte: sinceLastMonth } }),
-            Url.countDocuments({ createdAt: { $gte: sinceLastWeek } })
-        ])
-        res.status(200).json({ usersData, totalUrls, usersFromLastMonth, usersFromLastWeek, urlsFromLastMonth, urlsFromLastWeek });
+            Url.countDocuments({ createdAt: { $gte: sinceLastWeek } }),
+            User.aggregate([
+                {
+                    $lookup: {
+                        from: 'urls',
+                        localField: '_id',
+                        foreignField: 'user',
+                        as: 'urls'
+                    }
+                },
+                {
+                    $project: {
+                        urlCount: { $size: '$urls' },
+                        username: 1,
+                        email: 1,
+                        role: 1,
+                        createdAt: 1
+                    }
+                },
+                {
+                    $sort: sortOption
+                }
+            ])
+        ]);
+
+        res.status(200).json({
+            usersData: usersWithUrlCounts,
+            totalUrls,
+            usersFromLastMonth,
+            usersFromLastWeek,
+            urlsFromLastMonth,
+            urlsFromLastWeek
+        });
     } catch (err) {
         res.status(500).json({ error: "Something went wrong" });
     }
