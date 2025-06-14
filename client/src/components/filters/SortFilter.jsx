@@ -43,6 +43,16 @@ function SortFilter({ sortBy, setSortBy }) {
                             Date Added ( oldest )
                         </button>
                     </MenuItem>
+                    <MenuItem>
+                        <button onClick={() => setSortBy({ slug: 'updatedAt_desc', field: 'Date updated ( newest )' })} className="group cursor-pointer flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800/50">
+                            Date updated ( newest )
+                        </button>
+                    </MenuItem>
+                    <MenuItem>
+                        <button onClick={() => setSortBy({ slug: 'updatedAt_asc', field: 'Date updated ( oldest )' })} className="group cursor-pointer flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800/50">
+                            Date updated ( oldest )
+                        </button>
+                    </MenuItem>
                 </MenuItems>
             </Menu>
         </div>

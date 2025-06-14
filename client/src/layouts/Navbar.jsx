@@ -51,7 +51,7 @@ function Navbar() {
                                             <p className="font-semibold dark:text-white flex items-center gap-2"><span><IoSettingsSharp className='text-lg' /></span>Settings</p>
                                         </Link>
                                     </div>
-                                    <div className="p-3">
+                                    <div className="p-3 border-none">
                                         {loading ?
                                             <div className="rounded-lg w-full px-3 py-2">
                                                 <p className="font-semibold flex items-center gap-2 dark:text-white">

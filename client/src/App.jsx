@@ -9,13 +9,14 @@ import ResetPassword from "./pages/ResetPassword";
 import NoPage from "./pages/NoPage";
 import Statistics from "./pages/Statistics";
 import useTokenExpiryChecker from "./hooks/useTokenExpiryChecker";
+import Footer from "./layouts/Footer";
 
 function App() {
 
   useTokenExpiryChecker();
 
   return (
-    <>
+    <div className="min-h-screen">
       <Navbar />
       <Routes>
         <Route
@@ -32,7 +33,8 @@ function App() {
         <Route path="/statistics" exact element={<Statistics />} />
         <Route path="*" exact element={<NoPage />} />
       </Routes>
-    </>
+      <Footer />
+    </div>
   )
 }
 

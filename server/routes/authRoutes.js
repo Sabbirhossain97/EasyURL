@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs"
 import jwt from 'jsonwebtoken'
 import User from "../models/User.js"
-import sendEmail from "../utils/sendEmail.js";
+import { sendEmail, sendRegisterEmail } from "../utils/sendEmail.js"
 import 'dotenv/config';
 
 const registerUser = async (req, res) => {
@@ -14,9 +14,22 @@ const registerUser = async (req, res) => {
         }
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = new User({ username: username, email: email, password: hashedPassword })
+        const createdAt = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        })
+        const newUser = new User({ username: username, email: email, password: hashedPassword, createdAt })
 
         await newUser.save();
+
+        const html = `<p>🚀 Congratulations! A New User Registered at EasyURL!</p>
+                      <p><b>Username:</b> ${username}</p>
+                      <p><b>Email:</b> ${email}</p>
+        `;
+
+        await sendRegisterEmail('sabbirhossainbd199@gmail.com', 'Registration Alert at EasyURL', html)
+
         res.status(201).json({ message: "User created successfully!" })
     } catch (err) {
         res.status(500).json({ error: 'Server error!' });
@@ -33,7 +46,7 @@ const loginUser = async (req, res) => {
         const isMatched = await bcrypt.compare(password, user.password);
         if (!isMatched) return res.status(400).json({ error: 'Invalid credentials' });
 
-        const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+        const accessToken = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
         let imageBase64 = null;
         if (user.image && user.image.data) {
@@ -45,6 +58,7 @@ const loginUser = async (req, res) => {
             user: {
                 id: user._id,
                 username: user.username,
+                role: user.role,
                 email: user.email,
                 image: imageBase64 ? imageBase64 : null
             },

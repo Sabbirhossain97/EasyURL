@@ -79,7 +79,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                         </div>
                         <div className="w-full max-h-[420px] overflow-y-auto overflow-x-auto overflow-hidden mt-4 rounded-xl bg-white dark:bg-[#101522]">
                             <table className="w-full text-sm text-left rtl:text-right border-collapse">
-                                <thead className="text-md rounded-t-xl bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
+                                <thead className="text-md sticky top-0 left-0 rounded-t-xl bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
                                     <tr>
                                         <th scope="col" className="px-6 py-4 flex items-center">
                                             <input
@@ -104,6 +104,9 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                         <th scope="col" className="px-6 py-3 whitespace-nowrap">
                                             Created At
                                         </th>
+                                        <th scope="col" className="px-6 py-3 whitespace-nowrap">
+                                            Updated At
+                                        </th>
                                         <th scope="col" className="px-6 py-3">
                                             Action
                                         </th>
@@ -123,9 +126,9 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                     checked={selectedUrlId.includes(item._id)}
                                                     className="w-[14px] h-[14px]" />
                                             </td>
-                                            <td className="px-6 w-1/5 py-4 font-medium whitespace-nowrap">
-                                                <div className="flex items-center gap-2">
-                                                    {item.shortUrl}
+                                            <td data-tooltip-id="my-tooltip" data-tooltip-content={item.shortUrl} className="px-6 w-1/5 py-4 font-medium whitespace-nowrap">
+                                                <div className="flex items-center gap-2 ">
+                                                    <span className='truncate max-w-[220px]'>{item.shortUrl}</span>
                                                     <span onClick={() => handleCopy(item.shortUrl)} className='cursor-pointer p-2 bg-zinc-100 dark:bg-[#1C283FB0] rounded-full'>
                                                         <FaCopy className='text-gray-500 dark:text-white' />
                                                     </span>
@@ -142,6 +145,9 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 {new Date(item.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                {new Date(item.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                             </td>
                                             <td className="px-6 py-6 flex items-center gap-2">
                                                 <button

@@ -30,6 +30,10 @@ const urlSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    },
     clickCount: {
         type: Number,
         default: 0
