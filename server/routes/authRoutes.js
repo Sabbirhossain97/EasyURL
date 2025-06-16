@@ -53,6 +53,9 @@ const loginUser = async (req, res) => {
             imageBase64 = `data:${user.image.contentType};base64,${user.image.data.toString("base64")}`;
         }
 
+        user.lastSignedIn = new Date();
+        await user.save()
+
         res.json({
             accessToken,
             user: {

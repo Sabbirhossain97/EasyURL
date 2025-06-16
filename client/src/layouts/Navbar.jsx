@@ -18,14 +18,14 @@ function Navbar() {
     const themeIndex = theme.findIndex(t => t.name === selectedTheme);
 
     return (
-        <nav className="mx-auto flex items-center justify-between pt-6 text-center h-16 max-w-7xl px-6 md:px-10 xl:px-2">
+        <nav className="mx-auto flex items-center justify-between pt-6 text-center h-16 max-w-7xl px-3 md:px-4 xl:px-2">
             <Link to="/">
                 <h1 className="font-montserrat custom-header-text leading-[58px] text-zinc-500 flex font-bold whitespace-nowrap tracking-[1px] text-2xl sm:text-3xl">
                     EasyURL
                 </h1>
             </Link>
-            <div className='flex items-center gap-10'>
-                <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-4'>
+                <div className='flex items-center gap-1'>
                     {user &&
                         (
                             <Popover>
@@ -37,7 +37,7 @@ function Navbar() {
                                 <PopoverPanel
                                     transition
                                     anchor="bottom"
-                                    className="divide-y min-w-[150px] -ml-6 sm:mr-4 divide-zinc-300 dark:divide-white/5 rounded-xl bg-white dark:bg-gray-900 text-sm transition duration-200 ease-in-out [--anchor-gap:--spacing(5)] data-closed:-translate-y-1 data-closed:opacity-0"
+                                    className="divide-y divide-zinc-300 min-w-[150px] -ml-6 sm:mr-4 dark:divide-white/10 rounded-xl bg-white dark:bg-gray-900 text-sm transition duration-200 ease-in-out [--anchor-gap:--spacing(5)] data-closed:-translate-y-1 data-closed:opacity-0"
                                 >
                                     <div className="p-3">
                                         <div className="block rounded-lg px-3 py-2 transition">
@@ -51,7 +51,7 @@ function Navbar() {
                                             <p className="font-semibold dark:text-white flex items-center gap-2"><span><IoSettingsSharp className='text-lg' /></span>Settings</p>
                                         </Link>
                                     </div>
-                                    <div className="p-3 border-none">
+                                    <div className="p-3 sm:border-none">
                                         {loading ?
                                             <div className="rounded-lg w-full px-3 py-2">
                                                 <p className="font-semibold flex items-center gap-2 dark:text-white">
@@ -65,18 +65,20 @@ function Navbar() {
                                             </button>
                                         }
                                     </div>
-                                    <TabGroup selectedIndex={themeIndex} onChange={(index) => setSelectedTheme(theme[index].name)} className="p-3 rounded-full sm:hidden">
-                                        <TabList className="flex">
-                                            {theme.map(({ name }) => (
-                                                <Tab
-                                                    key={name}
-                                                    className="rounded-full cursor-pointer transition duration-300 ease-in-out px-3 py-1 text-sm/6 font-semibold data-selected:text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-selected:bg-sky-400 dark:data-selected:bg-white/10 dark:data-selected:data-hover:bg-white/10"
-                                                >
-                                                    {name}
-                                                </Tab>
-                                            ))}
-                                        </TabList>
-                                    </TabGroup>
+                                    <div>
+                                        <TabGroup selectedIndex={themeIndex} onChange={(index) => setSelectedTheme(theme[index].name)} className="p-3 rounded-full sm:hidden">
+                                            <TabList className="flex">
+                                                {theme.map(({ name }) => (
+                                                    <Tab
+                                                        key={name}
+                                                        className="rounded-full cursor-pointer transition duration-300 ease-in-out px-3 py-1 text-sm/6 font-semibold data-selected:text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-selected:bg-sky-400 dark:data-selected:bg-white/10 dark:data-selected:data-hover:bg-white/10"
+                                                    >
+                                                        {name}
+                                                    </Tab>
+                                                ))}
+                                            </TabList>
+                                        </TabGroup>
+                                    </div>
                                 </PopoverPanel>
                             </Popover>
                         )}

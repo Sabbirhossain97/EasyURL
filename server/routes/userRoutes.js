@@ -46,6 +46,7 @@ const updateProfile = async (req, res) => {
             user: {
                 id: user._id,
                 username: user.username,
+                role: user.role,
                 email: user.email,
                 image: imageBase64
             }
@@ -109,7 +110,8 @@ const getAdminStats = async (req, res) => {
                         username: 1,
                         email: 1,
                         role: 1,
-                        createdAt: 1
+                        createdAt: 1,
+                        lastSignedIn: 1
                     }
                 },
                 {

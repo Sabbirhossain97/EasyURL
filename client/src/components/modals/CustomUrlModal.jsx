@@ -52,7 +52,7 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
                             <input
                                 className="border focus:border-sky-400 dark:focus:border-blue-500 transition duration-300 outline-none w-full mt-2 placeholder:text-[14px] bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-md p-2"
                                 placeholder="Enter your custom name here..."
-                                onChange={(e) => setCustomUrl({ ...customUrl, name: e.target.value })}
+                                onChange={(e) => setCustomUrl({ ...customUrl, name: e.target.value.toLowerCase() })}
                                 value={customUrl.name}
                                 required
                             />

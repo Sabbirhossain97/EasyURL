@@ -6,6 +6,8 @@ import { IoMdStats } from "react-icons/io";
 import { LiaEditSolid } from "react-icons/lia";
 import { Tooltip as ReactTooltip } from 'react-tooltip'
 import { useNavigate } from 'react-router-dom';
+import { MdDelete } from "react-icons/md";
+import { TableSkeleton } from '../../layouts/Skeleton';
 import DeleteConfirmModal from '../modals/DeleteConfirmModal';
 import ViewUrlModal from "../modals/ViewUrlModal"
 import CustomUrlModal from '../modals/CustomUrlModal';
@@ -61,23 +63,26 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                 />
                 {urls?.length > 0 &&
                     <div className='flex flex-col'>
-                        <div className='flex justify-end gap-4'>
-                            <div className='flex items-center gap-4'>
-                                {
-                                    selectedUrlId.length > 0 &&
-                                    <div>
-                                        <button onClick={() => setIsDeleteModalOpen(true)} className="px-6 py-1.5 transition duration-300 bg-red-500 hover:bg-red-400 text-white font-medium flex cursor-pointer group w-full items-center gap-2 rounded-lg">
-                                            Delete {selectedUrlId.length > 0 ? `(${selectedUrlId.length})` : ""}
-                                        </button>
-                                    </div>
-                                }
+                        <div className='flex [@media(max-width:400px)]:justify-end justify-between'>
+                            <h3 className='text-sm [@media(max-width:400px)]:hidden block text-gray-600 dark:text-gray-400 mt-4'>Showing {urls?.length} results</h3>
+                            <div className='flex gap-4 items-center pb-4'>
+                                <div className='flex items-center gap-4'>
+                                    {
+                                        selectedUrlId.length > 0 &&
+                                        <div>
+                                            <button onClick={() => setIsDeleteModalOpen(true)} className="px-2 py-1.5 transition duration-300 bg-red-500 hover:bg-red-400 text-white font-medium flex cursor-pointer group w-full items-center gap-1 rounded-lg">
+                                                <MdDelete className='text-lg' /> <span className='hidden sm:block'>Delete</span> {selectedUrlId.length > 0 ? `(${selectedUrlId.length})` : ""}
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                                <SortFilter
+                                    sortBy={sortBy}
+                                    setSortBy={setSortBy}
+                                />
                             </div>
-                            <SortFilter
-                                sortBy={sortBy}
-                                setSortBy={setSortBy}
-                            />
                         </div>
-                        <div className="w-full max-h-[420px] overflow-y-auto overflow-x-auto overflow-hidden mt-4 rounded-xl bg-white dark:bg-[#101522]">
+                        <div className="w-full max-h-[420px] overflow-y-auto overflow-x-auto overflow-hidden mt-0 rounded-xl bg-white dark:bg-[#101522]">
                             <table className="w-full text-sm text-left rtl:text-right border-collapse">
                                 <thead className="text-md sticky top-0 left-0 rounded-t-xl bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
                                     <tr>
@@ -147,7 +152,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                 {new Date(item.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                {new Date(item.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                                {item.updatedAt ? new Date(item.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ""}
                                             </td>
                                             <td className="px-6 py-6 flex items-center gap-2">
                                                 <button
@@ -183,6 +188,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                 </tbody>
                             </table>
                         </div>
+                        <h3 className='text-sm text-center [@media(min-width:400px)]:hidden text-gray-600 dark:text-gray-400 mt-4'>Showing {urls?.length} results</h3>
                     </div>
                 }
             </div>

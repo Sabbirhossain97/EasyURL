@@ -9,6 +9,7 @@ import { FaUsers } from "react-icons/fa";
 import { FaLongArrowAltUp } from "react-icons/fa";
 import { IoIosLink } from "react-icons/io";
 import { AdminStatCardSkeleton } from '../layouts/Skeleton';
+import { signInDateOptions } from '../constants/dateOptions';
 import AdminStatFilter from '../components/filters/AdminStatFilter';
 import toast from 'react-hot-toast';
 
@@ -62,7 +63,7 @@ function ProfileSettings() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!formData.password.trim()) {
-            return toast.error("Please confirm your password", { position: 'top-center' });
+            return toast.error("Please confirm your account password", { position: 'top-center' });
         }
 
         setLoading(prev => ({ ...prev, updating: true }));
@@ -85,10 +86,10 @@ function ProfileSettings() {
     };
 
     return (
-        <main className="w-full min-h-screen py-1 lg:w-3/4 justify-center px-4">
-            <div className="md:p-4 bg-white dark:bg-white/10 rounded-md lg:bg-transparent">
+        <main className="w-full min-h-screen py-1 lg:w-3/4 justify-center">
+            <div className="md:p-4 bg-white dark:bg-white/5 rounded-md">
                 <div className="w-full px-4 pb-8 pt-4 lg:pt-0 mt-8 sm:rounded-lg">
-                    <form onSubmit={handleSubmit} className="grid max-w-2xl mx-auto mt-8">
+                    <form onSubmit={handleSubmit} className="grid max-w-3xl mx-auto mt-8">
                         <div className="flex flex-col items-center space-y-5 md:flex-row md:space-y-0">
                             {formData.previewImg ? (
                                 <ImagePreview src={formData.previewImg} uploading={loading.uploading} />
@@ -173,7 +174,7 @@ function AccountSettings() {
     };
 
     return (
-        <main className="min-h-screen py-10 w-full lg:w-3/4 px-4">
+        <main className="min-h-screen py-10 lg:py-0 w-full lg:w-3/4">
             <div className='border items-center bg-white dark:bg-white/10 sm:items-start border-red-500/30 rounded-md p-10'>
                 <h1 className='font-bold text-xl text-center sm:text-left dark:text-white'>Delete Account</h1>
                 <h3 className='mt-4 text-sm text-center sm:text-start font-medium text-zinc-500 dark:text-gray-400'>
@@ -219,7 +220,7 @@ function AdminSettings() {
 
     return (
         <>
-            <div className='px-3 lg:w-3/4'>
+            <div className='lg:w-3/4'>
                 <div className='flex flex-col sm:flex-row gap-6 w-full'>
                     {loading ? <AdminStatCardSkeleton /> :
                         <div className='border flex-1 dark:text-white bg-white dark:bg-[#181E29] p-4 flex gap-4 flex-col rounded-md border-zinc-200 dark:border-gray-800'>
@@ -279,6 +280,9 @@ function AdminSettings() {
                                     <th scope="col" className="px-6 py-3 whitespace-nowrap">
                                         URLs
                                     </th>
+                                    <th scope="col" className="px-6 py-3 whitespace-nowrap">
+                                        Last Signed In
+                                    </th>
                                     <th scope="col" className="px-6 py-3">
                                         Joined
                                     </th>
@@ -302,6 +306,9 @@ function AdminSettings() {
                                         <td className="px-6 py-4 text-center">
                                             {user.urlCount}
                                         </td>
+                                        <td className="px-6 py-4 text-center whitespace-nowrap">
+                                            {user.lastSignedIn ? new Date(user.lastSignedIn).toLocaleDateString('en-Us', signInDateOptions) : " N/A"}
+                                        </td>
                                         <td className="px-6 py-4 text-start whitespace-nowrap">
                                             {user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "N/A"}
                                         </td>
@@ -320,27 +327,25 @@ function Settings() {
     const user = JSON.parse(localStorage.getItem("user"));
 
     const tabs = user.role === "admin" ? [
-        { name: 'Profile Settings', element: <ProfileSettings /> },
-        { name: 'Account Settings', element: <AccountSettings /> },
-        { name: 'Admin Settings', element: <AdminSettings /> }] :
-        [{ name: 'Profile Settings', element: <ProfileSettings /> },
-        { name: 'Account Settings', element: <AccountSettings /> }]
-
-
+        { name: 'Profile', element: <ProfileSettings /> },
+        { name: 'Account', element: <AccountSettings /> },
+        { name: 'Admin', element: <AdminSettings /> }] :
+        [{ name: 'Profile', element: <ProfileSettings /> },
+        { name: 'Account', element: <AccountSettings /> }]
 
     return (
-        <div className='py-20 max-w-7xl mx-auto'>
-            <div className="py-10 px-6 md:px-16 lg:px-8 xl:px-28">
+        <div className='py-20 max-w-7xl mx-auto px-3 md:px-4 xl:px-2'>
+            <div className="py-10">
                 <Link to="/shorten" className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-500 dark:text-white dark:hover:text-white/40 transition duration-300">
                     <FaArrowLeftLong />Back to previous page
                 </Link>
             </div>
-            <div className="w-full flex flex-col gap-5 px-3 md:px-6 lg:px-8 xl:px-24 lg:flex-row text-[#161931]">
+            <div className="w-full flex flex-col gap-5 lg:flex-row text-[#161931]">
                 <aside className="py-4 w-full lg:w-1/4">
-                    <div className="sticky flex flex-col gap-2 p-4 text-sm lg:border-r border-zinc-300 dark:border-gray-700 top-12">
-                        <h2 className="pl-3 mb-4 text-2xl text-center lg:text-left dark:text-white font-semibold">Settings</h2>
-                        <TabGroup onChange={setSelectedTab} className="bg-white dark:bg-white/5 lg:bg-transparent dark:lg:bg-transparent p-2 rounded-md">
-                            <TabList className='flex flex-col sm:flex-row lg:flex-col gap-2'>
+                    <div className="sticky flex flex-col gap-2 text-sm lg:border-r border-zinc-300 dark:border-gray-700 top-12">
+                        <h2 className="mb-4 text-2xl text-center lg:text-left dark:text-white font-semibold">Settings</h2>
+                        <TabGroup onChange={setSelectedTab} className="bg-white dark:bg-white/5 lg:pr-4 lg:bg-transparent dark:lg:bg-transparent rounded-md">
+                            <TabList className='flex flex-row lg:flex-col gap-2 p-2 lg:p-0'>
                                 {tabs.map(({ name }, idx) => (
                                     <Tab
                                         key={name}
