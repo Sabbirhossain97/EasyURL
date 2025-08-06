@@ -19,7 +19,7 @@ function Home() {
     }
 
     useEffect(() => {
-        if (location.state?.from) {
+        if (location?.state === 'success') {
             setIsAuthModalOpen(true)
             navigate(location.pathname, { replace: true, state: null });
         }

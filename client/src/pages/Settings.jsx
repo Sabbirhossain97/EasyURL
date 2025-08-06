@@ -334,7 +334,7 @@ function Settings() {
         { name: 'Account', element: <AccountSettings /> }]
 
     return (
-        <div className='py-20 max-w-7xl mx-auto px-3 md:px-4 xl:px-2'>
+        <div className='py-10 md:py-20 max-w-7xl mx-auto px-3 md:px-4 xl:px-2'>
             <div className="py-10">
                 <Link to="/shorten" className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-500 dark:text-white dark:hover:text-white/40 transition duration-300">
                     <FaArrowLeftLong />Back to previous page

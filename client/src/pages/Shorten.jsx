@@ -24,7 +24,9 @@ function Shorten() {
         const data = await fetchUrls(sortBy);
         if (data) {
             setUrls(data);
-            setFetchLoading(false)
+            setTimeout(() => {
+                setFetchLoading(false)
+            }, 2000)
         }
     };
 
@@ -59,9 +61,9 @@ function Shorten() {
     }, [originalUrl]);
 
     return (
-        <div className="max-w-7xl min-h-screen mx-auto pb-20 px-3 md:px-4 xl:px-2">
+        <div className="max-w-[1440px] min-h-screen mx-auto pb-20 px-3 md:px-4 xl:px-2">
             <div className='flex justify-center'>
-                <div className="mt-44 w-full lg:w-3/4">
+                <div className="mt-16 sm:mt-20 lg:mt-30 xl:mt-44 w-full lg:w-3/4">
                     <h1 className="text-center text-[42px] sm:text-[52px] md:text-[64px] font-bold leading-[52px] custom-header-text">Shorten Your URL here</h1>
                     <form onSubmit={createUrl} className="flex gap-4 mt-4 md:mt-10 relative">
                         <textarea

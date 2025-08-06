@@ -7,7 +7,6 @@ import { LiaEditSolid } from "react-icons/lia";
 import { Tooltip as ReactTooltip } from 'react-tooltip'
 import { useNavigate } from 'react-router-dom';
 import { MdDelete } from "react-icons/md";
-import { TableSkeleton } from '../../layouts/Skeleton';
 import DeleteConfirmModal from '../modals/DeleteConfirmModal';
 import ViewUrlModal from "../modals/ViewUrlModal"
 import CustomUrlModal from '../modals/CustomUrlModal';
@@ -39,7 +38,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
 
     return (
         <div>
-            <div className="relative overflow-hidden mt-24">
+            <div className="relative overflow-hidden mt-16 lg:mt-20 xl:mt-24">
                 <ViewUrlModal
                     isUrlViewOpen={isUrlViewOpen}
                     setIsUrlViewOpen={setIsUrlViewOpen}

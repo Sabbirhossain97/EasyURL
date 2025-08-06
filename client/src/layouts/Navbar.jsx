@@ -24,20 +24,23 @@ function Navbar() {
                     EasyURL
                 </h1>
             </Link>
-            <div className='flex items-center gap-4'>
+            <div className='flex items-center gap-6'>
                 <div className='flex items-center gap-1'>
                     {user &&
                         (
-                            <Popover>
+                            <Popover >
                                 <PopoverButton className="cursor-pointer flex items-center gap-3 font-medium dark:text-white focus:outline-none data-active:text-sky-400 data-focus:outline data-focus:outline-white transition duration-300 data-hover:text-sky-400">
                                     {user?.image ? <img src={user?.image} className='w-10 sm:w-8 h-10 sm:h-8 rounded-full object-cover object-top border border-zinc-300' /> :
-                                        <AiOutlineUser className='text-2xl sm:text-xl' />}
-                                    <span className='text-[16px] hidden sm:block'>{user && user?.username}</span>
+                                    <AiOutlineUser className='text-2xl w-10 sm:w-8 h-10 sm:h-8 rounded-full sm:text-xl border border-gray-400 dark:border-white/30' />}
+                                    <p className='flex flex-col items-start'>
+                                        <span className='text-[14px] hidden sm:block'>{user && user?.username}</span>
+                                        <span className='text-[12px] text-gray-500 hidden sm:block'>{user && user?.role}</span>
+                                    </p>
                                 </PopoverButton>
                                 <PopoverPanel
                                     transition
                                     anchor="bottom"
-                                    className="divide-y divide-zinc-300 min-w-[150px] -ml-6 sm:mr-4 dark:divide-white/10 rounded-xl bg-white dark:bg-gray-900 text-sm transition duration-200 ease-in-out [--anchor-gap:--spacing(5)] data-closed:-translate-y-1 data-closed:opacity-0"
+                                    className="divide-y shadow-xl dark:border dark:border-white/10 divide-zinc-300 min-w-[150px] -ml-6 sm:mr-4 dark:divide-white/10 rounded-xl bg-white dark:bg-gray-900 text-sm transition duration-200 ease-in-out [--anchor-gap:--spacing(5)] data-closed:-translate-y-1 data-closed:opacity-0"
                                 >
                                     <div className="p-3">
                                         <div className="block rounded-lg px-3 py-2 transition">
