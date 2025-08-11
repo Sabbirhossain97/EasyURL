@@ -82,8 +82,8 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                             </div>
                         </div>
                         <div className="w-full max-h-[420px] overflow-y-auto overflow-x-auto overflow-hidden mt-0 rounded-xl bg-white dark:bg-[#101522]">
-                            <table className="w-full text-sm text-left rtl:text-right border-collapse">
-                                <thead className="text-md sticky top-0 left-0 rounded-t-xl bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
+                            <table className="w-full text-sm text-left rtl:text-right border-collapse ">
+                                <thead className="text-md sticky z-10 top-0 left-0 rounded-t-xl bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
                                     <tr>
                                         <th scope="col" className="px-6 py-4 flex items-center">
                                             <input
@@ -104,6 +104,9 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                         </th>
                                         <th scope="col" className="px-6 py-3 whitespace-nowrap">
                                             QR Scans
+                                        </th>
+                                        <th scope="col" className="px-6 py-3 whitespace-nowrap">
+                                            Status
                                         </th>
                                         <th scope="col" className="px-6 py-3 whitespace-nowrap">
                                             Created At
@@ -147,6 +150,16 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                             <td className="px-6 py-4 text-start">
                                                 {item.qr.scans}
                                             </td>
+                                            <td className="px-6 py-4 text-start flex gap-2 items-center">
+                                                <p>{item.status === 'active' ? "Active" : "Inactive"}</p>
+                                                {item.status === 'active' ?
+                                                    <span className="relative flex items-center z-0 size-2">
+                                                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
+                                                        <span className="relative inline-flex size-2 rounded-full bg-green-500"></span>
+                                                    </span> :
+                                                    <span className='h-2 w-2 bg-red-500 rounded-full'></span>
+                                                }
+                                            </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 {new Date(item.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                             </td>
@@ -165,7 +178,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                 <button
                                                     onClick={() => {
                                                         setIsCustomUrlModalOpen(true);
-                                                        setCustomUrl({ ...customUrl, id: item.shortId })
+                                                        setCustomUrl({ id: item.shortId, name: item.customName })
                                                     }}
                                                     className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 bg-zinc-200 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 rounded-md text-white font-medium items-center cursor-pointer">
                                                     <LiaEditSolid className='text-[16px] text-gray-700 dark:text-white' />
@@ -192,7 +205,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                 id="my-tooltip"
                 place="top"
                 arrowColor="black"
-                className="max-w-[500px] break-words whitespace-pre-wrap"
+                className="max-w-[500px] break-words whitespace-pre-wrap z-[1000]"
             />
         </div>
     )

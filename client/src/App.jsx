@@ -11,6 +11,7 @@ import Statistics from "./pages/Statistics";
 import useTokenExpiryChecker from "./hooks/useTokenExpiryChecker";
 import Footer from "./layouts/Footer";
 import RegisterVerifyEmail from "./pages/RegisterVerifyEmail";
+import { InactivePage } from "./pages/InactivePage";
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
           path="/"
           element={<Home />}
         />
+        <Route path="/inactive" element={<InactivePage />} />
         <Route element={<PrivateRoute />} >
           <Route path="/shorten" element={<Shorten />} />
           <Route path="/settings" exact element={<Settings />} />

@@ -11,7 +11,7 @@ function SortFilter({ sortBy, setSortBy }) {
                 <MenuItems
                     transition
                     anchor="bottom end"
-                    className="w-52 origin-top-right shadow-xl rounded-xl border border-white/5 bg-white dark:bg-gray-900 p-1 text-sm/6 text-gray-900 dark:text-white transition duration-100 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-95 data-closed:opacity-0"
+                    className="w-52 z-10 origin-top-right shadow-xl rounded-xl border border-white/5 bg-white dark:bg-gray-900 p-1 text-sm/6 text-gray-900 dark:text-white transition duration-100 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-95 data-closed:opacity-0"
                 >
                     <MenuItem>
                         <button onClick={() => setSortBy({ slug: 'clickCount_desc', field: 'Clicks (most)' })} className="group cursor-pointer flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800/50">
