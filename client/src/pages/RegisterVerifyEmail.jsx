@@ -20,7 +20,6 @@ const RegisterVerifyEmail = () => {
                 }, 2500)
             } catch (err) {
                 setTimeout(() => {
-                    toast.error(err?.error, { position: 'top-center' });
                     setError("Verification Failed!")
                 }, 1500)
             }

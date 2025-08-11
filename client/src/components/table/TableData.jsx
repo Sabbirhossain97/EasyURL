@@ -120,7 +120,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                     {urls.map((item, index) => (
                                         <tr
                                             key={index}
-                                            className={`${selectedUrlId.includes(item._id) ? "bg-blue-300/40 divide-none" : "border-b border-zinc-300/40 dark:border-gray-700/40"}`}
+                                            className={`${selectedUrlId.includes(item._id) ? "bg-blue-300/40 divide-none transition duration-300 ease-in-out" : `${index === urls.length - 1 ? 'border-none' : 'border-b border-zinc-300/40 dark:border-gray-700/40'} `}`}
                                         >
                                             <td className='px-6 py-6'>
                                                 <input
@@ -132,8 +132,8 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                             </td>
                                             <td data-tooltip-id="my-tooltip" data-tooltip-content={item.shortUrl} className="px-6 w-1/5 py-4 font-medium whitespace-nowrap">
                                                 <div className="flex items-center gap-2 ">
-                                                    <span className='truncate max-w-[220px]'>{item.shortUrl}</span>
-                                                    <span onClick={() => handleCopy(item.shortUrl)} className='cursor-pointer p-2 bg-zinc-100 dark:bg-[#1C283FB0] rounded-full'>
+                                                    <span className='truncate max-w-[350px]'>{item.shortUrl}</span>
+                                                    <span onClick={() => handleCopy(item.shortUrl)} className='cursor-pointer p-2 transition duration-300 bg-zinc-100 hover:bg-zinc-200 dark:bg-[#1C283FB0] dark:hover:bg-white/5 rounded-full'>
                                                         <FaCopy className='text-gray-500 dark:text-white' />
                                                     </span>
                                                 </div>
@@ -159,27 +159,24 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                         setIsUrlViewOpen(true)
                                                         setViewUrl(item)
                                                     }}
-                                                    className="px-2 inline-flex gap-1 items py-1 transition text-[12px] duration-300 rounded-md bg-sky-400 hover:bg-sky-500 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-medium items-center cursor-pointer">
-                                                    <BiShow className='text-[14px]' />
-                                                    <span> View </span>
+                                                    className="px-2 inline-flex gap-1 items py-1 transition text-[12px] duration-300 rounded-md bg-zinc-200 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 font-medium items-center cursor-pointer">
+                                                    <BiShow className='text-[16px] text-gray-700 dark:text-white' />
                                                 </button>
                                                 <button
                                                     onClick={() => {
                                                         setIsCustomUrlModalOpen(true);
                                                         setCustomUrl({ ...customUrl, id: item.shortId })
                                                     }}
-                                                    className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 bg-sky-400 hover:bg-sky-500 dark:bg-blue-600 dark:hover:bg-blue-500 rounded-md text-white font-medium items-center cursor-pointer">
-                                                    <LiaEditSolid className='text-[14px]' />
-                                                    <span> Edit</span>
+                                                    className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 bg-zinc-200 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 rounded-md text-white font-medium items-center cursor-pointer">
+                                                    <LiaEditSolid className='text-[16px] text-gray-700 dark:text-white' />
                                                 </button>
                                                 <button
                                                     onClick={() => navigate(
                                                         `/statistics?url=${encodeURIComponent(item.shortUrl)}&id=${item._id}`
                                                     )}
-                                                    className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 bg-sky-400 hover:bg-sky-500 dark:bg-blue-600 dark:hover:bg-blue-500 rounded-md text-white font-medium items-center cursor-pointer"
+                                                    className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 bg-zinc-200 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 rounded-md text-white font-medium items-center cursor-pointer"
                                                 >
-                                                    <IoMdStats className='text-[14px]' />
-                                                    <span>Statistics</span>
+                                                    <IoMdStats className='text-[16px] text-gray-700 dark:text-white' />
                                                 </button>
                                             </td>
                                         </tr>

@@ -60,7 +60,7 @@ const verifyUser = async (req, res) => {
         });
 
         if (!user) {
-            return res.status(400).json({ error: 'Invalid or expired verification token.' })
+            return res.status(400).json({ error: 'Invalid or expired verification token!.' })
         }
 
         user.isVerified = true;

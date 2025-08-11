@@ -87,7 +87,7 @@ function ProfileSettings() {
 
     return (
         <main className="w-full min-h-screen py-1 lg:w-3/4 justify-center">
-            <div className="md:p-4 bg-white dark:bg-white/5 rounded-md">
+            <div className="md:p-4 bg-white dark:bg-[#181E29] rounded-md">
                 <div className="w-full px-4 pb-8 pt-4 lg:pt-0 mt-8 sm:rounded-lg">
                     <form onSubmit={handleSubmit} className="grid max-w-3xl mx-auto mt-8">
                         <div className="flex flex-col items-center space-y-5 md:flex-row md:space-y-0">
@@ -175,7 +175,7 @@ function AccountSettings() {
 
     return (
         <main className="min-h-screen py-10 lg:py-0 w-full lg:w-3/4">
-            <div className='border items-center bg-white dark:bg-white/10 sm:items-start border-red-500/30 rounded-md p-10'>
+            <div className='border items-center bg-white dark:bg-[#181E29] sm:items-start border-red-500/30 rounded-md p-10'>
                 <h1 className='font-bold text-xl text-center sm:text-left dark:text-white'>Delete Account</h1>
                 <h3 className='mt-4 text-sm text-center sm:text-start font-medium text-zinc-500 dark:text-gray-400'>
                     Are you sure you want to delete your account? All of your data will be permanently removed. This action cannot be undone.
