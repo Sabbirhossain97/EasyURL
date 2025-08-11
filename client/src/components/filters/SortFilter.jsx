@@ -34,6 +34,16 @@ function SortFilter({ sortBy, setSortBy }) {
                         </button>
                     </MenuItem>
                     <MenuItem>
+                        <button onClick={() => setSortBy({ slug: 'active', field: 'Active' })} className="group cursor-pointer flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800/50">
+                            Active
+                        </button>
+                    </MenuItem>
+                    <MenuItem>
+                        <button onClick={() => setSortBy({ slug: 'inactive', field: 'Inactive' })} className="group cursor-pointer flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800/50">
+                            Inactive
+                        </button>
+                    </MenuItem>
+                    <MenuItem>
                         <button onClick={() => setSortBy({ slug: 'createdAt_desc', field: 'Created (newest)' })} className="group cursor-pointer flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800/50">
                             Created (newest)
                         </button>

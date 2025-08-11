@@ -34,6 +34,12 @@ const fetchUrls = async (req, res) => {
         case 'qrScans_desc':
             sortOption['qr.scans'] = -1
             break;
+        case 'active':
+            sortOption['status'] = 1
+            break;
+        case 'inactive':
+            sortOption['status'] = -1
+            break;
         default:
             sortOption.createdAt = -1;
     }
