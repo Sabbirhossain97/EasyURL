@@ -38,9 +38,9 @@ export const deleteUrls = async (urls) => {
     }
 };
 
-export const customizeUrl = async (customUrl, status) => {
+export const customizeUrl = async (customUrl) => {
     try {
-        const response = await axiosInstance.patch(`/shorten/${customUrl.id}`, { customName: customUrl.name, activeStatus: status });
+        const response = await axiosInstance.patch(`/shorten/${customUrl.id}`, { customName: customUrl.name, activeStatus: customUrl.status });
         return response.data;
     } catch (error) {
         throw error?.response?.data || { error: 'Something went wrong customizing urls.' };

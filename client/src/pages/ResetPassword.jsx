@@ -45,7 +45,7 @@ function ResetPassword() {
     }
 
     return (
-        <div className='px-4 md:px-6 xl:px-0'>
+        <div className='px-4 md:px-6 xl:px-0 min-h-screen'>
             <div className='max-w-md mx-auto p-4 md:p-6 rounded-md bg-white dark:bg-white/10 mt-44'>
                 <form onSubmit={handlePasswordUpdate}>
                     <div>

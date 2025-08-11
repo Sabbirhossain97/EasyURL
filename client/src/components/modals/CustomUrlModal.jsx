@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Dialog, DialogPanel, DialogBackdrop, DialogTitle, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Spinner } from '../svg/SVG';
 import { FaChevronDown } from "react-icons/fa";
@@ -9,23 +9,30 @@ import toast from 'react-hot-toast';
 function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customUrl, setCustomUrl, setUrls }) {
 
     const [loading, setLoading] = useState(false)
-    const [status, setStatus] = useState(customUrl.name)
+    const [status, setStatus] = useState(customUrl?.status || 'active')
 
     function close() {
         setIsCustomUrlModalOpen(false)
         setTimeout(() => {
             setCustomUrl({
                 id: null,
-                name: ""
+                name: "",
+                status: ""
             })
-        }, 1000)
+        }, 500)
     }
+
+    useEffect(() => {
+        if (customUrl?.status) {
+            setStatus(customUrl.status);
+        }
+    }, [customUrl?.status]);
 
     const handleCustomUrlName = async (e) => {
         e.preventDefault()
         setLoading(true)
         try {
-            const data = await customizeUrl(customUrl, status);
+            const data = await customizeUrl(customUrl);
             setTimeout(() => {
                 setUrls(data?.updatedUrl)
                 toast.success("URL customized!", { position: 'bottom-right' });
@@ -40,6 +47,8 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
             }, 2000);
         }
     }
+
+    console.log(customUrl)
 
     return (
         <Dialog open={isCustomUrlModalOpen} as="div" transition className="relative z-10 focus:outline-none" onClose={close}>
@@ -79,12 +88,12 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
                                                 className="min-w-[400px] z-[1500] rounded-xl border border-zinc-300 dark:border-none bg-white dark:bg-zinc-900 shadow-xl p-1 text-sm/6 transition duration-100 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-95 data-closed:opacity-0"
                                             >
                                                 <MenuItem>
-                                                    <button onClick={() => setStatus('active')} className="group cursor-pointer transition duration-300 flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-zinc-100 dark:data-focus:bg-zinc-800">
+                                                    <button onClick={() => setCustomUrl({ ...customUrl, status: 'active' })} className="group cursor-pointer transition duration-300 flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-zinc-100 dark:data-focus:bg-zinc-800">
                                                         Active
                                                     </button>
                                                 </MenuItem>
                                                 <MenuItem>
-                                                    <button onClick={() => setStatus('inactive')} className="group cursor-pointer transition duration-300 flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-zinc-100 dark:data-focus:bg-zinc-800">
+                                                    <button onClick={() => setCustomUrl({ ...customUrl, status: 'inactive' })} className="group cursor-pointer transition duration-300 flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-zinc-100 dark:data-focus:bg-zinc-800">
                                                         Inactive
                                                     </button>
                                                 </MenuItem>

@@ -21,7 +21,8 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
     let [selectedUrlId, setSelectedUrlId] = useState([])
     let [customUrl, setCustomUrl] = useState({
         id: null,
-        name: ""
+        name: "",
+        status: ""
     });
 
     const handleCheckboxChange = (urlId, isChecked) => {
@@ -178,7 +179,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                 <button
                                                     onClick={() => {
                                                         setIsCustomUrlModalOpen(true);
-                                                        setCustomUrl({ id: item.shortId, name: item.customName })
+                                                        setCustomUrl({ ...customUrl, id: item.shortId, name: item.customName, status: item.status })
                                                     }}
                                                     className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 bg-zinc-200 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 rounded-md text-white font-medium items-center cursor-pointer">
                                                     <LiaEditSolid className='text-[16px] text-gray-700 dark:text-white' />
