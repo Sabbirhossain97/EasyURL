@@ -38,11 +38,20 @@ export const deleteUrls = async (urls) => {
     }
 };
 
-export const customizeUrl = async (customUrl) => {
+export const customizeUrl = async (customUrl, status) => {
     try {
-        const response = await axiosInstance.patch(`/shorten/${customUrl.id}`, { customName: customUrl.name });
+        const response = await axiosInstance.patch(`/shorten/${customUrl.id}`, { customName: customUrl.name, activeStatus: status });
         return response.data;
     } catch (error) {
         throw error?.response?.data || { error: 'Something went wrong customizing urls.' };
     }
 }
+
+export const inactiveUrl = async (id) => {
+    try {
+        const response = await axiosInstance.get(`/${id}`);
+        return response; 
+    } catch (error) {
+        throw error?.response || { data: { error: 'Something went wrong.' }, status: 500 };
+    }
+}; 

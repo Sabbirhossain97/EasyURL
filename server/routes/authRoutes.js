@@ -1,7 +1,8 @@
 import bcrypt from "bcryptjs"
 import jwt from 'jsonwebtoken'
+import crypto from 'crypto';
 import User from "../models/User.js"
-import { sendEmail, sendRegisterEmail } from "../utils/sendEmail.js"
+import { sendPasswordResetEmail, sendRegisterEmail, sendVerificationEmail } from "../utils/sendEmail.js"
 import 'dotenv/config';
 
 const registerUser = async (req, res) => {
@@ -12,27 +13,69 @@ const registerUser = async (req, res) => {
         if (isUserExists) {
             return res.status(400).json({ error: "User already exists!" })
         }
+
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+        const tokenExpiry = Date.now() + 1000 * 60 * 60;
 
         const createdAt = new Date().toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
         })
-        const newUser = new User({ username: username, email: email, password: hashedPassword, createdAt })
+
+        const newUser = new User({
+            username,
+            email,
+            password: hashedPassword,
+            createdAt,
+            isVerified: false,
+            verificationToken,
+            tokenExpiry
+        });
 
         await newUser.save();
+        const resetLink = `${process.env.FRONTEND_URL}/verify-register/${verificationToken}`;
+        const verifyHtml = `
+                             <h2>Email Verification - EasyURL</h2>
+                             <p>Click the link below to verify your account:</p>
+                             <a href="${resetLink}">${resetLink}</a>
+                             <p>This link will expire in 1 hour.</p>
+                            `
 
-        const html = `<p>🚀 Congratulations! A New User Registered at EasyURL!</p>
-                      <p><b>Username:</b> ${username}</p>
-                      <p><b>Email:</b> ${email}</p>
-        `;
-
-        await sendRegisterEmail('sabbirhossainbd199@gmail.com', 'Registration Alert at EasyURL', html)
-
-        res.status(201).json({ message: "User created successfully!" })
+        await sendVerificationEmail(email, 'Verify your email', verifyHtml);
+        res.status(201).json({ message: "Verification link sent to your email!" })
     } catch (err) {
         res.status(500).json({ error: 'Server error!' });
+    }
+}
+
+const verifyUser = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const user = await User.findOne({
+            verificationToken: token,
+            tokenExpiry: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ error: 'Invalid or expired verification token!.' })
+        }
+
+        user.isVerified = true;
+        user.verificationToken = undefined;
+        user.tokenExpiry = undefined;
+        await user.save();
+        const html = `<p>🚀 Congratulations! A New User Registered at EasyURL!</p>
+                      <p><b>Username:</b> ${user.username}</p>
+                      <p><b>Email:</b> ${user.email}</p>
+                    `;
+
+        await sendRegisterEmail('sabbirhossainbd199@gmail.com', 'Registration Alert at EasyURL', html);
+        res.status(200).json({ message: 'Email verified successfully!' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
     }
 }
 
@@ -42,6 +85,10 @@ const loginUser = async (req, res) => {
 
         const user = await User.findOne({ email });
         if (!user) return res.status(400).json({ error: 'User not found!' });
+
+        if (!user.isVerified) {
+            return res.status(403).json({ error: 'Please verify your email before logging in.' });
+        }
 
         const isMatched = await bcrypt.compare(password, user.password);
         if (!isMatched) return res.status(400).json({ error: 'Invalid credentials' });
@@ -80,6 +127,11 @@ const forgotPassword = async (req, res) => {
         if (!user) {
             return res.status(409).json({ error: "Email doesn't exist" })
         }
+
+        if (!user.isVerified) {
+            return res.status(403).json({ error: 'Please verify your email before password reset.' });
+        }
+
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 3600000;
@@ -89,7 +141,7 @@ const forgotPassword = async (req, res) => {
         <p>You requested a password reset.</p>
         <p>Click <a href="${resetLink}">here</a> to reset your password. This link will expire in 1 hour.</p>
       `;
-        await sendEmail(user.email, 'Reset your password', html)
+        await sendPasswordResetEmail(user.email, 'Reset your password', html)
         res.status(200).json({ message: 'Reset link sent to your email' });
     } catch (err) {
         res.status(500).json({ error: 'Server error!' });
@@ -120,11 +172,10 @@ const resetPassword = async (req, res) => {
     }
 }
 
-
-
 export const authRoutes = (app) => {
     app.post("/api/signup", registerUser);
-    app.post("/api/signin", loginUser)
+    app.post("/api/signin", loginUser);
+    app.get('/api/verify-register/:token', verifyUser);
     app.post('/api/forgot-password', forgotPassword)
     app.post("/api/reset-password/:token", resetPassword)
 }

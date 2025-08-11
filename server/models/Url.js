@@ -22,9 +22,18 @@ const urlSchema = new mongoose.Schema({
             default: 0
         }
     },
+    status: {
+        type: String,
+        enum: ['active', 'inactive'],
+        default: 'active'
+    },
     shortId: {
         type: String,
         required: true,
+        unique: true
+    },
+    customName: {
+        type: String,
     },
     createdAt: {
         type: Date,

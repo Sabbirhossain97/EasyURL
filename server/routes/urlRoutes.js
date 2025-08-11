@@ -206,17 +206,22 @@ const createUrl = async (req, res) => {
 
 const customizeUrl = async (req, res) => {
     const { shortId } = req.params;
-    const { customName } = req.body;
+    const { customName, activeStatus } = req.body;
     const userId = mongoose.Types.ObjectId.createFromHexString(req.user.id);
+
     try {
+        if (customName !== undefined && customName !== null) {
+            if (typeof customName !== 'string') {
+                return res.status(400).json({ error: "Custom name must be fully string or alphanumeric." });
+            }
+            if (customName.length < 4 || customName.length > 30) {
+                return res.status(400).json({ error: "Custom name must be between 4 and 30 characters." });
+            }
 
-        if (customName.length < 4 || customName.length > 30) {
-            return res.status(400).json({ error: "Custom name must be between 4 and 30 characters." });
-        }
-
-        const isCustomNameExist = await Url.findOne({ shortId: customName, user: userId });
-        if (isCustomNameExist) {
-            return res.status(409).json({ error: "Custom name already taken!" });
+            const isCustomNameExist = await Url.findOne({ customName: customName, user: userId, shortId: { $ne: shortId } });
+            if (isCustomNameExist) {
+                return res.status(409).json({ error: "Custom name already taken!" });
+            }
         }
 
         const url = await Url.findOne({ shortId, user: userId });
@@ -224,18 +229,17 @@ const customizeUrl = async (req, res) => {
             return res.status(404).json({ error: "Short ID not found!" });
         }
 
-        url.shortUrl = url.shortUrl.replace(url.shortId, customName);
-        url.shortId = customName;
-        const updatedAt = new Date().toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        })
-        url.updatedAt = updatedAt
-        await url.save();
-        const urls = await Url.find({ user: userId });
-        return res.status(200).json({ message: "Custom name added!", updatedUrl: urls });
+        if (customName) {
+            url.customName = customName;
+            url.shortUrl = `${process.env.BASE_URL}/${customName}`;
+        }
 
+        url.status = activeStatus
+        url.updatedAt = new Date();
+        await url.save();
+
+        const urls = await Url.find({ user: userId });
+        return res.status(200).json({ message: "URL updated!", updatedUrl: urls });
     } catch (error) {
         console.error("Error customizing URL:", error.message);
         return res.status(500).json({ error: "Server error while customizing URL" });
@@ -244,18 +248,24 @@ const customizeUrl = async (req, res) => {
 
 const redirectUrl = async (req, res) => {
     try {
-        const { shortId } = req.params;
+        const { id } = req.params;
         const isQR = req.query.source === 'qr';
         const ua = req.useragent;
         const referrer = req.get('referer') || 'Direct';
-        const url = await Url.findOneAndUpdate({ shortId }, {
-            $inc: {
-                clickCount: 1,
-                'qr.scans': isQR ? 1 : 0
-            }
-        });
+        const url = await Url.findOneAndUpdate(
+            { $or: [{ shortId: id }, { customName: id }], status: "active" },
+            { $inc: { clickCount: 1, 'qr.scans': isQR ? 1 : 0 } },
+            { sort: { updatedAt: -1 }, new: true }
+        );
 
-        if (!url) return res.status(404).send('URL not found in database!');
+        if (!url) {
+            const inactiveUrl = await Url.findOne({ $or: [{ shortId: id }, { customName: id }], status: "inactive" });
+            if (inactiveUrl) {
+                return res.redirect(`${process.env.FRONTEND_URL}/inactive`)
+            } else {
+                res.status(500).send('Server error');
+            }
+        }
 
         await url.save();
         const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
@@ -315,5 +325,5 @@ export const urlRoutes = (app) => {
     app.get("/api/statistics/:urlId", auth, fetchUrlStats);
     app.patch("/api/shorten/:shortId", auth, customizeUrl);
     app.delete("/api/delete-urls", auth, deleteMultipleUrls);
-    app.get('/:shortId', redirectUrl);
+    app.get('/:id', redirectUrl);
 }

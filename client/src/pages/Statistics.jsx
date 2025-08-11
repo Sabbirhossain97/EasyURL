@@ -35,7 +35,7 @@ function Statistics() {
 
     return (
         <div className="px-3 md:px-4 xl:px-6 max-w-7xl mx-auto pb-20">
-            <div className="mt-24">
+            <div className="mt-10 lg:mt-24">
                 <Link to="/shorten"><h3 className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-500 dark:text-white dark:hover:text-white/40 transition duration-300 cursor-pointer"><FaArrowLeftLong />Back to previous page</h3></Link>
             </div>
             <div className="text-center mt-10">

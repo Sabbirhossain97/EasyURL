@@ -22,9 +22,15 @@ function Shorten() {
     const getUrls = async (sortBy) => {
         setFetchLoading(true)
         const data = await fetchUrls(sortBy);
+        const updatedData = data.map(url => ({
+            ...url,
+            status: url.status || 'active'
+        }))
         if (data) {
-            setUrls(data);
-            setFetchLoading(false)
+            setUrls(updatedData);
+            setTimeout(() => {
+                setFetchLoading(false)
+            }, 2000)
         }
     };
 
@@ -59,9 +65,9 @@ function Shorten() {
     }, [originalUrl]);
 
     return (
-        <div className="max-w-7xl min-h-screen mx-auto pb-20 px-3 md:px-4 xl:px-2">
+        <div className="max-w-[1536px] min-h-screen mx-auto pb-20 px-3 md:px-4 xl:px-2">
             <div className='flex justify-center'>
-                <div className="mt-44 w-full lg:w-3/4">
+                <div className="mt-16 sm:mt-20 lg:mt-30 xl:mt-44 w-full lg:w-3/4">
                     <h1 className="text-center text-[42px] sm:text-[52px] md:text-[64px] font-bold leading-[52px] custom-header-text">Shorten Your URL here</h1>
                     <form onSubmit={createUrl} className="flex gap-4 mt-4 md:mt-10 relative">
                         <textarea
@@ -88,7 +94,7 @@ function Shorten() {
                     </form>
                 </div>
             </div>
-            {fetchLoading ? <TableSkeleton /> : urls.length === 0 ? (<div className="min-h-[420px] bg-white dark:bg-white/5 rounded-md flex flex-col justify-center items-center mt-20">
+            {fetchLoading ? <TableSkeleton /> : urls.length === 0 ? (<div className="min-h-[420px] rounded-md flex flex-col justify-center items-center mt-20">
                 <div>
                     <div className="p-5 rounded-md bg-sky-400/20">
                         <FaLink className="h-8 w-8 text-sky-400" />

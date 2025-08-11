@@ -9,6 +9,15 @@ export const loginUser = async (formValues) => {
     }
 }
 
+export const verifyRegistration = async (token) => {
+    try {
+        const response = await axiosInstance.get(`/verify-register/${token}`);
+        return response.data;
+    } catch (error) {
+        throw error?.response?.data || { error: 'Something went wrong during verification.' };
+    }
+}
+
 export const registerUser = async (formValues) => {
     try {
         const response = await axiosInstance.post('/signup', formValues);

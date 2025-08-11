@@ -8,6 +8,7 @@ import { Spinner } from '../svg/SVG';
 import { handleCopy } from '../../utils/clipboard';
 import { handleDownloadQR } from '../../utils/downloadQR';
 import { useNavigate } from 'react-router-dom';
+import { IoWarning } from "react-icons/io5";
 
 function ViewUrlModal({ isUrlViewOpen, setIsUrlViewOpen, viewUrl, setViewUrl }) {
     const navigate = useNavigate();
@@ -55,7 +56,7 @@ function ViewUrlModal({ isUrlViewOpen, setIsUrlViewOpen, viewUrl, setViewUrl }) 
                         </div>
                         <div className='mt-6'>
                             <h3>Share</h3>
-                            <div className="flex gap-2 mt-2">
+                            {viewUrl.status === 'active' ? <div className="flex gap-2 mt-2">
                                 <FacebookShareButton url={viewUrl?.shortUrl}>
                                     <FacebookIcon size={32} round />
                                 </FacebookShareButton>
@@ -71,27 +72,38 @@ function ViewUrlModal({ isUrlViewOpen, setIsUrlViewOpen, viewUrl, setViewUrl }) 
                                 <WhatsappShareButton url={viewUrl?.shortUrl}>
                                     <WhatsappIcon size={32} round />
                                 </WhatsappShareButton>
-                            </div>
+                            </div> : <p className='text-sm mt-2 flex gap-1 items-center'>
+                                <IoWarning className='text-lg text-yellow-400' /> <span className='text-gray-600'>You have to activate your link to share them</span>
+                            </p>}
                         </div>
                         <div className='mt-10 flex flex-col items-center gap-4 justify-center'>
                             <div>
-                                <img src={viewUrl?.qr?.code} width="300px" height="300px" />
+                                {viewUrl.status === 'active' ? <img src={viewUrl?.qr?.code} alt='qr_code' width="300px" height="300px" /> : 
+                                 <div className='h-[300px] w-[300px] border border-dashed border-gray-300 rounded-md dark:border-zinc-700 flex items-center justify-center'>QR not available</div> }
                             </div>
                             <div>
-                                <Button
+                                {viewUrl.status === 'active' ? <Button
                                     type='button'
+                                    disabled
                                     onClick={() => handleDownloadQR(viewUrl, setLoading)}
                                     className="inline-flex items-center cursor-pointer transition duration-300 gap-2 rounded-md bg-gray-700 dark:bg-white/10 px-3 py-1 text-sm/6 font-semibold text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-600 data-open:bg-gray-700"
                                 >
                                     {loading ? <Spinner /> : <LuDownload />}
                                     {loading ? "Downloading..." : "Download QR Code"}
-                                </Button>
+                                </Button> : <Button
+                                    type='button'
+                                    disabled
+                                    className="inline-flex items-center cursor-pointer transition duration-300 gap-2 rounded-md bg-gray-700 dark:bg-white/10 px-3 py-1 text-sm/6 font-semibold text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-600 data-open:bg-gray-700"
+                                >
+
+                                    <IoWarning className='text-lg text-yellow-400' />Activate your link for download
+                                </Button>}
                             </div>
                         </div>
                     </DialogPanel>
                 </div>
-            </div>
-        </Dialog>
+            </div >
+        </Dialog >
     )
 }
 

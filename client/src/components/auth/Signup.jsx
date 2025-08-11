@@ -5,7 +5,7 @@ import { registerUser } from '../../services/authService';
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import toast from 'react-hot-toast';
 
-function Signup({ onSuccess }) {
+function Signup() {
 
     const [formValues, setFormValues] = useState({
         username: "",
@@ -23,8 +23,7 @@ function Signup({ onSuccess }) {
             setTimeout(() => {
                 toast.success(data?.message, { position: 'top-center' });
                 setLoading(false);
-                onSuccess()
-                toast.success("Please log in to continue!", { position: 'top-center' });
+                // toast.success("Please log in to continue!", { position: 'top-center' });
             }, 1500)
         } catch (err) {
             setTimeout(() => {
