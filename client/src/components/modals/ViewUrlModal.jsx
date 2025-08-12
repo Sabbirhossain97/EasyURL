@@ -9,6 +9,7 @@ import { handleCopy } from '../../utils/clipboard';
 import { handleDownloadQR } from '../../utils/downloadQR';
 import { useNavigate } from 'react-router-dom';
 import { IoWarning } from "react-icons/io5";
+import { IoMdClose } from "react-icons/io";
 
 function ViewUrlModal({ isUrlViewOpen, setIsUrlViewOpen, viewUrl, setViewUrl }) {
     const navigate = useNavigate();
@@ -28,11 +29,12 @@ function ViewUrlModal({ isUrlViewOpen, setIsUrlViewOpen, viewUrl, setViewUrl }) 
                 <div className="flex min-h-full items-center justify-center p-2 sm:p-4">
                     <DialogPanel
                         transition
-                        className="w-full max-w-[500px] rounded-xl shadow-xl bg-white dark:bg-[#181E29] p-4 sm:p-6 backdrop-blur-2xl duration-300 ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0"
+                        className="w-full relative max-w-[500px] rounded-xl shadow-xl bg-white dark:bg-[#181E29] p-4 sm:p-6 backdrop-blur-2xl duration-300 ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0"
                     >
                         <DialogTitle as="h3" className="text-base/7 font-bold dark:text-white">
                             Your shortened URL
                         </DialogTitle>
+                        <IoMdClose onClick={close} className='absolute transition duration-300 hover:text-gray-400 dark:hover:text-white/50 cursor-pointer text-lg top-4 right-4' />
                         <div className='mt-2 flex gap-2 items-center w-full'>
                             <h3 className='text-sm w-full px-4 py-1.5 rounded-md bg-gray-200 dark:bg-white/10'>{viewUrl.shortUrl}</h3>
                             <div className='w-full flex gap-2 flex-1'>
@@ -73,13 +75,13 @@ function ViewUrlModal({ isUrlViewOpen, setIsUrlViewOpen, viewUrl, setViewUrl }) 
                                     <WhatsappIcon size={32} round />
                                 </WhatsappShareButton>
                             </div> : <p className='text-sm mt-2 flex gap-1 items-center'>
-                                <IoWarning className='text-lg text-yellow-400' /> <span className='text-gray-600'>You have to activate your link to share them</span>
+                                <IoWarning className='text-lg text-yellow-400' /> <span className='text-gray-600 dark:text-white'>You have to activate your link to share them</span>
                             </p>}
                         </div>
                         <div className='mt-10 flex flex-col items-center gap-4 justify-center'>
                             <div>
-                                {viewUrl.status === 'active' ? <img src={viewUrl?.qr?.code} alt='qr_code' width="300px" height="300px" /> : 
-                                 <div className='h-[300px] w-[300px] border border-dashed border-gray-300 rounded-md dark:border-zinc-700 flex items-center justify-center'>QR not available</div> }
+                                {viewUrl.status === 'active' ? <img src={viewUrl?.qr?.code} alt='qr_code' width="300px" height="300px" /> :
+                                    <div className='h-[300px] w-[300px] border border-dashed border-gray-300 rounded-md dark:border-zinc-700 flex items-center justify-center'>QR not available</div>}
                             </div>
                             <div>
                                 {viewUrl.status === 'active' ? <Button
