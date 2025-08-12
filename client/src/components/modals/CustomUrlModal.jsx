@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customUrl, setCustomUrl, setUrls }) {
 
     const [loading, setLoading] = useState(false)
-    const [status, setStatus] = useState(customUrl?.status || 'active')
+    const [_, setStatus] = useState(customUrl?.status || 'active')
 
     function close() {
         setIsCustomUrlModalOpen(false)
@@ -48,8 +48,6 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
         }
     }
 
-    console.log(customUrl)
-
     return (
         <Dialog open={isCustomUrlModalOpen} as="div" transition className="relative z-10 focus:outline-none" onClose={close}>
             <DialogBackdrop className="fixed inset-0 backdrop-blur-sm" />
@@ -70,35 +68,66 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
                                 onChange={(e) => setCustomUrl({ ...customUrl, name: e.target.value.toLowerCase() })}
                                 value={customUrl.name}
                             />
-                            <div className='mt-4 w-full relative'>
+                            <div className="mt-4 w-full">
                                 <DialogTitle as="h3" className="text-base/7 font-medium dark:text-white">
                                     Set status
                                 </DialogTitle>
+
                                 <Menu>
                                     {({ open }) => (
-                                        <>
-                                            <MenuButton className="inline-flex relative cursor-pointer mt-2 w-full border border-zinc-300 dark:border-zinc-700 items-center gap-2 rounded-md px-3 py-1.5 text-sm/6 font-semibold text-gray-600 dark:text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white">
-                                                {status === 'active' ? 'Active' : 'Inactive'}
-                                                <FaChevronDown className={`size-3 transition duration-300  ${open ? 'rotate-180' : ''
-                                                    } absolute right-4 top-3 dark:fill-white/60`} />
+                                        <div className="relative w-full">
+                                            <MenuButton className="inline-flex cursor-pointer mt-2 w-full border border-zinc-300 dark:border-zinc-700 items-center gap-2 rounded-md px-3 py-1.5 text-sm/6 font-semibold text-gray-600 dark:text-white">
+                                                {customUrl.status === 'active' ? 'Active' : 'Inactive'}
+                                                <FaChevronDown
+                                                    className={`size-3 transition duration-300 absolute right-4 top-5 dark:fill-white/60 ${open ? 'rotate-180' : ''
+                                                        }`}
+                                                />
                                             </MenuButton>
+
                                             <MenuItems
                                                 transition
-                                                anchor="bottom end"
-                                                className="min-w-[400px] z-[1500] rounded-xl border border-zinc-300 dark:border-none bg-white dark:bg-zinc-900 shadow-xl p-1 text-sm/6 transition duration-100 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-95 data-closed:opacity-0"
+                                                className="absolute left-0 top-full mt-1 w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-[#181E29] shadow-xl p-1 text-sm/6 transition duration-100 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0"
                                             >
                                                 <MenuItem>
-                                                    <button onClick={() => setCustomUrl({ ...customUrl, status: 'active' })} className="group cursor-pointer transition duration-300 flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-zinc-100 dark:data-focus:bg-zinc-800">
-                                                        Active
-                                                    </button>
+                                                    {({ close }) => (
+                                                        <button
+                                                            type='button'
+                                                            onClick={() => {
+                                                                if (customUrl.status !== 'active') {
+                                                                    setCustomUrl((prev) => ({
+                                                                        ...prev,
+                                                                        status: 'active',
+                                                                    }));
+                                                                }
+                                                                close();
+                                                            }}
+                                                            className="group cursor-pointer flex w-full items-center gap-2 transition duration-300 rounded-lg px-3 py-1.5 data-focus:bg-zinc-100 dark:data-focus:bg-white/10"
+                                                        >
+                                                            Active
+                                                        </button>
+                                                    )}
                                                 </MenuItem>
                                                 <MenuItem>
-                                                    <button onClick={() => setCustomUrl({ ...customUrl, status: 'inactive' })} className="group cursor-pointer transition duration-300 flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-zinc-100 dark:data-focus:bg-zinc-800">
-                                                        Inactive
-                                                    </button>
+                                                    {({ close }) => (
+                                                        <button
+                                                            type='button'
+                                                            onClick={() => {
+                                                                if (customUrl.status !== 'inactive') {
+                                                                    setCustomUrl((prev) => ({
+                                                                        ...prev,
+                                                                        status: 'inactive',
+                                                                    }));
+                                                                }
+                                                                close();
+                                                            }}
+                                                            className="group cursor-pointer flex w-full items-center gap-2 transition duration-300 rounded-lg px-3 py-1.5 data-focus:bg-zinc-100 dark:data-focus:bg-white/10"
+                                                        >
+                                                            Inactive
+                                                        </button>
+                                                    )}
                                                 </MenuItem>
                                             </MenuItems>
-                                        </>
+                                        </div>
                                     )}
                                 </Menu>
                             </div>
