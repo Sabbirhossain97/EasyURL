@@ -5,6 +5,8 @@ import { FaChevronDown } from "react-icons/fa";
 import { customizeUrl } from '../../services/urlService';
 import { IoMdClose } from "react-icons/io";
 import toast from 'react-hot-toast';
+import { Tooltip } from 'react-tooltip'
+import { RiInformationLine } from "react-icons/ri";
 
 function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customUrl, setCustomUrl, setUrls }) {
 
@@ -50,6 +52,7 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
 
     return (
         <Dialog open={isCustomUrlModalOpen} as="div" transition className="relative z-10 focus:outline-none" onClose={close}>
+
             <DialogBackdrop className="fixed inset-0 backdrop-blur-sm" />
             <form onSubmit={handleCustomUrlName}>
                 <div className="fixed inset-0 z-[1000] w-screen overflow-y-auto">
@@ -58,8 +61,20 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
                             transition
                             className="w-full max-w-md relative rounded-xl shadow-xl bg-white dark:bg-[#181E29] p-6 backdrop-blur-2xl duration-300 ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0"
                         >
-                            <DialogTitle as="h3" className="text-base/7 font-medium dark:text-white">
+                            <DialogTitle as="h3" className="text-base/7 font-medium dark:text-white flex items-center gap-2">
                                 Customize your URL
+                                <span data-tooltip-id="my-tooltip"><RiInformationLine className='text-gray-500 dark:text-white' /></span>
+                                <Tooltip id="my-tooltip" place="right" effect="solid">
+                                    <div style={{ maxWidth: "250px" }}>
+                                        <p>Conditions:</p>
+                                        <ul style={{ margin: 0 }}>
+                                            <li>✅ Must contain at least one letter</li>
+                                            <li>✅ Can include letters, numbers, hyphens (-), underscores (_)</li>
+                                            <li>✅ Cannot be numbers only</li>
+                                            <li>✅ Length: 4–30 characters</li>
+                                        </ul>
+                                    </div>
+                                </Tooltip>
                             </DialogTitle>
                             <IoMdClose onClick={close} className='absolute transition duration-300 hover:text-gray-400 dark:hover:text-white/50 cursor-pointer text-lg top-4 right-4' />
                             <input

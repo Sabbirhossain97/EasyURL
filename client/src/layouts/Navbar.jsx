@@ -30,7 +30,7 @@ function Navbar() {
                         (
                             <Popover>
                                 <PopoverButton className="cursor-pointer flex items-center gap-3 font-medium dark:text-white focus:outline-none data-active:text-sky-400 data-focus:outline data-focus:outline-white transition duration-300 data-hover:text-sky-400">
-                                    {user?.image ? <img src={user?.image} className='w-10 sm:w-8 h-10 sm:h-8 rounded-full object-cover object-top border border-zinc-300' /> :
+                                    {user?.image ? <img src={user?.image} className='w-10 sm:w-8 h-10 sm:h-8 rounded-full object-cover object-center border border-zinc-300 dark:border-none' /> :
                                         <AiOutlineUser className='text-2xl w-10 sm:w-8 h-10 sm:h-8 rounded-full sm:text-xl border border-gray-400 dark:border-white/30' />}
                                     <p className='flex flex-col items-start'>
                                         <span className='text-[14px] hidden sm:block'>{user && user?.username}</span>

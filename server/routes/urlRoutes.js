@@ -218,8 +218,15 @@ const customizeUrl = async (req, res) => {
     try {
         if (customName !== undefined && customName !== null) {
             if (typeof customName !== 'string') {
-                return res.status(400).json({ error: "Custom name must be fully string or alphanumeric." });
+                return res.status(400).json({ error: "Custom name must be string." });
             }
+
+            if (!/^(?=.*[a-z])[a-z0-9_-]+$/i.test(customName)) {
+                return res.status(400).json({
+                    error: "Invalid format check instructions!"
+                });
+            }
+
             if (customName.length < 4 || customName.length > 30) {
                 return res.status(400).json({ error: "Custom name must be between 4 and 30 characters." });
             }
