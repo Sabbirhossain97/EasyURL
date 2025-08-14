@@ -204,9 +204,9 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
             </div>
             <ReactTooltip
                 id="my-tooltip"
-                place="top"
+                place="right"
                 arrowColor="black"
-                className="max-w-[500px] break-words whitespace-pre-wrap z-[1000]"
+                className="max-w-[250px] break-words z-[1000]"
             />
         </div>
     )
