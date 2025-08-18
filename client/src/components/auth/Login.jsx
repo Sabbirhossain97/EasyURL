@@ -5,8 +5,11 @@ import { Spinner } from '../svg/SVG';
 import { loginUser } from '../../services/authService';
 import toast from 'react-hot-toast';
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { useGoogleLogin } from '@react-oauth/google';
+import { FcGoogle } from "react-icons/fc";
+import { googleLogin } from '../../services/authService';
 
-function Login() {
+function Login({ setUser }) {
 
     const navigate = useNavigate();
     const [formValues, setFormValues] = useState({
@@ -24,6 +27,7 @@ function Login() {
             localStorage.setItem("token", data?.accessToken);
             localStorage.setItem("token_expiry", new Date().getTime() + 24 * 60 * 60 * 1000);
             localStorage.setItem("user", JSON.stringify(data?.user));
+            setUser(data?.user);
             setTimeout(() => {
                 toast.success(data.message, { position: 'top-center' });
                 setLoading(false);
@@ -36,6 +40,30 @@ function Login() {
             }, 1500);
         }
     };
+
+    const login = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            try {
+                const token = tokenResponse.access_token;
+                const data = await googleLogin(token);
+                localStorage.setItem("token", data?.accessToken);
+                localStorage.setItem("token_expiry", new Date().getTime() + 24 * 60 * 60 * 1000);
+                localStorage.setItem("user", JSON.stringify(data?.user));
+                setTimeout(() => {
+                    toast.success(data.message, { position: 'top-center' });
+                    setLoading(false);
+                    setUser(data?.user);
+                    navigate('/shorten');
+                }, 1000);
+            } catch (err) {
+                setTimeout(() => {
+                    toast.error(err?.error || "Login failed", { position: 'top-center' });
+                    setLoading(false);
+                }, 1000);
+            }
+        },
+        onError: () => console.log("Google Login Failed"),
+    });
 
     return (
         <>
@@ -68,7 +96,10 @@ function Login() {
                         <MdVisibilityOff onClick={() => setVisible(!visible)} className='cursor-pointer absolute bottom-3 text-zinc-400 right-2' />
                     }
                 </div>
-                <div className="mt-6">
+                <div className='mt-4 text-right'>
+                    <button onClick={() => navigate("/forgot-password")} className='text-sky-400 hover:text-sky-600 transition duration-300 inline-flex dark:text-white dark:hover:text-white/50 underline cursor-pointer'>Forgot password?</button>
+                </div>
+                <div className="mt-4">
                     <Button
                         type='submit'
                         className="cursor-pointer flex justify-center transition duration-300 w-full text-center items-center gap-2 rounded-md bg-sky-400 dark:bg-white/10 px-3 py-2 text-sm/6 font-semibold text-white shadow-inner focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-sky-500 dark:data-hover:bg-white/15"
@@ -76,8 +107,23 @@ function Login() {
                         {loading ? <><Spinner /> Processing...</> : "Signin"}
                     </Button>
                 </div>
-                <div className='mt-4 text-center'>
-                    <button onClick={() => navigate("/forgot-password")} className='text-sky-400 inline-flex dark:text-white underline cursor-pointer'>Forgot password?</button>
+                <div className='flex items-center justify-center mt-4'>
+                    <div className='w-[50px] inline-flex items-center h-6'>
+                        <div className='w-[50px] border-b mt-1 border-zinc-300 dark:border-gray-700'></div>
+                    </div>
+                    <h3 className='px-3 text-center inline-flex items-center'>or</h3>
+                    <div className='w-[50px] inline-flex items-center h-6'>
+                        <div className='w-[50px] border-b mt-1 border-zinc-300 dark:border-gray-700'></div>
+                    </div>
+                </div>
+                <div className="mt-2">
+                    <Button
+                        className="cursor-pointer flex justify-center transition duration-300 hover:bg-zinc-100 w-full text-center items-center gap-2 rounded-md border border-zinc-300 dark:border-none dark:bg-white/10 px-3 py-2 text-sm/6 font-semibold focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white dark:data-hover:bg-white/15"
+                        onClick={() => login()}
+                        type="button">
+                        <FcGoogle />
+                        Sign in with Google
+                    </Button>
                 </div>
             </form>
         </>

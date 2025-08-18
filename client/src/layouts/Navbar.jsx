@@ -9,13 +9,14 @@ import { theme } from '../constants/theme';
 import { handleLogout } from '../utils/logout';
 import { IoSettingsSharp } from "react-icons/io5";
 
-function Navbar() {
+function Navbar({ user, setUser }) {
 
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const { selectedTheme, setSelectedTheme } = useTheme('Light');
-    const user = JSON.parse(localStorage.getItem("user"));
     const themeIndex = theme.findIndex(t => t.name === selectedTheme);
+
+    console.log(user)
 
     return (
         <nav className="mx-auto flex items-center justify-between pt-6 text-center h-16 max-w-7xl px-3 md:px-4 xl:px-2">
@@ -30,7 +31,7 @@ function Navbar() {
                         (
                             <Popover>
                                 <PopoverButton className="cursor-pointer flex items-center gap-3 font-medium dark:text-white focus:outline-none data-active:text-sky-400 data-focus:outline data-focus:outline-white transition duration-300 data-hover:text-sky-400">
-                                    {user?.image ? <img src={user?.image} className='w-10 sm:w-8 h-10 sm:h-8 rounded-full object-cover object-center border border-zinc-300 dark:border-none' /> :
+                                    {user?.image ? <img src={user?.image} alt="profile_img" className='w-10 sm:w-8 h-10 sm:h-8 rounded-full object-cover object-top border border-zinc-300 dark:border-none' /> :
                                         <AiOutlineUser className='text-2xl w-10 sm:w-8 h-10 sm:h-8 rounded-full sm:text-xl border border-gray-400 dark:border-white/30' />}
                                     <p className='flex flex-col items-start'>
                                         <span className='text-[14px] hidden sm:block'>{user && user?.username}</span>
@@ -69,7 +70,7 @@ function Navbar() {
                                                             <span><Spinner /></span>Logging out...</p>
                                                     </div>
                                                     :
-                                                    <button onClick={() => handleLogout(navigate, setLoading)} className="rounded-lg w-full cursor-pointer px-3 py-2 transition duration-300 hover:bg-gray-100 dark:hover:bg-white/5">
+                                                    <button onClick={() => handleLogout(navigate, setLoading, setUser)} className="rounded-lg w-full cursor-pointer px-3 py-2 transition duration-300 hover:bg-gray-100 dark:hover:bg-white/5">
                                                         <p className="font-semibold flex items-center gap-2 dark:text-white">
                                                             <span><MdLogout className='text-lg' />
                                                             </span>Logout</p>

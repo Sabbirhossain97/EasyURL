@@ -10,6 +10,7 @@ import { FaLongArrowAltUp } from "react-icons/fa";
 import { IoIosLink } from "react-icons/io";
 import { AdminStatCardSkeleton } from '../layouts/Skeleton';
 import { signInDateOptions } from '../constants/dateOptions';
+import { IoWarning } from "react-icons/io5";
 import AdminStatFilter from '../components/filters/AdminStatFilter';
 import toast from 'react-hot-toast';
 
@@ -86,75 +87,83 @@ function ProfileSettings() {
     };
 
     return (
-        <main className="w-full min-h-screen py-1 lg:w-3/4 justify-center">
-            <div className="md:p-4 bg-white dark:bg-[#181E29] rounded-md">
-                <div className="w-full px-4 pb-8 pt-4 lg:pt-0 mt-8 sm:rounded-lg">
-                    <form onSubmit={handleSubmit} className="grid max-w-3xl mx-auto mt-8">
-                        <div className="flex flex-col items-center space-y-5 md:flex-row md:space-y-0">
-                            {formData.previewImg ? (
-                                <ImagePreview src={formData.previewImg} uploading={loading.uploading} />
-                            ) : user?.image ? (
-                                <ImagePreview src={user.image} uploading={loading.uploading} />
-                            ) : (
-                                <div className="w-40 h-40 border rounded-full border-zinc-300 flex justify-center items-center">
-                                    <AiOutlineUser className="text-gray-400 text-[92px] rounded-full" />
+        <main className='w-full lg:w-3/4'>
+            {user.provider === "google" && <div className='flex gap-2 p-3 mb-2 md:mb-4 bg-yellow-300/20 dark:bg-yellow-400/20 rounded-md'>
+                <span className='w-[36px]'><IoWarning className='w-full text-[36px] text-yellow-400' /></span>
+                <h3 className='dark:text-white/80 text-gray-600 w-[calc(100%-20px)]'>Your profile details are synced from Google. To update your information, please make changes in your Google account</h3>
+            </div>}
+            <div className="w-full min-h-screen py-1 justify-center">
+                <div className="md:p-4 bg-white dark:bg-[#181E29] rounded-md">
+                    <div className="w-full px-4 pb-8 pt-4 lg:pt-0 mt-2 md:mt-8 sm:rounded-lg">
+                        <form onSubmit={handleSubmit} className="grid max-w-3xl mx-auto mt-8">
+                            <div className="flex flex-col items-center space-y-5 md:flex-row md:space-y-0">
+                                {formData.previewImg ? (
+                                    <ImagePreview src={formData.previewImg} uploading={loading.uploading} />
+                                ) : user?.image ? (
+                                    <ImagePreview src={user.image} uploading={loading.uploading} />
+                                ) : (
+                                    <div className="w-40 h-40 border rounded-full border-zinc-300 flex justify-center items-center">
+                                        <AiOutlineUser className="text-gray-400 text-[92px] rounded-full" />
+                                    </div>
+                                )}
+                                <div className="flex items-center gap-2 md:ml-8">
+                                    <label className={`${user.provider === "google" ? "cursor-not-allowed" : "cursor-pointer hover:bg-sky-400"} py-2.5 px-7 inline-flex gap-2 items-center whitespace-nowrap bg-sky-500 dark:bg-blue-500 transition duration-300 text-base font-medium text-white focus:outline-none rounded-md`}>
+                                        {loading.uploading ? <><Spinner /> Uploading...</> : (!formData.previewImg && !user?.image) ? "Upload picture" : "Change picture"}
+                                        <input onChange={handleFileChange} type="file" className="hidden" disabled={user.provider === "google"} />
+                                    </label>
                                 </div>
-                            )}
-                            <div className="flex items-center gap-2 md:ml-8">
-                                <label className="py-2.5 px-7 inline-flex gap-2 items-center whitespace-nowrap bg-sky-500 transition duration-300 cursor-pointer hover:bg-sky-400 text-base font-medium text-white focus:outline-none rounded-md">
-                                    {loading.uploading ? <><Spinner /> Uploading...</> : (!formData.previewImg && !user?.image) ? "Upload picture" : "Change picture"}
-                                    <input onChange={handleFileChange} type="file" className="hidden" />
-                                </label>
-                            </div>
-                        </div>
-
-                        <div className="items-center mt-10 sm:mt-14 text-[#202142]">
-                            <div className="w-full mb-4">
-                                <label className='font-semibold dark:text-white'>Username</label>
-                                <input
-                                    type="text"
-                                    value={formData.username}
-                                    onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
-                                    className="border focus:border-sky-400 dark:text-white mt-2 dark:focus:border-blue-500 transition duration-300 outline-none w-full placeholder:text-[14px] dark:placeholder:text-gray-400 dark:bg-[#181E29] bg-white border-zinc-200 dark:border-zinc-700 rounded-md p-2"
-                                    placeholder="Your username"
-                                />
                             </div>
 
-                            <div className="mb-4">
-                                <label className='font-semibold dark:text-white'>Email</label>
-                                <input
-                                    type="email"
-                                    value={user?.email}
-                                    className="border text-gray-500 dark:bg-gray-800 dark:text-gray-600 cursor-not-allowed focus:border-sky-400 bg-gray-200 mt-2 dark:focus:border-blue-500 transition duration-300 outline-none w-full placeholder:text-[14px] dark:placeholder:text-gray-400 border-zinc-200 dark:border-zinc-700 rounded-md p-2"
-                                    disabled
-                                />
-                            </div>
+                            <div className="items-center mt-10 sm:mt-14 text-[#202142]">
+                                <div className="w-full mb-4">
+                                    <label className='font-semibold dark:text-white'>Username</label>
+                                    <input
+                                        type="text"
+                                        disabled={user.provider === "google"}
+                                        value={formData.username}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
+                                        className={`${user.provider === "google" ? "cursor-not-allowed" : ""} border focus:border-sky-400 dark:text-white mt-2 dark:focus:border-blue-500 transition duration-300 outline-none w-full placeholder:text-[14px] dark:placeholder:text-gray-400 dark:bg-[#181E29] bg-white border-zinc-200 dark:border-zinc-700 rounded-md p-2`}
+                                        placeholder="Your username"
+                                    />
+                                </div>
 
-                            <div className="mb-4">
-                                <label className='font-semibold dark:text-white'>Confirm password</label>
-                                <input
-                                    type="text"
-                                    value={formData.password}
-                                    onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
-                                    className="border dark:text-white focus:border-sky-400 mt-2 dark:focus:border-blue-500 transition duration-300 outline-none w-full placeholder:text-[14px] dark:placeholder:text-gray-400 dark:bg-[#181E29] bg-white border-zinc-200 dark:border-zinc-700 rounded-md p-2"
-                                    placeholder="password"
-                                />
-                            </div>
+                                <div className="mb-4">
+                                    <label className='font-semibold dark:text-white'>Email</label>
+                                    <input
+                                        type="email"
+                                        value={user?.email}
+                                        className="border text-gray-500 dark:bg-gray-800 dark:text-gray-600 cursor-not-allowed focus:border-sky-400 bg-gray-200 mt-2 dark:focus:border-blue-500 transition duration-300 outline-none w-full placeholder:text-[14px] dark:placeholder:text-gray-400 border-zinc-200 dark:border-zinc-700 rounded-md p-2"
+                                        disabled
+                                    />
+                                </div>
 
-                            <div className="flex justify-end">
-                                <button type="submit" className="py-2.5 px-7 inline-flex gap-2 items-center bg-sky-500 transition duration-300 cursor-pointer hover:bg-sky-400 text-base font-medium text-white focus:outline-none rounded-md">
-                                    {loading.updating ? <><Spinner /> Updating...</> : "Update"}
-                                </button>
+                                <div className="mb-4">
+                                    <label className='font-semibold dark:text-white'>Confirm password</label>
+                                    <input
+                                        type="text"
+                                        disabled={user.provider === "google"}
+                                        value={formData.password}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+                                        className={`${user.provider === "google" ? "cursor-not-allowed" : ""} border dark:text-white focus:border-sky-400 mt-2 dark:focus:border-blue-500 transition duration-300 outline-none w-full placeholder:text-[14px] dark:placeholder:text-gray-400 dark:bg-[#181E29] bg-white border-zinc-200 dark:border-zinc-700 rounded-md p-2`}
+                                        placeholder="password"
+                                    />
+                                </div>
+
+                                <div className="flex justify-end">
+                                    <button type="submit" disabled={user.provider === "google"} className={`${user.provider === "google" ? "cursor-not-allowed" : "hover:bg-sky-400 cursor-pointer"} py-2.5 px-7 inline-flex gap-2 items-center bg-sky-500 dark:bg-blue-500 transition duration-300  text-base font-medium text-white focus:outline-none rounded-md`}>
+                                        {loading.updating ? <><Spinner /> Updating...</> : "Update"}
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </main>
     );
 }
 
-function AccountSettings() {
+function AccountSettings({ setUser }) {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -166,6 +175,7 @@ function AccountSettings() {
             setTimeout(() => {
                 toast.success(message, { position: 'bottom-right' });
                 setLoading(false);
+                setUser("")
                 navigate("/");
             }, 2000);
         } catch (err) {
@@ -322,16 +332,16 @@ function AdminSettings() {
     )
 }
 
-function Settings() {
+function Settings({ setUser }) {
     const [selectedTab, setSelectedTab] = useState(0);
     const user = JSON.parse(localStorage.getItem("user"));
 
     const tabs = user.role === "admin" ? [
         { name: 'Profile', element: <ProfileSettings /> },
-        { name: 'Account', element: <AccountSettings /> },
+        { name: 'Account', element: <AccountSettings setUser={setUser} /> },
         { name: 'Admin', element: <AdminSettings /> }] :
         [{ name: 'Profile', element: <ProfileSettings /> },
-        { name: 'Account', element: <AccountSettings /> }]
+        { name: 'Account', element: <AccountSettings setUser={setUser} /> }]
 
     return (
         <div className='py-10 md:py-20 max-w-7xl mx-auto px-3 md:px-4 xl:px-2'>

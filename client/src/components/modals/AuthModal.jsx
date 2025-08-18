@@ -3,18 +3,18 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels, Dialog, DialogPanel, Dialo
 import Login from "../auth/Login"
 import Signup from '../auth/Signup';
 
-function AuthModal({ isAuthModalOpen, setIsAuthModalOpen }) {
+function AuthModal({ setUser, isAuthModalOpen, setIsAuthModalOpen }) {
 
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     const authTabs = [
         {
             name: 'Signin',
-            component: (switchTab) => <Login />
+            component: () => <Login setUser={setUser} />
         },
         {
             name: 'Signup',
-            component: (switchTab) => <Signup onSuccess={() => switchTab(0)} />
+            component: (switchTab) => <Signup setUser={setUser} onSuccess={() => switchTab(0)} />
         },
     ];
 
