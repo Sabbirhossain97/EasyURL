@@ -16,8 +16,6 @@ function Navbar({ user, setUser }) {
     const { selectedTheme, setSelectedTheme } = useTheme('Light');
     const themeIndex = theme.findIndex(t => t.name === selectedTheme);
 
-    console.log(user)
-
     return (
         <nav className="mx-auto flex items-center justify-between pt-6 text-center h-16 max-w-7xl px-3 md:px-4 xl:px-2">
             <Link to="/">

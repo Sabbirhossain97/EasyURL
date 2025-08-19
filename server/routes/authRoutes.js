@@ -5,25 +5,32 @@ import User from "../models/User.js"
 import { sendPasswordResetEmail, sendRegisterEmail, sendVerificationEmail } from "../utils/sendEmail.js"
 import 'dotenv/config';
 import fetch from 'node-fetch'
+import validator from "validator";
 
 const registerUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
-        const usernameRegex = /^(?=.*[a-zA-Z])[a-zA-Z0-9]{3,20}$/;
+        const trimmedUsername = username.trim();
 
-        if (!username || !usernameRegex.test(username)) {
-            return res.status(400).json({ error: "Username must be 3-20 characters and contain only letters, numbers, or underscores." });
+        if (!trimmedUsername) {
+            return res.status(400).json({ error: "Username is required." });
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!email || !emailRegex.test(email)) {
-            return res.status(400).json({ error: "Invalid email format." });
+        if (trimmedUsername.length < 3 || trimmedUsername.length > 20) {
+            return res.status(400).json({ error: "Username must be between 3 and 20 characters long." });
         }
 
-        if (!password || password.length < 6) {
-            return res.status(400).json({ error: "Password must be at least 6 characters long." });
+        const usernameRegex = /^(?=.*[a-zA-Z])[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/;
+
+        if (!usernameRegex.test(trimmedUsername)) {
+            return res.status(400).json({ error: "Username can only contain letters, numbers, single spaces (no leading or trailing spaces), and no special characters" });
         }
+
+        if (!email || !validator.isEmail(email)) {
+            return res.status(400).json({ error: "Please provide a valid email address." });
+        }
+
         const isUserExists = await User.findOne({ email });
 
         if (isUserExists && isUserExists.provider === "google") {
@@ -88,6 +95,7 @@ const verifyUser = async (req, res) => {
         user.tokenExpiry = undefined;
         await user.save();
         const html = `<p>🚀 Congratulations! A New User Registered at EasyURL!</p>
+                      <p><b>Provider:</b> ${user.provider}</p>
                       <p><b>Username:</b> ${user.username}</p>
                       <p><b>Email:</b> ${user.email}</p>
                     `;
@@ -114,7 +122,7 @@ const loginUser = async (req, res) => {
             return res.status(409).json({ error: 'This email is already registered with Google. Please log in using Google instead.' })
         }
 
-        const isMatched = bcrypt.compare(password, user.password);
+        const isMatched = await bcrypt.compare(password, user.password);
         if (!isMatched) return res.status(400).json({ error: 'Invalid credentials' });
 
         const accessToken = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
@@ -135,7 +143,7 @@ const loginUser = async (req, res) => {
                 role: user.role,
                 email: user.email,
                 image: imageBase64 ? imageBase64 : null,
-                provider: 'local',
+                provider: user.provider,
             },
             message: "Successfully logged in!"
         });
@@ -176,7 +184,14 @@ const googleLogin = async (req, res) => {
                 lastSignedIn: new Date(),
                 image: { url: profile.picture }
             })
-            await user.save()
+            await user.save();
+            const html = `<p>🚀 Congratulations! A New User Registered at EasyURL!</p>
+                          <p><b>Provider:</b> ${user.provider}</p>
+                          <p><b>Username:</b> ${user.username}</p>
+                          <p><b>Email:</b> ${user.email}</p>
+                    `;
+
+            await sendRegisterEmail('sabbirhossainbd199@gmail.com', 'Registration Alert at EasyURL', html);
         }
 
         const accessToken = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
@@ -196,7 +211,7 @@ const googleLogin = async (req, res) => {
                 role: user.role,
                 email: user.email,
                 image: imageBase64 ? imageBase64 : null,
-                provider: 'google',
+                provider: user.provider,
 
             },
             message: "Successfully logged in with Google!"

@@ -27,11 +27,11 @@ function Login({ setUser }) {
             localStorage.setItem("token", data?.accessToken);
             localStorage.setItem("token_expiry", new Date().getTime() + 24 * 60 * 60 * 1000);
             localStorage.setItem("user", JSON.stringify(data?.user));
-            setUser(data?.user);
             setTimeout(() => {
                 toast.success(data.message, { position: 'top-center' });
                 setLoading(false);
                 navigate('/shorten');
+                setUser(data?.user);
             }, 1500);
         } catch (err) {
             setTimeout(() => {
