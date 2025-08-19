@@ -55,6 +55,9 @@ const urlSchema = new mongoose.Schema({
 })
 
 urlSchema.index({ user: 1, shortId: 1 }, { unique: true })
+urlSchema.index({ shortId: 1 });
+urlSchema.index({ customName: 1 });
+urlSchema.index({ status: 1 });
 
 const Url = mongoose.model("Url", urlSchema);
 

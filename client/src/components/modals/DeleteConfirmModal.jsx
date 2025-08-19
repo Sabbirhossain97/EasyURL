@@ -5,7 +5,7 @@ import { Spinner } from '../svg/SVG';
 import { deleteUrls } from '../../services/urlService';
 import toast from 'react-hot-toast';
 
-function DeleteConfirmModal({ isDeleteModalOpen, setIsDeleteModalOpen, urls, setUrls, selectedUrlId, setSelectedUrlId }) {
+function DeleteConfirmModal({ isDeleteModalOpen, setIsDeleteModalOpen, setUrls, selectedUrlId, setSelectedUrlId }) {
 
     const [loading, setLoading] = useState(false);
 
@@ -25,14 +25,14 @@ function DeleteConfirmModal({ isDeleteModalOpen, setIsDeleteModalOpen, urls, set
                 });
                 setLoading(false)
                 close()
-            }, 2000)
+            }, 1000)
 
         } catch (err) {
             setTimeout(() => {
                 toast.error(err?.error, { position: 'top-center' });
                 setLoading(false);
                 close()
-            }, 2000);
+            }, 1000);
         }
     }
 

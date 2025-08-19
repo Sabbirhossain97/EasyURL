@@ -49,17 +49,13 @@ function Login({ setUser }) {
                 localStorage.setItem("token", data?.accessToken);
                 localStorage.setItem("token_expiry", new Date().getTime() + 24 * 60 * 60 * 1000);
                 localStorage.setItem("user", JSON.stringify(data?.user));
-                setTimeout(() => {
-                    toast.success(data.message, { position: 'top-center' });
-                    setLoading(false);
-                    setUser(data?.user);
-                    navigate('/shorten');
-                }, 1000);
+                toast.success(data.message, { position: 'top-center' });
+                setLoading(false);
+                setUser(data?.user);
+                navigate('/shorten');
             } catch (err) {
-                setTimeout(() => {
-                    toast.error(err?.error || "Login failed", { position: 'top-center' });
-                    setLoading(false);
-                }, 1000);
+                toast.error(err?.error || "Login failed", { position: 'top-center' });
+                setLoading(false);
             }
         },
         onError: () => console.log("Google Login Failed"),

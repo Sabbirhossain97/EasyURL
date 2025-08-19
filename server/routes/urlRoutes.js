@@ -280,37 +280,29 @@ const redirectUrl = async (req, res) => {
             }
         }
 
-        await url.save();
         const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
-        let geoData;
-        try {
-            const response = await fetch(`https://ipapi.co/${ip}/json/`, {
-                method: "GET",
-                headers: {
-                    "User-Agent": "Node.js"
-                }
-            });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+        (async () => {
+            let geoData;
+            try {
+                const response = await fetch(`https://ipapi.co/${ip}/json/`);
+                geoData = await response.json();
+            } catch (err) {
+                console.error("Geo API error:", err.message);
             }
 
-            geoData = await response.json();
-        } catch (err) {
-            console.error("Geo API error:", err.message);
-        }
+            const stat = new Stat({
+                urlId: url._id,
+                shortUrl: url.shortUrl,
+                ip: ip,
+                country: geoData?.country_name || "Unknown",
+                browser: ua.browser || 'Unknown',
+                platform: ua.platform || 'Unknown',
+                referrer: referrer
+            });
 
-        const stat = new Stat({
-            urlId: url._id,
-            shortUrl: url.shortUrl,
-            ip: ip,
-            country: geoData?.country_name || "Unknown",
-            browser: ua.browser || 'Unknown',
-            platform: ua.platform || 'Unknown',
-            referrer: referrer
-        });
-
-        await stat.save();
+            await stat.save().catch(err => console.error(err));
+        })();
 
         return res.redirect(url.longUrl);
     } catch (err) {
