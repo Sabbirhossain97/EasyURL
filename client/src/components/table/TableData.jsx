@@ -56,7 +56,6 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                 <DeleteConfirmModal
                     isDeleteModalOpen={isDeleteModalOpen}
                     setIsDeleteModalOpen={setIsDeleteModalOpen}
-                    urls={urls}
                     setUrls={setUrls}
                     selectedUrlId={selectedUrlId}
                     setSelectedUrlId={setSelectedUrlId}

@@ -30,7 +30,7 @@ function Shorten() {
             setUrls(updatedData);
             setTimeout(() => {
                 setFetchLoading(false)
-            }, 2000)
+            }, 1000)
         }
     };
 
@@ -48,7 +48,7 @@ function Shorten() {
                 await getUrls(sortBy);
                 setOriginalUrl("");
                 setLoading(false);
-            }, 2000)
+            }, 1000)
         } catch (err) {
             setTimeout(() => {
                 toast.error(err?.error, { position: 'top-center' });

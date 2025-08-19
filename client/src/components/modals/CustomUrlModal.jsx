@@ -64,7 +64,7 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
                             <DialogTitle as="h3" className="text-base/7 font-medium dark:text-white flex items-center gap-2">
                                 Customize your URL
                                 <span data-tooltip-id="my-tooltip"><RiInformationLine className='text-gray-500 dark:text-white' /></span>
-                                <Tooltip id="my-tooltip" place="right" effect="solid">
+                                <Tooltip id="my-tooltip" place="right" effect="solid" className='z-5'>
                                     <div style={{ maxWidth: "250px" }}>
                                         <p>Conditions:</p>
                                         <ul style={{ margin: 0 }}>
