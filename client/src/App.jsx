@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Shorten from "./pages/Shorten";
@@ -17,19 +18,29 @@ function App() {
 
   useTokenExpiryChecker();
 
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || "")
+
+  useEffect(() => {
+    const handleStorage = () => {
+      setUser(JSON.parse(localStorage.getItem("user")));
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
   return (
     <div className="min-h-screen">
-      <Navbar />
+      <Navbar user={user} setUser={setUser} />
       <Routes>
         <Route
           exact
           path="/"
-          element={<Home />}
+          element={<Home setUser={setUser} />}
         />
         <Route path="/inactive" element={<InactivePage />} />
         <Route element={<PrivateRoute />} >
           <Route path="/shorten" element={<Shorten />} />
-          <Route path="/settings" exact element={<Settings />} />
+          <Route path="/settings" exact element={<Settings setUser={setUser} />} />
         </Route>
         <Route path="/verify-register/:token" element={<RegisterVerifyEmail />} />
         <Route path="/forgot-password" exact element={<VerifyEmail />} />

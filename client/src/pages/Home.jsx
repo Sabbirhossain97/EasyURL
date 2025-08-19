@@ -3,7 +3,7 @@ import AuthModal from '../components/modals/AuthModal';
 import Features from "../layouts/Features"
 import { useNavigate, useLocation } from 'react-router-dom';
 
-function Home() {
+function Home({setUser}) {
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -28,6 +28,7 @@ function Home() {
     return (
         <section className="py-20 max-w-7xl mx-auto">
             <AuthModal
+                setUser={setUser}
                 isAuthModalOpen={isAuthModalOpen}
                 setIsAuthModalOpen={setIsAuthModalOpen}
             />

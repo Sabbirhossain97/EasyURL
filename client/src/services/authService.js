@@ -27,6 +27,15 @@ export const registerUser = async (formValues) => {
     }
 };
 
+export const googleLogin = async(token)=> {
+    try {
+        const response = await axiosInstance.post('/google', {token});
+        return response.data;
+    } catch (error) {
+        throw error?.response?.data || { error: 'Something went wrong during login with google!.' };
+    }
+}
+
 export const forgotPassword = async (email) => {
     try {
         const response = await axiosInstance.post('/forgot-password', { email });

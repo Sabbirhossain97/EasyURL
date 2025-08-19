@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.2",
+    "@react-oauth/google": "^0.12.2",
     "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.8.4",
+    "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.5.2",

@@ -4,12 +4,39 @@ import crypto from 'crypto';
 import User from "../models/User.js"
 import { sendPasswordResetEmail, sendRegisterEmail, sendVerificationEmail } from "../utils/sendEmail.js"
 import 'dotenv/config';
+import fetch from 'node-fetch'
+import validator from "validator";
 
 const registerUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
+        const trimmedUsername = username.trim();
+
+        if (!trimmedUsername) {
+            return res.status(400).json({ error: "Username is required." });
+        }
+
+        if (trimmedUsername.length < 3 || trimmedUsername.length > 20) {
+            return res.status(400).json({ error: "Username must be between 3 and 20 characters long." });
+        }
+
+        const usernameRegex = /^(?=.*[a-zA-Z])[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/;
+
+        if (!usernameRegex.test(trimmedUsername)) {
+            return res.status(400).json({ error: "Username can only contain letters, numbers, single spaces (no leading or trailing spaces), and no special characters" });
+        }
+
+        if (!email || !validator.isEmail(email)) {
+            return res.status(400).json({ error: "Please provide a valid email address." });
+        }
+
         const isUserExists = await User.findOne({ email });
+
+        if (isUserExists && isUserExists.provider === "google") {
+            return res.status(409).json({ error: "This user is already registered with Google. Please log in" })
+        }
+
         if (isUserExists) {
             return res.status(400).json({ error: "User already exists!" })
         }
@@ -68,6 +95,7 @@ const verifyUser = async (req, res) => {
         user.tokenExpiry = undefined;
         await user.save();
         const html = `<p>🚀 Congratulations! A New User Registered at EasyURL!</p>
+                      <p><b>Provider:</b> ${user.provider}</p>
                       <p><b>Username:</b> ${user.username}</p>
                       <p><b>Email:</b> ${user.email}</p>
                     `;
@@ -90,6 +118,10 @@ const loginUser = async (req, res) => {
             return res.status(403).json({ error: 'Please verify your email before logging in.' });
         }
 
+        if (user.provider === 'google') {
+            return res.status(409).json({ error: 'This email is already registered with Google. Please log in using Google instead.' })
+        }
+
         const isMatched = await bcrypt.compare(password, user.password);
         if (!isMatched) return res.status(400).json({ error: 'Invalid credentials' });
 
@@ -110,13 +142,83 @@ const loginUser = async (req, res) => {
                 username: user.username,
                 role: user.role,
                 email: user.email,
-                image: imageBase64 ? imageBase64 : null
+                image: imageBase64 ? imageBase64 : null,
+                provider: user.provider,
             },
             message: "Successfully logged in!"
         });
 
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
+    }
+}
+
+
+const googleLogin = async (req, res) => {
+    try {
+        const { token } = req.body
+        const googleRes = await fetch(
+            `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`
+        )
+        const profile = await googleRes.json();
+        let user = await User.findOne({ email: profile.email });
+        if (user) {
+            if (user.provider === 'local') {
+                user.provider = 'local';
+            }
+            user.isVerified = true;
+            user.verificationToken = undefined;
+            user.tokenExpiry = undefined;
+            user.lastSignedIn = new Date();
+            user.image.url = profile.picture;
+            await user.save();
+        } else {
+            user = new User({
+                username: profile.name,
+                email: profile.email,
+                provider: 'google',
+                password: null,
+                isVerified: true,
+                verificationToken: undefined,
+                tokenExpiry: undefined,
+                lastSignedIn: new Date(),
+                image: { url: profile.picture }
+            })
+            await user.save();
+            const html = `<p>🚀 Congratulations! A New User Registered at EasyURL!</p>
+                          <p><b>Provider:</b> ${user.provider}</p>
+                          <p><b>Username:</b> ${user.username}</p>
+                          <p><b>Email:</b> ${user.email}</p>
+                    `;
+
+            await sendRegisterEmail('sabbirhossainbd199@gmail.com', 'Registration Alert at EasyURL', html);
+        }
+
+        const accessToken = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
+
+        let imageBase64 = null;
+        if (user.image && user.image.data) {
+            imageBase64 = `data:${user.image.contentType};base64,${user.image.data.toString("base64")}`;
+        } else if (user.image && user.image.url) {
+            imageBase64 = user.image.url;
+        }
+
+        res.json({
+            accessToken,
+            user: {
+                id: user._id,
+                username: user.username,
+                role: user.role,
+                email: user.email,
+                image: imageBase64 ? imageBase64 : null,
+                provider: user.provider,
+
+            },
+            message: "Successfully logged in with Google!"
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Google login failed" });
     }
 }
 
@@ -175,6 +277,7 @@ const resetPassword = async (req, res) => {
 export const authRoutes = (app) => {
     app.post("/api/signup", registerUser);
     app.post("/api/signin", loginUser);
+    app.post("/api/google", googleLogin)
     app.get('/api/verify-register/:token', verifyUser);
     app.post('/api/forgot-password', forgotPassword)
     app.post("/api/reset-password/:token", resetPassword)
