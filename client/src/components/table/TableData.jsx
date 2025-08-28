@@ -11,6 +11,7 @@ import DeleteConfirmModal from '../modals/DeleteConfirmModal';
 import ViewUrlModal from "../modals/ViewUrlModal"
 import CustomUrlModal from '../modals/CustomUrlModal';
 import SortFilter from '../filters/SortFilter';
+import { TbExternalLink } from "react-icons/tb";
 
 function TableData({ urls, setUrls, sortBy, setSortBy }) {
     const navigate = useNavigate();
@@ -133,12 +134,15 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                     checked={selectedUrlId.includes(item._id)}
                                                     className="w-[14px] h-[14px]" />
                                             </td>
-                                            <td data-tooltip-id="my-tooltip" data-tooltip-content={item.shortUrl} className="px-6 w-1/5 py-4 font-medium whitespace-nowrap">
+                                            <td className="px-6 w-1/5 py-4 font-medium whitespace-nowrap">
                                                 <div className="flex items-center gap-2 ">
-                                                    <span className='truncate max-w-[350px]'>{item.shortUrl}</span>
+                                                    <span data-tooltip-id="my-tooltip" data-tooltip-content={item.shortUrl} className='truncate max-w-[350px]'>{item.shortUrl}</span>
                                                     <span onClick={() => handleCopy(item.shortUrl)} className='cursor-pointer p-2 transition duration-300 bg-zinc-100 hover:bg-zinc-200 dark:bg-[#1C283FB0] dark:hover:bg-white/5 rounded-full'>
                                                         <FaCopy className='text-gray-500 dark:text-white' />
                                                     </span>
+                                                    <a href={item.shortUrl} target='__blank' className='cursor-pointer p-2 transition duration-300 bg-zinc-100 hover:bg-zinc-200 dark:bg-[#1C283FB0] dark:hover:bg-white/5 rounded-full'>
+                                                        <TbExternalLink className='text-gray-500 dark:text-white text-[16px]' />
+                                                    </a>
                                                 </div>
                                             </td>
                                             <td data-tooltip-id="my-tooltip" data-tooltip-content={item.longUrl} className="px-6 py-4 truncate max-w-[250px]">

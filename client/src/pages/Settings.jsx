@@ -4,12 +4,14 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { Tab, TabGroup, TabList } from '@headlessui/react'
 import { AiOutlineUser } from "react-icons/ai";
 import { Spinner, DeleteSpinner, ImageUploadSpinner } from "../components/svg/SVG"
-import { deleteAccount, updateProfile, getUserStats } from '../services/userService';
+import { deleteAccount, updateProfile } from '../services/userService';
+import { getUserStats } from '../services/adminService';
 import { FaUsers } from "react-icons/fa";
 import { FaLongArrowAltUp } from "react-icons/fa";
 import { IoIosLink } from "react-icons/io";
 import { AdminStatCardSkeleton } from '../layouts/Skeleton';
 import { signInDateOptions } from '../constants/dateOptions';
+import UserDeleteModal from '../components/modals/UserDeleteModal';
 import { IoWarning } from "react-icons/io5";
 import AdminStatFilter from '../components/filters/AdminStatFilter';
 import toast from 'react-hot-toast';
@@ -211,6 +213,8 @@ function AdminSettings() {
         slug: "createdAt_desc",
         field: "Joined Date ( newest )"
     });
+    const [userDeleteModalOpen, setUserDeleteModalOpen] = useState(false)
+    const [selectedId, setSelectedId] = useState(null);
 
     const fetchUsers = async (sortBy) => {
         setLoading(true)
@@ -230,6 +234,14 @@ function AdminSettings() {
 
     return (
         <>
+            <UserDeleteModal
+                userDeleteModalOpen={userDeleteModalOpen}
+                setUserDeleteModalOpen={setUserDeleteModalOpen}
+                selectedId={selectedId}
+                setSelectedId={setSelectedId}
+                fetchUsers={fetchUsers}
+                sortBy={sortBy}
+            />
             <div className='lg:w-3/4'>
                 <div className='flex flex-col sm:flex-row gap-6 w-full'>
                     {loading ? <AdminStatCardSkeleton /> :
@@ -287,6 +299,9 @@ function AdminSettings() {
                                     <th scope="col" className="px-6 py-3">
                                         Role
                                     </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Provider
+                                    </th>
                                     <th scope="col" className="px-6 py-3 whitespace-nowrap">
                                         URLs
                                     </th>
@@ -296,6 +311,9 @@ function AdminSettings() {
                                     <th scope="col" className="px-6 py-3">
                                         Joined
                                     </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Action
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody className='dark:text-[#b2b6bd]'>
@@ -304,23 +322,40 @@ function AdminSettings() {
 
                                         className={`border-b border-zinc-300/40 dark:border-gray-700/40`}
                                     >
-                                        <td className="px-6 py-4 truncate max-w-[250px]">
+                                        <td className="px-6 py-4 max-w-[200px]">
                                             {user.username}
                                         </td>
-                                        <td className="px-6 py-4 text-start">
+                                        <td className="px-6 py-4 text-start w-1/8">
                                             {user.email}
                                         </td>
-                                        <td className="px-6 py-4 text-start">
+                                        <td className="px-6 py-4 text-start w-1/8">
                                             {user.role ? user.role : "user"}
                                         </td>
-                                        <td className="px-6 py-4 text-center">
+                                        <td className="px-6 py-4 text-start w-1/8">
+                                            {user.provider}
+                                        </td>
+                                        <td className="px-6 py-4 text-center w-1/8">
                                             {user.urlCount}
                                         </td>
-                                        <td className="px-6 py-4 text-center whitespace-nowrap">
+                                        <td className="px-6 py-4 text-center whitespace-nowrap w-1/8">
                                             {user.lastSignedIn ? new Date(user.lastSignedIn).toLocaleDateString('en-Us', signInDateOptions) : " N/A"}
                                         </td>
-                                        <td className="px-6 py-4 text-start whitespace-nowrap">
+                                        <td className="px-6 py-4 text-start whitespace-nowrap w-1/8">
                                             {user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "N/A"}
+                                        </td>
+                                        <td className="px-6 py-2 w-1/8">
+                                            <button
+                                                type='button'
+                                                disabled={user.role === 'admin'}
+                                                onClick={() => {
+                                                    setUserDeleteModalOpen(true);
+                                                    setSelectedId(user._id)
+                                                }
+                                                }
+                                                className={`${user.role === 'admin' ? 'cursor-not-allowed bg-gray-300 dark:bg-gray-400' : 'bg-red-500 dark:bg-red-500 cursor-pointer'} py-1 px-4 inline-flex gap-2  items-center  transition duration-300 text-[12px] font-medium text-white focus:outline-none rounded-md`}
+                                            >
+                                                Delete
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
@@ -346,7 +381,7 @@ function Settings({ setUser }) {
     return (
         <div className='py-10 md:py-20 max-w-7xl mx-auto px-3 md:px-4 xl:px-2'>
             <div className="py-10">
-                <Link to="/shorten" className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-500 dark:text-white dark:hover:text-white/40 transition duration-300">
+                <Link to="/shorten" className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-500 dark:text-blue-500 dark:hover:text-blue-600 transition duration-300">
                     <FaArrowLeftLong />Back to previous page
                 </Link>
             </div>
