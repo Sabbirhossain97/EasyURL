@@ -5,7 +5,7 @@ function SortFilter({ sortBy, setSortBy }) {
     return (
         <div className='flex gap-2'>
             <Menu>
-                <MenuButton className="inline-flex whitespace-nowrap items-center gap-2 rounded-md bg-sky-400 data-hover:bg-sky-500 dark:bg-blue-600 dark:hover:bg-blue-600 px-3 py-1.5 text-sm/6 font-semibold text-white transition duration-300 cursor-pointer focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white dark:data-hover:bg-blue-500 data-open:bg-sky-500 dark:data-open:bg-blue-600">
+                <MenuButton className="inline-flex whitespace-nowrap items-center gap-2 rounded-md bg-sky-400 data-hover:bg-sky-500 dark:bg-blue-600 dark:hover:bg-blue-700 px-3 py-1.5 text-sm/6 font-semibold text-white transition duration-300 cursor-pointer focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white">
                     <FaFilter /> {sortBy.field}
                 </MenuButton>
                 <MenuItems

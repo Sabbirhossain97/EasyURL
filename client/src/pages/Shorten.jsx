@@ -6,6 +6,7 @@ import { fetchUrls, createUrls } from "../services/urlService";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { FaLink } from "react-icons/fa";
 import { TableSkeleton } from "../layouts/Skeleton";
+import { MdClose } from "react-icons/md";
 
 function Shorten() {
 
@@ -75,10 +76,11 @@ function Shorten() {
                             value={originalUrl}
                             onChange={(e) => setOriginalUrl(e.target.value)}
                             placeholder="Paste your long URL here..."
-                            className="resize-none border placeholder:text-gray-400 focus:border-sky-400 pr-[62px] min-h-[50px] dark:focus:border-blue-500 overflow-hidden transition duration-300 outline-none w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-lg p-5"
+                            className="resize-none border placeholder:text-gray-400 focus:border-sky-400 pr-[90px] min-h-[50px] dark:focus:border-blue-500 overflow-hidden transition duration-300 outline-none w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-lg p-5"
                             rows={1}
                         />
-                        <button type="submit" className={`${loading ? 'bg-blue-500' : 'bg-sky-400 dark:bg-blue-600'} text-white cursor-pointer transition duration-300 hover:bg-blue-500 absolute right-2 bottom-2 w-[50px] h-[50px] px-4 rounded-lg flex items-center justify-center`}>
+                        {originalUrl && <MdClose onClick={()=> setOriginalUrl("")} className="absolute cursor-pointer bottom-[20px] right-[68px] text-xl text-red-400 hover:text-red-500 transition duration-300"/> }
+                        <button type="submit" className={`${loading ? 'bg-sky-500 dark:bg-blue-600' : 'bg-sky-400 dark:bg-blue-600'} text-white cursor-pointer transition duration-300 hover:bg-sky-500 dark:hover:bg-blue-700 absolute right-2 bottom-2 w-[50px] h-[50px] px-4 rounded-lg flex items-center justify-center`}>
                             {loading ? (
                                 <div className='flex items-center gap-2'>
                                     <div role="status">

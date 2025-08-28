@@ -6,6 +6,7 @@ import { authRoutes } from './routes/authRoutes.js';
 import { urlRoutes } from './routes/urlRoutes.js';
 import useragent from "express-useragent";
 import { userRoutes } from './routes/userRoutes.js';
+import { adminRoutes } from './routes/adminRoutes.js';
 
 const app = express();
 app.use(cors());
@@ -16,6 +17,7 @@ connectDB();
 authRoutes(app);
 urlRoutes(app);
 userRoutes(app);
+adminRoutes(app);
 
 app.listen(3000, () => {
     console.log(`Server is running on port 3000`);
