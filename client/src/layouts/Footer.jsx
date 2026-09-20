@@ -7,13 +7,13 @@ function Footer() {
             <div className="max-w-[1280px] mx-auto px-4 py-4">
                 <div className="flex flex-col gap-4 lg:flex-row items-center justify-between">
                     <div className="flex items-center order-1 lg:order-1 space-x-1 text-muted-foreground">
-                        <span>Made with</span>
+                        <span className="dark:text-white">Made with</span>
                         <FaHeart className="h-4 w-4 text-red-500 ml-1 fill-current " />
-                        <span className="ml-1">by</span>
+                        <span className="ml-1 dark:text-white">by</span>
                         <a
                             href="https://github.com/Sabbirhossain97"
                             target="_blank"
-                            className="hover:text-blue-500 transition duration-300"
+                            className="hover:text-blue-500 dark:text-white transition duration-300"
                             rel="noopener noreferrer"
                             aria-label="GitHub">
                             Sabbir Hossain
@@ -21,8 +21,8 @@ function Footer() {
                     </div>
 
                     <div className="flex items-center space-x-1 order-3 lg:order-2 text-muted-foreground">
-                        <p className="transition duration-300">
-                            © 2025 EasyURL. All rights reserved.
+                        <p className="transition duration-300 dark:text-white">
+                            © 2025 EasyURL v2.0. All rights reserved.
                         </p>
                     </div>
 

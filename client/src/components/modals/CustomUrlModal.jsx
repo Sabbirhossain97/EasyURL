@@ -7,11 +7,12 @@ import { IoMdClose } from "react-icons/io";
 import toast from 'react-hot-toast';
 import { Tooltip } from 'react-tooltip'
 import { RiInformationLine } from "react-icons/ri";
+import { TagsInput } from "react-tag-input-component";
 
 function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customUrl, setCustomUrl, setUrls }) {
 
-    const [loading, setLoading] = useState(false)
-    const [_, setStatus] = useState(customUrl?.status || 'active')
+    const [loading, setLoading] = useState(false);
+    const [_, setStatus] = useState(customUrl?.status || 'active');
 
     function close() {
         setIsCustomUrlModalOpen(false)
@@ -19,15 +20,26 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
             setCustomUrl({
                 id: null,
                 name: "",
-                status: ""
+                status: "",
+                tags: []
             })
         }, 500)
     }
 
     useEffect(() => {
+        if (customUrl?.tags) {
+            setCustomUrl((prev) => ({
+                ...prev,
+                tags: customUrl.tags
+            }));
+        }
+    }, [customUrl?.id]);
+
+    useEffect(() => {
         if (customUrl?.status) {
             setStatus(customUrl.status);
         }
+
     }, [customUrl?.status]);
 
     const handleCustomUrlName = async (e) => {
@@ -38,7 +50,11 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
             setTimeout(() => {
                 setUrls(data?.updatedUrl)
                 toast.success("URL customized!", { position: 'bottom-right' });
-                setLoading(false)
+                setLoading(false);
+                setCustomUrl((prev) => ({
+                    ...prev,
+                    tags: []
+                }));
                 close()
             }, 2000)
 
@@ -83,6 +99,7 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
                                 onChange={(e) => setCustomUrl({ ...customUrl, name: e.target.value.toLowerCase() })}
                                 value={customUrl.name}
                             />
+                            {/* Status */}
                             <div className="mt-4 w-full">
                                 <DialogTitle as="h3" className="text-base/7 font-medium dark:text-white">
                                     Set status
@@ -145,6 +162,36 @@ function CustomUrlModal({ isCustomUrlModalOpen, setIsCustomUrlModalOpen, customU
                                         </div>
                                     )}
                                 </Menu>
+                            </div>
+                            {/* Tags */}
+                            <div className="mt-4 w-full">
+                                <DialogTitle
+                                    as="h3"
+                                    className="text-base/7 font-medium dark:text-white"
+                                >
+                                    Set Tags
+                                </DialogTitle>
+
+                                <div className="mt-2">
+                                    <TagsInput
+                                        value={customUrl?.tags || []}
+                                        onChange={(newTags)=> 
+                                            setCustomUrl((prevUrl)=> ({
+                                                ...prevUrl,
+                                                tags: newTags
+                                            }))
+                                        }
+                                        placeHolder="Add tags..."
+                                        classNames={{
+                                            tag: "custom-tag",
+                                            input: "custom-tag-input",
+                                        }}
+                                    />
+                                </div>
+
+                                <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500">
+                                    Type a tag and press Enter to add it
+                                </p>
                             </div>
                             <div className="mt-4">
                                 <Button

@@ -5,14 +5,14 @@
             "has": [
                 {
                     "type": "host",
-                    "value": "www.easy-url.xyz"
+                    "value": "www.easurl.xyz"
                 }
             ],
-            "destination": "https://easyurl-production.up.railway.app/:shortId"
+            "destination": "https://easyurl-eymh.onrender.com/:shortId"
         },
         {
             "source": "/api/:match*",
-            "destination": "https://easyurl-production.up.railway.app/api/:match*"
+            "destination": "https://easyurl-eymh.onrender.com/api/:match*"
         },
         {
             "source": "/(.*)",
