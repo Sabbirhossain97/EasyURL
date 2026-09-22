@@ -60,7 +60,7 @@ html.dark {
 /* Input */
 .rti--input {
   background: transparent !important;
-  color: #38BDF8 !important;
+  color: #144EE3 !important; 
   border: none !important;
   outline: none !important;
   font-size: 14px !important;
@@ -70,7 +70,7 @@ html.dark {
 
 :root:not(.dark) .rti--input {
   background: transparent !important;
-  color: #144EE3 !important;
+  color: #38BDF8 !important;
   border: none !important;
   outline: none !important;
   font-size: 14px !important;

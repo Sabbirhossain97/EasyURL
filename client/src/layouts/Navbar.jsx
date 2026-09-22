@@ -18,7 +18,7 @@ function Navbar({ user, setUser }) {
 
     return (
         <nav className="mx-auto flex items-center justify-between pt-6 text-center h-16 max-w-[1736px] px-3 md:px-4 xl:px-2">
-            <div className='mx-auto w-5/6 flex justify-between'>
+            <div className='mx-auto w-full lg:w-5/6 flex justify-between'>
                 <Link to="/">
                     <h1 className="font-montserrat custom-header-text leading-[58px] text-zinc-500 flex font-bold whitespace-nowrap tracking-[1px] text-2xl sm:text-3xl">
                         EasyURL

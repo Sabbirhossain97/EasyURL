@@ -121,9 +121,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
 
     return (
         <div>
-
             <div className="relative overflow-hidden mt-16 lg:mt-20 xl:mt-24 mx-auto">
-
                 {/* VIEW URL MODAL */}
                 <ViewUrlModal
                     isUrlViewOpen={isUrlViewOpen}
@@ -151,80 +149,32 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                 />
 
                 {urls?.length > 0 && (
-
                     <div className='flex flex-col'>
-                        <div className='flex mx-auto pb-4 lg:w-5/6 [@media(max-width:400px)]:justify-end justify-between'>
-                            <div className='flex items-center gap-4'>
-                                <div className="flex items-center gap-1 p-1 rounded-lg bg-zinc-200 dark:bg-[#181E29]">
-                                    <button
-                                        onClick={() => setViewMode("table")}
-                                        className={`p-1.5 cursor-pointer rounded-md transition duration-300
-                                                 ${viewMode === "table"
-                                                ? "bg-white dark:bg-[#1C283F] shadow-sm text-sky-400 dark:text-blue-500"
-                                                : "text-gray-500 hover:text-gray-700 dark:hover:text-white"
-                                            }`}
-                                    >
-                                        <MdTableRows className="text-lg" />
-                                    </button>
+                        {/* DESKTOP / TABLET TOOLBAR */}
+                        <div className="mx-auto w-full lg:w-5/6 pb-2">
 
-                                    <button
-                                        onClick={() => setViewMode("card")}
-                                        className={`p-1.5 cursor-pointer rounded-md transition duration-300
-                                            ${viewMode === "card"
-                                                ? "bg-white dark:bg-[#1C283F] shadow-sm text-sky-400 dark:text-blue-500"
-                                                : "text-gray-500 hover:text-gray-700 dark:hover:text-white"
-                                            } `}
-                                    >
-                                        <MdGridView className="text-lg" />
-                                    </button>
+                            {/* TABLET: 640px - 1023px */}
+                            <div className="hidden sm:flex lg:hidden flex-col gap-3 rounded-lg">
 
-                                </div>
-                              {viewMode === 'table' && <div>
-                                    <h3 className='text-sm [@media(max-width:400px)]:hidden block text-gray-600 dark:text-gray-400 '>
-                                        Showing <span className='text-sky-400 dark:text-blue-500 font-semibold'>{filteredUrls.length}</span> of {urls.length} results
-                                    </h3>
-                                </div>}
-                            </div>
-
-                            <div className='flex gap-4 items-center'>
-                                <div className='flex items-center gap-4'>
-                                    {selectedUrlId.length > 0 && (
-                                        <div>
-                                            <button
-                                                onClick={() => setIsDeleteModalOpen(true)}
-                                                className="px-2 py-1.5 transition duration-300 bg-red-500 hover:bg-red-400 text-white font-medium flex cursor-pointer group w-full items-center gap-1 rounded-lg"
-                                            >
-
-                                                <MdDelete className='text-lg' />
-                                                <span className='hidden sm:block'>
-                                                    Delete
-                                                </span>
-                                                ({selectedUrlId.length})
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className='relative w-[280px] lg:w-[320px]'>
+                                {/* SEARCH */}
+                                <div className="relative w-full">
                                     <input
                                         type="text"
                                         value={searchQuery}
-                                        onChange={(e) =>
-                                            setSearchQuery(e.target.value)
-                                        }
-                                        className="indent-9 pr-[25px] border placeholder:text-gray-400 placeholder:text-[13px] focus:border-sky-400 min-h-[38px] dark:focus:border-blue-500 overflow-hidden transition duration-300 outline-none w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-lg"
-                                        placeholder='Search by Custom Name, Tags, or URLs...'
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="indent-9 pr-9 min-h-[40px] w-full rounded-lg border border-zinc-200 bg-white outline-none transition duration-300 placeholder:text-gray-400 placeholder:text-[13px] focus:border-sky-400 dark:border-zinc-800 dark:bg-[#181E29] dark:focus:border-blue-500"
+                                        placeholder="Search by Custom Name, Tags, or URLs..."
                                     />
 
-                                    <span className='absolute left-2 top-2.5'>
-                                        <IoIosSearch className='w-[20px] h-[20px] text-sky-400 dark:text-blue-500' />
+                                    <span className="absolute left-2.5 top-2.5">
+                                        <IoIosSearch className="h-[21px] w-[21px] text-sky-400 dark:text-blue-500" />
                                     </span>
 
                                     {searchQuery && (
                                         <button
                                             type="button"
                                             onClick={() => setSearchQuery("")}
-                                            className="absolute right-2 top-1 text-red-400 hover:text-red-600 dark text-[20px] cursor-pointer"
+                                            className="absolute right-2 top-1 cursor-pointer text-[20px] text-red-400 hover:text-red-600"
                                             aria-label="Clear search"
                                         >
                                             ×
@@ -232,17 +182,242 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                     )}
                                 </div>
 
-                                {/* SORT */}
-                                <SortFilter
-                                    sortBy={sortBy}
-                                    setSortBy={setSortBy}
-                                />
+                                {/* CONTROLS */}
+                                <div className="flex items-center justify-between gap-3">
+
+                                    {/* LEFT */}
+                                    <div className="flex min-w-0 items-center gap-3">
+                                        <div className="flex shrink-0 items-center gap-1 rounded-lg bg-zinc-200 p-1 dark:bg-[#181E29]">
+                                            <button
+                                                onClick={() => setViewMode("table")}
+                                                className={`cursor-pointer rounded-md p-1.5 transition duration-300 ${viewMode === "table"
+                                                    ? "bg-white text-sky-400 shadow-sm dark:bg-[#1C283F] dark:text-blue-500"
+                                                    : "text-gray-500 hover:text-gray-700 dark:hover:text-white"
+                                                    }`}
+                                            >
+                                                <MdTableRows className="text-lg" />
+                                            </button>
+
+                                            <button
+                                                onClick={() => setViewMode("card")}
+                                                className={`cursor-pointer rounded-md p-1.5 transition duration-300 ${viewMode === "card"
+                                                    ? "bg-white text-sky-400 shadow-sm dark:bg-[#1C283F] dark:text-blue-500"
+                                                    : "text-gray-500 hover:text-gray-700 dark:hover:text-white"
+                                                    }`}
+                                            >
+                                                <MdGridView className="text-lg" />
+                                            </button>
+                                        </div>
+
+                                        {viewMode === "table" && (
+                                            <p className="whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                                                Showing{" "}
+                                                <span className="font-semibold text-sky-400 dark:text-blue-500">
+                                                    {filteredUrls.length}
+                                                </span>{" "}of{" "}{urls.length} results
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* RIGHT */}
+                                    <div className="flex shrink-0 items-center gap-3">
+                                        {selectedUrlId.length > 0 && (
+                                            <button
+                                                onClick={() => setIsDeleteModalOpen(true)}
+                                                className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-red-500 px-3 py-1.5 text-sm font-medium text-white transition duration-300 hover:bg-red-400"
+                                            >
+                                                <MdDelete className="text-lg" />
+                                                Delete ({selectedUrlId.length})
+                                            </button>
+                                        )}
+
+                                        <SortFilter
+                                            sortBy={sortBy}
+                                            setSortBy={setSortBy}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* LARGE DESKTOP: 1024px+ */}
+                            <div className="hidden lg:flex items-center justify-between gap-4">
+
+                                {/* LEFT */}
+                                <div className="flex items-center gap-4">
+                                    <div className="flex items-center gap-1 rounded-lg bg-zinc-200 p-1 dark:bg-[#181E29]">
+                                        <button
+                                            onClick={() => setViewMode("table")}
+                                            className={`cursor-pointer rounded-md p-1.5 transition duration-300 ${viewMode === "table"
+                                                ? "bg-white text-sky-400 shadow-sm dark:bg-[#1C283F] dark:text-blue-500"
+                                                : "text-gray-500 hover:text-gray-700 dark:hover:text-white"
+                                                }`}
+                                        >
+                                            <MdTableRows className="text-lg" />
+                                        </button>
+
+                                        <button
+                                            onClick={() => setViewMode("card")}
+                                            className={`cursor-pointer rounded-md p-1.5 transition duration-300 ${viewMode === "card"
+                                                ? "bg-white text-sky-400 shadow-sm dark:bg-[#1C283F] dark:text-blue-500"
+                                                : "text-gray-500 hover:text-gray-700 dark:hover:text-white"
+                                                }`}
+                                        >
+                                            <MdGridView className="text-lg" />
+                                        </button>
+                                    </div>
+
+                                    {viewMode === "table" && (
+                                        <p className="whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                                            Showing{" "}
+                                            <span className="font-semibold text-sky-400 dark:text-blue-500">
+                                                {filteredUrls.length}
+                                            </span>{" "}of{" "}{urls.length} results
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* RIGHT */}
+                                <div className="flex items-center gap-4">
+
+                                    <div className="relative w-[320px]">
+                                        <input
+                                            type="text"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            className="indent-9 pr-9 min-h-[38px] w-full rounded-lg border border-zinc-200 bg-white outline-none transition duration-300 placeholder:text-gray-400 placeholder:text-[13px] focus:border-sky-400 dark:border-zinc-800 dark:bg-[#181E29] dark:focus:border-blue-500"
+                                            placeholder="Search by Custom Name, Tags, or URLs..."
+                                        />
+
+                                        <span className="absolute left-2 top-2.5">
+                                            <IoIosSearch className="h-[20px] w-[20px] text-sky-400 dark:text-blue-500" />
+                                        </span>
+
+                                        {searchQuery && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setSearchQuery("")}
+                                                className="absolute right-2 top-1 cursor-pointer text-[20px] text-red-400 hover:text-red-600"
+                                                aria-label="Clear search"
+                                            >
+                                                ×
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    <SortFilter
+                                        sortBy={sortBy}
+                                        setSortBy={setSortBy}
+                                    />
+                                </div>
+                            
+                            </div>
+                            <div className='mt-2 hidden lg:flex justify-end'>
+                                {selectedUrlId.length > 0 && (
+                                    <button
+                                        onClick={() => setIsDeleteModalOpen(true)}
+                                        className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-red-500 px-3 py-1.5 text-sm font-medium text-white transition duration-300 hover:bg-red-400"
+                                    >
+                                        <MdDelete className="text-lg" />
+                                        Delete ({selectedUrlId.length})
+                                    </button>
+                                )}
                             </div>
                         </div>
 
+                        <div className="sm:hidden w-full pb-4">
+                            <div className="relative w-full">
+
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="indent-9 pr-9 border placeholder:text-gray-400 placeholder:text-[12px] focus:border-sky-400 min-h-[40px] dark:focus:border-blue-500 outline-none w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-800 rounded-lg transition duration-300"
+                                    placeholder="Search by Custom Name, Tags, or URLs..."
+                                />
+
+                                <span className="absolute left-2.5 top-2.5">
+                                    <IoIosSearch className="w-[21px] h-[21px] text-sky-400 dark:text-blue-500" />
+                                </span>
+
+                                {searchQuery && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setSearchQuery("")}
+                                        className="absolute right-2 top-1 text-red-400 hover:text-red-600 text-[20px] cursor-pointer"
+                                        aria-label="Clear search"
+                                    >
+                                        ×
+                                    </button>
+                                )}
+                            </div>
+
+                            <div className="flex items-center justify-between gap-2 mt-3">
+                                <div className="flex items-center gap-2 min-w-0">
+                                    <div className="flex shrink-0 items-center gap-1 p-1 rounded-lg bg-zinc-200 dark:bg-[#181E29]">
+                                        <button
+                                            onClick={() => setViewMode("table")}
+                                            className={`p-1.5 cursor-pointer rounded-md transition duration-300
+                                                   ${viewMode === "table"
+                                                    ? "bg-white dark:bg-[#1C283F] shadow-sm text-sky-400 dark:text-blue-500"
+                                                    : "text-gray-500 hover:text-gray-700 dark:hover:text-white"
+                                                }`}
+                                        >
+                                            <MdTableRows className="text-lg" />
+                                        </button>
+                                        <button
+                                            onClick={() => setViewMode("card")}
+                                            className={`p-1.5 cursor-pointer rounded-md transition duration-300
+                                                     ${viewMode === "card"
+                                                    ? "bg-white dark:bg-[#1C283F] shadow-sm text-sky-400 dark:text-blue-500"
+                                                    : "text-gray-500 hover:text-gray-700 dark:hover:text-white"
+                                                }`}
+                                        >
+                                            <MdGridView className="text-lg" />
+                                        </button>
+                                    </div>
+
+                                    {/* RESULT COUNT */}
+                                    {viewMode === 'table' && <div className="text-xs whitespace-nowrap text-gray-600 dark:text-gray-400">
+                                        <span className='hidden sm:block'>Showing{" "}</span>
+                                        <span className="font-semibold text-sky-400 dark:text-blue-500">
+                                            {filteredUrls.length}
+                                        </span>
+
+                                        {" "}of{" "}
+                                        <span>
+                                            {urls.length}
+                                        </span>
+                                        {" "}results
+                                    </div>}
+                                </div>
+
+                                {/* RIGHT SIDE - SORT */}
+                                <div className="shrink-0">
+
+                                    <SortFilter
+                                        sortBy={sortBy}
+                                        setSortBy={setSortBy}
+                                    />
+
+                                </div>
+                            </div>
+
+                            {/* MOBILE DELETE */}
+                            {selectedUrlId.length > 0 && (
+                                <button
+                                    onClick={() => setIsDeleteModalOpen(true)}
+                                    className="mt-3 px-3 py-1.5 transition duration-300 bg-red-500 hover:bg-red-400 text-white text-sm font-medium flex cursor-pointer items-center gap-1 rounded-lg"
+                                >
+                                    <MdDelete className="text-lg" />
+
+                                    Delete ({selectedUrlId.length})
+                                </button>
+                            )}
+                        </div>
+
                         {viewMode === 'table' ? (
-                            <div className="w-full mx-auto lg:w-5/6 max-h-[420px] overflow-auto mt-0 rounded-xl bg-white dark:bg-[#101522]">
-                                <table className="min-w-max w-full text-sm text-left rtl:text-right border-collapse">
+                            <div className="w-full mx-auto lg:w-5/6 max-h-[420px]  overflow-auto mt-0 rounded-xl bg-white dark:bg-[#101522]">
+                                <table className="w-full min-w-0 md:min-w-[1100px] text-sm text-left rtl:text-right border-collapse">
                                     <thead className="sticky top-0 z-[3] bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
                                         <tr>
                                             {/* CHECKBOX */}
@@ -263,8 +438,6 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
 
                                             </th>
 
-                                            {/* SHORT LINK */}
-
                                             <th
                                                 scope="col"
                                                 className="px-6 py-3 text-left w-[300px] min-w-[300px]"
@@ -272,57 +445,29 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                 Short Link
                                             </th>
 
-                                            {/* ORIGINAL LINK */}
-
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3 text-left w-[300px] min-w-[300px]"
-                                            >
+                                            <th className="hidden md:table-cell px-6 py-3 text-left w-[300px] min-w-[300px]">
                                                 Original Link
                                             </th>
 
-                                            {/* TAGS */}
-
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
-                                            >
+                                            <th className="hidden md:table-cell px-6 py-3">
                                                 Tags
                                             </th>
 
-                                            {/* STATUS */}
-
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3 whitespace-nowrap"
-                                            >
+                                            <th className="hidden md:table-cell px-6 py-3 whitespace-nowrap">
                                                 Status
                                             </th>
 
-                                            {/* CREATED AT */}
-
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3 whitespace-nowrap"
-                                            >
+                                            <th className="hidden md:table-cell px-6 py-3 whitespace-nowrap">
                                                 Created At
                                             </th>
 
-                                            {/* UPDATED AT */}
-
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3 whitespace-nowrap"
-                                            >
+                                            <th className="hidden md:table-cell px-6 py-3 whitespace-nowrap">
                                                 Updated At
                                             </th>
 
-                                            {/* ACTION */}
-
                                             <th
                                                 scope="col"
-                                                className="sticky w-[80px] min-w-[80px] right-0 top-0 z-[3] px-6 py-3 whitespace-nowrap bg-zinc-200 dark:bg-[#181E29] shadow-[-6px_0_10px_-8px_rgba(0,0,0,0.45)] dark:shadow-[-6px_0_10px_-8px_rgba(0,0,0,0.8)]"
-                                            >
+                                                className="sticky right-0 top-0 z-[3] w-[135px] min-w-[135px] px-4 py-3 whitespace-nowrap text-center bg-zinc-200 dark:bg-[#181E29] before:absolute before:left-0 before:top-0 before:h-full before:w-[5px] before:-translate-x-full before:pointer-events-none before:content-[''] before:bg-gradient-to-l before:from-black/10 before:to-transparent dark:before:from-black/30">
                                                 Action
                                             </th>
                                         </tr>
@@ -336,9 +481,9 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                     key={item._id}
                                                     className={
                                                         selectedUrlId.includes(item._id)
-                                                            ? "bg-blue-300/40 transition duration-300 ease-in-out"
+                                                            ? "bg-blue-100/60 dark:bg-blue-950/40 transition duration-300 ease-in-out"
                                                             : `${index === filteredUrls.length - 1
-                                                                ? "border-none"
+                                                                ? "border-none z-[3]"
                                                                 : "border-b border-zinc-300/40 dark:border-gray-700/40"
                                                             } `
                                                     }
@@ -363,30 +508,28 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
 
                                                     {/* SHORT LINK */}
 
-                                                    <td className="px-6 py-4 w-[300px] min-w-[350px]">
+                                                    <td className="px-3 py-4 md:px-6 md:py-4 md:w-[300px] md:min-w-[350px]">
+                                                        {/* SHORT LINK + ACTIONS */}
                                                         <div className="flex items-center gap-2 min-w-0">
+
                                                             <span
                                                                 data-tooltip-id="my-tooltip"
                                                                 data-tooltip-content={item.shortUrl}
-                                                                className="block w-[260px] truncate whitespace-nowrap"
+                                                                className="block min-w-0 flex-1 truncate whitespace-nowrap md:w-[260px] md:flex-none"
                                                             >
                                                                 {item.shortUrl}
                                                             </span>
 
                                                             {/* COPY */}
-
                                                             <button
                                                                 type="button"
-                                                                onClick={() =>
-                                                                    handleCopy(item.shortUrl)
-                                                                }
+                                                                onClick={() => handleCopy(item.shortUrl)}
                                                                 className="shrink-0 cursor-pointer p-2 transition duration-300 bg-zinc-100 hover:bg-zinc-200 dark:bg-[#1C283FB0] dark:hover:bg-white/5 rounded-full"
                                                             >
                                                                 <FaCopy className="text-gray-500 dark:text-white" />
                                                             </button>
 
                                                             {/* OPEN */}
-
                                                             <a
                                                                 href={item.shortUrl}
                                                                 target="_blank"
@@ -396,11 +539,96 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                                 <TbExternalLink className="text-gray-500 dark:text-white text-[16px]" />
                                                             </a>
                                                         </div>
+
+                                                        {/* MOBILE SUBTEXT */}
+                                                        <div className="md:hidden mt-2 text-[11px] text-gray-500 dark:text-gray-400">
+
+                                                            {/* STATUS / CREATED / UPDATED */}
+                                                            <div className="flex items-center gap-3 flex-wrap">
+
+                                                                {/* STATUS */}
+                                                                <div className="flex items-center gap-1">
+
+                                                                    {item.status === "active" ? (
+                                                                        <span className="flex items-center gap-1 text-green-500">
+                                                                            <span className="relative flex items-center size-1.5">
+                                                                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
+                                                                                <span className="relative inline-flex size-1.5 rounded-full bg-green-500"></span>
+                                                                            </span>
+
+                                                                            Active
+                                                                        </span>
+                                                                    ) : (
+                                                                        <span className="flex items-center gap-1 text-red-500">
+                                                                            <span className="size-1.5 rounded-full bg-red-500"></span>
+                                                                            Inactive
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+
+                                                                {/* CREATED */}
+                                                                <div>
+                                                                    Created:
+                                                                    <span className="ml-1 text-gray-600 dark:text-gray-300">
+                                                                        {new Date(item.createdAt).toLocaleDateString(
+                                                                            "en-US",
+                                                                            {
+                                                                                year: "numeric",
+                                                                                month: "short",
+                                                                                day: "numeric"
+                                                                            }
+                                                                        )}
+                                                                    </span>
+                                                                </div>
+
+                                                                {/* UPDATED */}
+                                                                <div>
+                                                                    Updated:
+                                                                    <span className="ml-1 text-gray-600 dark:text-gray-300">
+                                                                        {item.updatedAt
+                                                                            ? new Date(item.updatedAt).toLocaleDateString(
+                                                                                "en-US",
+                                                                                {
+                                                                                    year: "numeric",
+                                                                                    month: "short",
+                                                                                    day: "numeric"
+                                                                                }
+                                                                            )
+                                                                            : "-"
+                                                                        }
+                                                                    </span>
+                                                                </div>
+
+                                                            </div>
+
+                                                            {/* TAGS */}
+                                                            <div className="flex items-start gap-1.5 mt-2">
+
+                                                                <div className="flex flex-wrap gap-1">
+
+                                                                    {item.tags?.length > 0 ? (
+                                                                        item.tags.map((tag, index) => (
+                                                                            <span
+                                                                                key={index}
+                                                                                className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-1.5 py-0.5 text-[10px] text-gray-600 dark:bg-[#1C283F] dark:text-gray-300"
+                                                                            >
+                                                                                <IoPricetagSharp className="text-[9px]" />
+                                                                                {tag}
+                                                                            </span>
+                                                                        ))
+                                                                    ) : (
+                                                                        null
+                                                                    )}
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
                                                     </td>
 
                                                     {/* ORIGINAL LINK */}
 
-                                                    <td className="px-6 py-4 w-[300px] min-w-[350px]">
+                                                    <td className="hidden md:table-cell px-6 py-4 w-[300px] min-w-[350px]">
                                                         <div className="flex items-center gap-2 min-w-0">
                                                             <span
                                                                 data-tooltip-id="my-tooltip"
@@ -424,26 +652,27 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
 
                                                     {/* TAGS */}
 
-                                                    <td className="px-6 py-4 text-start max-w-[250px]">
-
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {item.tags?.length > 0 ? item.tags?.map((tag, index) => (
-                                                                <span
-                                                                    key={index}
-                                                                    className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-zinc-100 dark:bg-[#1C283F] text-gray-600 dark:text-gray-200"
-                                                                >
-
-                                                                    <IoPricetagSharp className="text-gray-500 dark:text-gray-400" />
-
-                                                                    {tag}
-                                                                </span>
-                                                            )) : '-'}
+                                                    <td className="hidden md:table-cell px-6 py-4 text-start w-[300px] min-w-[300px]">
+                                                        <div className="flex flex-wrap gap-1.5">
+                                                            {item.tags?.length > 0 ? (
+                                                                item.tags.map((tag, index) => (
+                                                                    <span
+                                                                        key={index}
+                                                                        className="inline-flex items-center gap-1 whitespace-nowrap rounded-md bg-zinc-100 px-2 py-1 text-xs text-gray-600 dark:bg-[#1C283F] dark:text-gray-300"
+                                                                    >
+                                                                        <IoPricetagSharp className="text-[10px] shrink-0" />
+                                                                        {tag}
+                                                                    </span>
+                                                                ))
+                                                            ) : (
+                                                                <span className="text-gray-500">-</span>
+                                                            )}
                                                         </div>
                                                     </td>
 
                                                     {/* STATUS */}
 
-                                                    <td className="px-6 py-4 text-start">
+                                                    <td className="hidden md:table-cell px-6 py-4 text-start">
                                                         <div className="flex gap-2 items-center">
 
                                                             <p>
@@ -469,7 +698,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
 
                                                     {/* CREATED AT */}
 
-                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                    <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap">
 
                                                         {new Date(item.createdAt).toLocaleDateString(
                                                             "en-US",
@@ -483,7 +712,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
 
                                                     {/* UPDATED AT */}
 
-                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                    <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap">
 
                                                         {item.updatedAt
                                                             ? new Date(item.updatedAt).toLocaleDateString(
@@ -500,17 +729,18 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
 
                                                     {/* STICKY ACTION */}
 
-                                                    <td
-                                                        className={`sticky right-0 z-[2] px-6 py-6 whitespace-nowrap shadow-[-6px_0_10px_-8px_rgba(0, 0, 0, 0.45)] dark: shadow-[-6px_0_10px_-8px_rgba(0, 0, 0, 0.8)]
+                                                    <td className={`sticky right-0 z-[2] w-[135px] min-w-[135px] px-4 py-6 whitespace-nowrap
 
-                                                    ${selectedUrlId.includes(item._id)
-                                                                ? "bg-blue-300/40"
+                                                                ${selectedUrlId.includes(item._id)
+                                                                ? "bg-blue-100/60 dark:bg-blue-950/40"
                                                                 : "bg-white dark:bg-[#101522]"
-                                                            } `
+                                                            }
+
+                                                                before:absolute before:left-0 before:top-0 before:h-full before:w-[5px] before:-translate-x-full before:pointer-events-none before:content-[''] before:bg-gradient-to-l before:from-black/10 before:to-transparent dark:before:from-black/30`
                                                         }
                                                     >
 
-                                                        <div className="flex items-center gap-2">
+                                                        <div className="flex flex-row items-center justify-center gap-2">
 
                                                             {/* VIEW */}
                                                             <button
@@ -520,10 +750,10 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                                 }}
                                                                 data-tooltip-id="action-tooltip"
                                                                 data-tooltip-content="Details"
-                                                                className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 rounded-md bg-zinc-200 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 font-medium items-center cursor-pointer"
+                                                                className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 rounded-md bg-sky-100 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 font-medium items-center cursor-pointer"
                                                             >
 
-                                                                <BiShow className="text-[16px] text-gray-700 dark:text-white" />
+                                                                <BiShow className="text-[16px] text-sky-400 dark:text-blue-400" />
 
                                                             </button>
 
@@ -547,10 +777,10 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
 
                                                                 }}
 
-                                                                className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 bg-zinc-200 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 rounded-md font-medium items-center cursor-pointer"
+                                                                className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 bg-violet-100 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 rounded-md font-medium items-center cursor-pointer"
                                                             >
 
-                                                                <LiaEditSolid className="text-[16px] text-gray-700 dark:text-white" />
+                                                                <LiaEditSolid className="text-[16px] text-violet-600 dark:text-violet-400" />
                                                             </button>
 
                                                             {/* STATISTICS */}
@@ -566,10 +796,10 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                                         }& id=${item._id} `
                                                                     )
                                                                 }
-                                                                className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 bg-zinc-200 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 rounded-md font-medium items-center cursor-pointer"
+                                                                className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 bg-emerald-100 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 rounded-md font-medium items-center cursor-pointer"
                                                             >
 
-                                                                <IoMdStats className="text-[16px] text-gray-700 dark:text-white" />
+                                                                <IoMdStats className="text-[16px] text-emerald-600 dark:text-emerald-400" />
                                                             </button>
                                                         </div>
                                                     </td>
@@ -611,9 +841,8 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                     navigate={navigate}
                                 />
                                 {viewMode === "card" && (
-                                    <div className="lg:w-5/6 mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 mt-5">
+                                    <div className="w-full lg:w-5/6 mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 mt-5">
 
-                                        {/* RESULT COUNT */}
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
                                             Showing{" "}
                                             <span className="font-medium text-gray-700 dark:text-gray-200">
@@ -635,7 +864,6 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                         {/* PAGINATION */}
                                         <div className="flex items-center gap-1">
 
-                                            {/* PREVIOUS */}
                                             <button
                                                 type="button"
                                                 disabled={currentPage === 1}
@@ -644,10 +872,8 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                 }
                                                 className="px-3 cursor-pointer h-[34px] text-sm rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-[#181E29] text-gray-600 dark:text-gray-300 hover:bg-zinc-100 dark:hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed transition"
                                             >
-                                                <GrFormPrevious/>
+                                                <GrFormPrevious />
                                             </button>
-
-                                            {/* PAGE NUMBERS */}
 
                                             {Array.from(
                                                 { length: totalPages },
@@ -714,7 +940,6 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                     );
                                                 })}
 
-                                            {/* NEXT */}
                                             <button
                                                 type="button"
                                                 disabled={currentPage === totalPages}
@@ -725,7 +950,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                 }
                                                 className="px-3 cursor-pointer h-[34px] text-sm rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-[#181E29] text-gray-600 dark:text-gray-300 hover:border-sky-400 dark:hover:border-blue-500 disabled:border-none disabled:opacity-40 disabled:cursor-not-allowed transition"
                                             >
-                                                <GrFormNext/>
+                                                <GrFormNext />
                                             </button>
 
                                         </div>
@@ -733,9 +958,9 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                 )}
                             </>
                         }
-                        <h3 className='text-sm text-center [@media(min-width:400px)]:hidden text-gray-600 dark:text-gray-400 mt-4'>
+                        {viewMode === 'table' && <h3 className='text-sm text-center [@media(min-width:400px)]:hidden text-gray-600 dark:text-gray-400 mt-4'>
                             Showing {filteredUrls.length} of {urls.length} results
-                        </h3>
+                        </h3>}
                     </div>
                 )}
             </div>
@@ -759,4 +984,3 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
 }
 
 export default TableData
-

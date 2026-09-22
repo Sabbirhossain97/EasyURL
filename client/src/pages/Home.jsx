@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import AuthModal from '../components/modals/AuthModal';
 import Features from "../layouts/Features"
 import { useNavigate, useLocation } from 'react-router-dom';
+import FAQ from '../layouts/Faq';
 
 function Home({setUser}) {
 
@@ -46,6 +47,7 @@ function Home({setUser}) {
                     </button>
                 </div>
                 <Features />
+                <FAQ />
             </div>
         </section>
     )

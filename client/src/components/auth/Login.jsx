@@ -16,8 +16,9 @@ function Login({ setUser }) {
         email: "",
         password: ""
     })
-    const [visible, setVisible] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [visible, setVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -44,18 +45,19 @@ function Login({ setUser }) {
     const login = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             try {
+                setGoogleLoginLoading(true)
                 const token = tokenResponse.access_token;
                 const data = await googleLogin(token);
                 localStorage.setItem("token", data?.accessToken);
                 localStorage.setItem("token_expiry", new Date().getTime() + 24 * 60 * 60 * 1000);
                 localStorage.setItem("user", JSON.stringify(data?.user));
                 toast.success(data.message, { position: 'top-center' });
-                setLoading(false);
+                setGoogleLoginLoading(false);
                 setUser(data?.user);
                 navigate('/shorten');
             } catch (err) {
                 toast.error(err?.error || "Login failed", { position: 'top-center' });
-                setLoading(false);
+                setGoogleLoginLoading(false);
             }
         },
         onError: () => console.log("Google Login Failed"),
@@ -117,8 +119,8 @@ function Login({ setUser }) {
                         className="cursor-pointer flex justify-center transition duration-300 hover:bg-zinc-100 w-full text-center items-center gap-2 rounded-md border border-zinc-300 dark:border-none dark:bg-white/10 px-3 py-2 text-sm/6 font-semibold focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white dark:data-hover:bg-white/15"
                         onClick={() => login()}
                         type="button">
-                        <FcGoogle />
-                        Sign in with Google
+                        {!googleLoginLoading && <FcGoogle /> }
+                        {googleLoginLoading ? <><Spinner /> Processing...</> : "Sign in with Google"}
                     </Button>
                 </div>
             </form>

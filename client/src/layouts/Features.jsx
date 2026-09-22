@@ -26,7 +26,7 @@ function Features() {
                     <FaGear className='text-sky-400 text-2xl' />
                     <h3 className="text-[16px] font-semibold whitespace">Customizable URL</h3>
                     <p className="text-gray-600 dark:text-gray-400 text-center text-sm">
-                        Personalize your short URL with a custom name to make it more recognizable.
+                        Personalize your short URL with a custom name, tags to make it more recognizable.
                     </p>
                 </div>
                 <div className="bg-white dark:bg-white/10 rounded-lg flex flex-col justify-center gap-2 px-4 py-6 items-center">
