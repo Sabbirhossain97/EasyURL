@@ -20,6 +20,7 @@ function Signup({ setUser }) {
     })
     const [visible, setVisible] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [googleRegisterLoading, setGoogleRegisterLoading] = useState(false);
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -38,10 +39,10 @@ function Signup({ setUser }) {
         }
     }
 
-
     const registerWithGoogle = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             try {
+                setGoogleRegisterLoading(true)
                 const token = tokenResponse.access_token;
                 const data = await googleLogin(token);
                 localStorage.setItem("token", data?.accessToken);
@@ -55,12 +56,12 @@ function Signup({ setUser }) {
                 }, 1000);
             } catch (err) {
                 setTimeout(() => {
-                    toast.error(err?.error || "Login failed", { position: 'top-center' });
-                    setLoading(false);
+                    toast.error(err?.error || "Signup failed", { position: 'top-center' });
+                    setGoogleRegisterLoading(false);
                 }, 1000);
             }
         },
-        onError: () => console.log("Google Login Failed"),
+        onError: () => console.log("Google Signup Failed"),
     });
 
     return (
@@ -127,8 +128,8 @@ function Signup({ setUser }) {
                     className="cursor-pointer flex justify-center transition duration-300 hover:bg-zinc-100 w-full text-center items-center gap-2 rounded-md border border-zinc-300 dark:border-none dark:bg-white/10 px-3 py-2 text-sm/6 font-semibold focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white dark:data-hover:bg-white/15"
                     onClick={() => registerWithGoogle()}
                     type="button">
-                    <FcGoogle />
-                    Register with Google
+                    {!googleRegisterLoading && <FcGoogle />}
+                    {googleRegisterLoading ? <><Spinner /> Processing...</> : "Register with Google"}
                 </Button>
             </div>
         </form>

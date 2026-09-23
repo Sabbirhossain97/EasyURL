@@ -5,7 +5,6 @@ import TableData from "../components/table/TableData";
 import { fetchUrls, createUrls } from "../services/urlService";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { FaLink } from "react-icons/fa";
-import { TableSkeleton } from "../layouts/Skeleton";
 import { MdClose } from "react-icons/md";
 import { GoLink } from "react-icons/go";
 
@@ -32,7 +31,7 @@ function Shorten() {
             setUrls(updatedData);
             setTimeout(() => {
                 setFetchLoading(false)
-            }, 1000)
+            }, 500)
         }
     };
 
@@ -98,7 +97,7 @@ function Shorten() {
                     </form>
                 </div>
             </div>
-            {fetchLoading ? <TableSkeleton /> : urls.length === 0 ? (<div className="min-h-[420px] rounded-md flex flex-col justify-center items-center mt-20">
+            {urls.length === 0 ? (<div className="min-h-[420px] rounded-md flex flex-col justify-center items-center mt-20">
                 <div>
                     <div className="p-5 rounded-md bg-sky-400/20">
                         <FaLink className="h-8 w-8 text-sky-400" />
@@ -110,6 +109,7 @@ function Shorten() {
                 <TableData
                     urls={urls}
                     setUrls={setUrls}
+                    fetchLoading={fetchLoading}
                     sortBy={sortBy}
                     setSortBy={setSortBy}
                 />}

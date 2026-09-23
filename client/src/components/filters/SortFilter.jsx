@@ -1,4 +1,4 @@
-import { FaFilter } from "react-icons/fa";
+import { TbArrowsSort } from "react-icons/tb";
 import {
     Menu,
     MenuButton,
@@ -11,9 +11,7 @@ function SortFilter({ sortBy, setSortBy }) {
     return (
 
         <div className="flex gap-2">
-
             <Menu>
-
                 <MenuButton
                     className="
                         inline-flex
@@ -21,35 +19,35 @@ function SortFilter({ sortBy, setSortBy }) {
                         items-center
                         gap-2
                         rounded-md
-                        bg-sky-400
-                        data-hover:bg-sky-500
-                        dark:bg-blue-600
-                        dark:hover:bg-blue-700
+                        border
+                        bg-white
+                        border-zinc-200
+                        dark:border-zinc-800
+                        data-hover:border-sky-400
+                        dark:data-hover:border-blue-500
+                        dark:bg-[#181E29]
                         px-3
                         py-1.5
                         text-sm/6
-                        font-semibold
-                        text-white
+                        font-medium
+                        text-sky-400
+                        dark:text-blue-500
                         transition
                         duration-300
                         cursor-pointer
                         focus:not-data-focus:outline-none
                         data-focus:outline
                         data-focus:outline-white
-
                         max-w-[145px]
                         sm:max-w-none
                     "
                 >
 
-                    <FaFilter className="shrink-0" />
-
+                    <TbArrowsSort className="shrink-0 h-5 w-4" />
                     <span className="truncate">
                         {sortBy.field}
                     </span>
-
                 </MenuButton>
-
 
                 <MenuItems
                     transition
@@ -77,7 +75,6 @@ function SortFilter({ sortBy, setSortBy }) {
                         data-closed:opacity-0
                     "
                 >
-
                     <MenuItem>
                         <button
                             onClick={() =>

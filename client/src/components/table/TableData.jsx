@@ -18,7 +18,9 @@ import { MdDelete, MdTableRows, MdGridView } from "react-icons/md";
 import CardView from '../card/CardView';
 import { IoIosSearch } from "react-icons/io";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
-function TableData({ urls, setUrls, sortBy, setSortBy }) {
+import { TableLoader } from '../svg/SVG';
+
+function TableData({ urls, setUrls, fetchLoading, sortBy, setSortBy }) {
 
     const navigate = useNavigate();
     const [isCustomUrlModalOpen, setIsCustomUrlModalOpen] = useState(false);
@@ -284,7 +286,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                             type="text"
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
-                                            className="indent-9 pr-9 min-h-[38px] w-full rounded-lg border border-zinc-200 bg-white outline-none transition duration-300 placeholder:text-gray-400 placeholder:text-[13px] focus:border-sky-400 dark:border-zinc-800 dark:bg-[#181E29] dark:focus:border-blue-500"
+                                            className="pl-9 pr-9 min-h-[38px] w-full rounded-lg border text-[14px] border-zinc-200 bg-white outline-none transition duration-300 placeholder:text-gray-400 placeholder:text-[13px] focus:border-sky-400 dark:border-zinc-800 dark:bg-[#181E29] dark:focus:border-blue-500"
                                             placeholder="Search by Custom Name, Tags, or URLs..."
                                         />
 
@@ -296,7 +298,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                             <button
                                                 type="button"
                                                 onClick={() => setSearchQuery("")}
-                                                className="absolute right-2 top-1 cursor-pointer text-[20px] text-red-400 hover:text-red-600"
+                                                className="absolute right-2 top-[3px] cursor-pointer text-[20px] text-red-400 hover:text-red-600"
                                                 aria-label="Clear search"
                                             >
                                                 ×
@@ -416,8 +418,13 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                         </div>
 
                         {viewMode === 'table' ? (
-                            <div className="w-full mx-auto lg:w-5/6 max-h-[420px]  overflow-auto mt-0 rounded-xl bg-white dark:bg-[#101522]">
-                                <table className="w-full min-w-0 md:min-w-[1100px] text-sm text-left rtl:text-right border-collapse">
+                            <div className="relative w-full mx-auto lg:w-5/6 max-h-[420px] overflow-auto mt-0 rounded-xl bg-white dark:bg-[#101522]">
+                                {fetchLoading && <div className="absolute inset-0 z-2 flex items-center justify-center rounded-xl bg-white/50 dark:bg-[#101522]/50 backdrop-blur-[2px]">
+                                    <div className="flex items-center justify-center rounded-lg px-4 py-3 ">
+                                        <TableLoader />
+                                    </div>
+                                </div>}
+                                <table className=" w-full min-w-0 md:min-w-[1100px] text-sm text-left rtl:text-right border-collapse">
                                     <thead className="sticky top-0 z-[3] bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
                                         <tr>
                                             {/* CHECKBOX */}
@@ -788,14 +795,7 @@ function TableData({ urls, setUrls, sortBy, setSortBy }) {
                                                             <button
                                                                 data-tooltip-id="action-tooltip"
                                                                 data-tooltip-content="Analytics"
-                                                                onClick={() =>
-                                                                    navigate(
-                                                                        `/ statistics ? url = ${encodeURIComponent(
-                                                                            item.shortUrl
-                                                                        )
-                                                                        }& id=${item._id} `
-                                                                    )
-                                                                }
+                                                                onClick={() =>navigate(`/statistics?url = ${encodeURIComponent(item.shortUrl)}&id=${item._id}`)}
                                                                 className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 bg-emerald-100 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 rounded-md font-medium items-center cursor-pointer"
                                                             >
 
