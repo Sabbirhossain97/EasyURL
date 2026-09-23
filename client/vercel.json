@@ -1,22 +1,22 @@
 {
-  "rewrites": [
-    {
-      "source": "/:shortId((?!shorten|statistics|settings|inactive)[\\w\\-]{1,})",
-      "has": [
+    "rewrites": [
         {
-          "type": "host",
-          "value": "easurl.xyz"
+            "source": "/:shortId((?!shorten|statistics|settings|inactive)[\\w\\-]{1,})",
+            "has": [
+                {
+                    "type": "host",
+                    "value": "easurl.xyz"
+                }
+            ],
+            "destination": "https://easyurl-eymh.onrender.com/:shortId"
+        },
+        {
+            "source": "/api/:match*",
+            "destination": "https://easyurl-eymh.onrender.com/api/:match*"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
         }
-      ],
-      "destination": "https://easyurl-eymh.onrender.com/:shortId"
-    },
-    {
-      "source": "/api/:match*",
-      "destination": "https://easyurl-eymh.onrender.com/api/:match*"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+    ]
 }

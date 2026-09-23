@@ -27,3 +27,105 @@ html.dark {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.rti--container {
+  width: 100% !important;
+  min-height: 40px !important;
+  background: #181E29 !important;
+  border: 1px solid rgb(63 63 70) !important;
+  border-radius: 0.375rem !important;
+  padding: 6px 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  transition: border-color 0.3s ease !important;
+}
+
+/* Light mode */
+:root:not(.dark) .rti--container {
+  background: #ffffff !important;
+  border-color: rgb(228 228 231) !important;
+}
+
+/* Focus */
+.rti--container:focus-within {
+  border-color: #144EE3 !important;
+  border: 1px solid
+}
+
+:root:not(.dark) .rti--container:focus-within {
+  border-color: rgb(56 189 248) !important;
+  border: 1px solid
+}
+
+/* Input */
+.rti--input {
+  background: transparent !important;
+  color: #144EE3 !important; 
+  border: none !important;
+  outline: none !important;
+  font-size: 14px !important;
+  padding: 2px 4px !important;
+  min-width: 100px !important;
+}
+
+:root:not(.dark) .rti--input {
+  background: transparent !important;
+  color: #38BDF8 !important;
+  border: none !important;
+  outline: none !important;
+  font-size: 14px !important;
+  padding: 2px 4px !important;
+  min-width: 100px !important;
+}
+
+.rti--input::placeholder {
+  color: rgb(156 163 175) !important;
+}
+
+/* Tags */
+.rti--tag {
+  background: #283041 !important;
+  color: rgb(203 213 225) !important;
+  border-radius: 0.375rem !important;
+  font-size: 12px !important;
+  padding: 4px 7px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+:root:not(.dark) .rti--tag {
+  background: #38BDF8 !important;
+  color: white !important;
+  border-radius: 0.375rem !important;
+  font-size: 12px !important;
+  padding: 4px 7px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+/* Tag remove button */
+.rti--tag button {
+  color: rgb(156 163 175) !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+}
+
+:root:not(.dark) .rti--tag button {
+  color: rgb(233, 236, 240) !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+}
+
+.rti--tag button:hover {
+  color: white !important;
+}
+
+:root:not(.dark) .rti--tag button:hover {
+  color: white !important;
+}

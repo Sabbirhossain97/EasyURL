@@ -5,8 +5,8 @@ import TableData from "../components/table/TableData";
 import { fetchUrls, createUrls } from "../services/urlService";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { FaLink } from "react-icons/fa";
-import { TableSkeleton } from "../layouts/Skeleton";
 import { MdClose } from "react-icons/md";
+import { GoLink } from "react-icons/go";
 
 function Shorten() {
 
@@ -31,7 +31,7 @@ function Shorten() {
             setUrls(updatedData);
             setTimeout(() => {
                 setFetchLoading(false)
-            }, 1000)
+            }, 500)
         }
     };
 
@@ -66,17 +66,18 @@ function Shorten() {
     }, [originalUrl]);
 
     return (
-        <div className="max-w-[1536px] min-h-screen mx-auto pb-20 px-3 md:px-4 xl:px-2">
+        <div className="max-w-[1736px] min-h-screen mx-auto pb-20 px-3 md:px-4 xl:px-2">
             <div className='flex justify-center'>
-                <div className="mt-16 sm:mt-20 lg:mt-30 xl:mt-44 w-full lg:w-3/4">
+                <div className="mt-16 sm:mt-20 lg:mt-30 xl:mt-44 w-full lg:w-5/6">
                     <h1 className="text-center text-[42px] sm:text-[52px] md:text-[64px] font-bold leading-[52px] custom-header-text">Shorten Your URL here</h1>
                     <form onSubmit={createUrl} className="flex gap-4 mt-4 md:mt-10 relative">
+                        <span className="absolute top-6 left-4 text-gray-600 dark:text-gray-400"><GoLink className="text-sky-400 dark:text-blue-500"/></span>
                         <textarea
                             ref={textareaRef}
                             value={originalUrl}
                             onChange={(e) => setOriginalUrl(e.target.value)}
-                            placeholder="Paste your long URL here..."
-                            className="resize-none border placeholder:text-gray-400 focus:border-sky-400 pr-[90px] min-h-[50px] dark:focus:border-blue-500 overflow-hidden transition duration-300 outline-none w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-700 rounded-lg p-5"
+                            placeholder="Paste long URL here..."
+                            className="resize-none indent-6 border placeholder:text-gray-400 focus:border-sky-400 pr-[90px] min-h-[50px] dark:focus:border-blue-500 overflow-hidden transition duration-300 outline-none w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-800 rounded-lg p-5"
                             rows={1}
                         />
                         {originalUrl && <MdClose onClick={()=> setOriginalUrl("")} className="absolute cursor-pointer bottom-[20px] right-[68px] text-xl text-red-400 hover:text-red-500 transition duration-300"/> }
@@ -96,7 +97,7 @@ function Shorten() {
                     </form>
                 </div>
             </div>
-            {fetchLoading ? <TableSkeleton /> : urls.length === 0 ? (<div className="min-h-[420px] rounded-md flex flex-col justify-center items-center mt-20">
+            {urls.length === 0 ? (<div className="min-h-[420px] rounded-md flex flex-col justify-center items-center mt-20">
                 <div>
                     <div className="p-5 rounded-md bg-sky-400/20">
                         <FaLink className="h-8 w-8 text-sky-400" />
@@ -108,6 +109,7 @@ function Shorten() {
                 <TableData
                     urls={urls}
                     setUrls={setUrls}
+                    fetchLoading={fetchLoading}
                     sortBy={sortBy}
                     setSortBy={setSortBy}
                 />}

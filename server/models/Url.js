@@ -34,6 +34,10 @@ const urlSchema = new mongoose.Schema({
     customName: {
         type: String,
     },
+    tags: {
+        type: [String],
+        default: []
+    },
     createdAt: {
         type: Date,
         default: Date.now

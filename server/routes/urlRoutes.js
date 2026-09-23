@@ -212,7 +212,7 @@ const createUrl = async (req, res) => {
 
 const customizeUrl = async (req, res) => {
     const { shortId } = req.params;
-    const { customName, activeStatus } = req.body;
+    const { customName, activeStatus, tags } = req.body;
     const userId = mongoose.Types.ObjectId.createFromHexString(req.user.id);
 
     try {
@@ -246,8 +246,14 @@ const customizeUrl = async (req, res) => {
             url.customName = customName;
             url.shortUrl = `${process.env.BASE_URL}/${customName}`;
         }
+        
+        if (Array.isArray(tags)) {
+            url.tags = tags;
+        }
 
-        url.status = activeStatus
+        if (activeStatus) {
+            url.status = activeStatus;
+        }
         url.updatedAt = new Date();
         await url.save();
 
