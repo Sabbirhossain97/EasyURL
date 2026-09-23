@@ -5,7 +5,7 @@
             "has": [
                 {
                     "type": "host",
-                    "value": "www.easurl.xyz"
+                    "value": "easurl.xyz"
                 }
             ],
             "destination": "https://easyurl-eymh.onrender.com/:shortId"
