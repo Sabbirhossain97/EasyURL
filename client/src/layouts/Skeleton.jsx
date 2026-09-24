@@ -20,7 +20,7 @@ export const AdminStatCardSkeleton = () => {
 
 export const TableSkeleton = () => {
     return (
-        <div className="w-full overflow-y-auto overflow-x-auto mt-44 overflow-hidden rounded-xl">
+        <div className="w-full lg:w-5/6 overflow-y-auto mx-auto overflow-x-auto mt-44 overflow-hidden rounded-xl">
             <table className="w-full text-sm text-left rtl:text-right border-collapse rounded-xl">
                 <thead className="text-md sticky top-0 left-0 rounded-t-xl bg-zinc-200 dark:bg-[#181E29] text-zinc-600 dark:text-white">
                     <tr>

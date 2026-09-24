@@ -19,6 +19,7 @@ import CardView from '../card/CardView';
 import { IoIosSearch } from "react-icons/io";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { TableLoader } from '../svg/SVG';
+import { CiEdit } from "react-icons/ci";
 
 function TableData({ urls, setUrls, fetchLoading, sortBy, setSortBy }) {
 
@@ -619,7 +620,7 @@ function TableData({ urls, setUrls, fetchLoading, sortBy, setSortBy }) {
                                                                                 key={index}
                                                                                 className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-1.5 py-0.5 text-[10px] text-gray-600 dark:bg-[#1C283F] dark:text-gray-300"
                                                                             >
-                                                                                <IoPricetagSharp className="text-[9px]" />
+                                                                                <IoPricetagSharp className="text-[9px] text-sky-400 dark:text-blue-500" />
                                                                                 {tag}
                                                                             </span>
                                                                         ))
@@ -667,7 +668,7 @@ function TableData({ urls, setUrls, fetchLoading, sortBy, setSortBy }) {
                                                                         key={index}
                                                                         className="inline-flex items-center gap-1 whitespace-nowrap rounded-md bg-zinc-100 px-2 py-1 text-xs text-gray-600 dark:bg-[#1C283F] dark:text-gray-300"
                                                                     >
-                                                                        <IoPricetagSharp className="text-[10px] shrink-0" />
+                                                                        <IoPricetagSharp className="text-[10px] shrink-0 text-sky-400 dark:text-blue-500" />
                                                                         {tag}
                                                                     </span>
                                                                 ))
@@ -787,7 +788,7 @@ function TableData({ urls, setUrls, fetchLoading, sortBy, setSortBy }) {
                                                                 className="px-2 py-1 inline-flex gap-1 text-[12px] transition duration-300 bg-violet-100 hover:bg-zinc-100 dark:bg-[#1C283FB0] dark:hover:bg-white/10 rounded-md font-medium items-center cursor-pointer"
                                                             >
 
-                                                                <LiaEditSolid className="text-[16px] text-violet-600 dark:text-violet-400" />
+                                                                <CiEdit className="text-[16px] text-violet-600 dark:text-violet-400" />
                                                             </button>
 
                                                             {/* STATISTICS */}
