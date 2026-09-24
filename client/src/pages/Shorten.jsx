@@ -7,11 +7,12 @@ import { RiSendPlaneFill } from "react-icons/ri";
 import { FaLink } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 import { GoLink } from "react-icons/go";
+import {TableSkeleton} from "../layouts/Skeleton"
 
 function Shorten() {
 
     const [originalUrl, setOriginalUrl] = useState("");
-    const [fetchLoading, setFetchLoading] = useState(false)
+    const [fetchLoading, setFetchLoading] = useState(true);
     const [loading, setLoading] = useState(false);
     const [urls, setUrls] = useState([]);
     const textareaRef = useRef(null);
@@ -21,7 +22,7 @@ function Shorten() {
     });
 
     const getUrls = async (sortBy) => {
-        setFetchLoading(true)
+       
         const data = await fetchUrls(sortBy);
         const updatedData = data.map(url => ({
             ...url,
@@ -29,10 +30,8 @@ function Shorten() {
         }))
         if (data) {
             setUrls(updatedData);
-            setTimeout(() => {
-                setFetchLoading(false)
-            }, 500)
         }
+        setFetchLoading(false)
     };
 
     useEffect(() => {
@@ -71,7 +70,7 @@ function Shorten() {
                 <div className="mt-16 sm:mt-20 lg:mt-30 xl:mt-44 w-full lg:w-5/6">
                     <h1 className="text-center text-[42px] sm:text-[52px] md:text-[64px] font-bold leading-[52px] custom-header-text">Shorten Your URL here</h1>
                     <form onSubmit={createUrl} className="flex gap-4 mt-4 md:mt-10 relative">
-                        <span className="absolute top-6 left-4 text-gray-600 dark:text-gray-400"><GoLink className="text-sky-400 dark:text-blue-500"/></span>
+                        <span className="absolute top-6 left-4 text-gray-600 dark:text-gray-400"><GoLink className="text-sky-400 dark:text-blue-500" /></span>
                         <textarea
                             ref={textareaRef}
                             value={originalUrl}
@@ -80,7 +79,7 @@ function Shorten() {
                             className="resize-none indent-6 border placeholder:text-gray-400 focus:border-sky-400 pr-[90px] min-h-[50px] dark:focus:border-blue-500 overflow-hidden transition duration-300 outline-none w-full bg-white dark:bg-[#181E29] border-zinc-200 dark:border-zinc-800 rounded-lg p-5"
                             rows={1}
                         />
-                        {originalUrl && <MdClose onClick={()=> setOriginalUrl("")} className="absolute cursor-pointer bottom-[20px] right-[68px] text-xl text-red-400 hover:text-red-500 transition duration-300"/> }
+                        {originalUrl && <MdClose onClick={() => setOriginalUrl("")} className="absolute cursor-pointer bottom-[20px] right-[68px] text-xl text-red-400 hover:text-red-500 transition duration-300" />}
                         <button type="submit" className={`${loading ? 'bg-sky-500 dark:bg-blue-600' : 'bg-sky-400 dark:bg-blue-600'} text-white cursor-pointer transition duration-300 hover:bg-sky-500 dark:hover:bg-blue-700 absolute right-2 bottom-2 w-[50px] h-[50px] px-4 rounded-lg flex items-center justify-center`}>
                             {loading ? (
                                 <div className='flex items-center gap-2'>
@@ -97,22 +96,23 @@ function Shorten() {
                     </form>
                 </div>
             </div>
-            {urls.length === 0 ? (<div className="min-h-[420px] rounded-md flex flex-col justify-center items-center mt-20">
-                <div>
-                    <div className="p-5 rounded-md bg-sky-400/20">
-                        <FaLink className="h-8 w-8 text-sky-400" />
+            {fetchLoading ? <TableSkeleton /> :
+                urls.length === 0 ? (<div className="min-h-[420px] rounded-md flex flex-col justify-center items-center mt-20">
+                    <div>
+                        <div className="p-5 rounded-md bg-sky-400/20">
+                            <FaLink className="h-8 w-8 text-sky-400" />
+                        </div>
                     </div>
-                </div>
-                <h1 className="text-3xl font-bold mt-4">No URLs Yet</h1>
-                <h3 className="mt-2 text-gray-400 text-center px-8 sm:px-0">Start shortening your first URL and watch your links come to life.</h3>
-            </div>) :
-                <TableData
-                    urls={urls}
-                    setUrls={setUrls}
-                    fetchLoading={fetchLoading}
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
-                />}
+                    <h1 className="text-3xl font-bold mt-4">No URLs Yet</h1>
+                    <h3 className="mt-2 text-gray-400 text-center px-8 sm:px-0">Start shortening your first URL and watch your links come to life.</h3>
+                </div>) :
+                    <TableData
+                        urls={urls}
+                        setUrls={setUrls}
+                        fetchLoading={fetchLoading}
+                        sortBy={sortBy}
+                        setSortBy={setSortBy}
+                    />}
         </div>
     )
 }
